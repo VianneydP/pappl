@@ -1,0 +1,7 @@
+/* -----------------------------------------
+ * Projet ECN Logement
+ *
+ * Ecole Centrale Nantes
+ * Vianney de Ponthaud - Maxence Nicolet
+ * ----------------------------------------- */
+ 
