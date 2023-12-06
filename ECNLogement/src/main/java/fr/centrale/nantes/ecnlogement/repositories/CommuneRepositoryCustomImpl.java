@@ -8,6 +8,7 @@
 package fr.centrale.nantes.ecnlogement.repositories;
 
 import fr.centrale.nantes.ecnlogement.items.*;
+import static java.lang.Math.*;
 import java.util.Optional;
 import java.util.Collection;
 
@@ -78,5 +79,35 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
           }
           return null;
     }
-
+    
+    public int rangCommune(Integer codeCommune){
+        int rg=0;
+        Commune com=getByCodeCommune(codeCommune);
+        if (com!=null){
+            if (com.getDansMetropoleNantes()){
+                rg=4;
+            }else{
+                double distance=500;
+                Commune nantes=getByCodeCommune(44109);
+                double lat_a=nantes.getLatitude();
+                double lon_a=nantes.getLongitude();
+                double lat_b=com.getLatitude();
+                double lon_b=com.getLongitude();
+                int R = 6378; //Rayon de la terre en km
+                lat_a = PI*lat_a/180;
+                lon_a = PI*lon_a/180;
+                lat_b = PI*lat_b/180;
+                lon_b = PI*lon_b/180;
+                distance = R * (PI/2 - Math.asin( Math.sin(lat_b) * Math.sin(lat_a) + Math.cos(lon_b - lon_a) * Math.cos(lat_b) * Math.cos(lat_a)));
+                if (distance<200){
+                    rg=1;
+                }if (distance<400 && distance >=200){
+                    rg=2;
+                }if (distance>=400){
+                    rg=3;
+                }
+            }
+        }
+        return rg;
+    }
 }
