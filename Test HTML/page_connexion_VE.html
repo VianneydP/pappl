@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de Connexion</title>
+    <title>Page de Connexion Admin</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,6 +34,10 @@
             box-sizing: border-box;
         }
 
+        #password {
+            font-family: monospace;
+        }
+
         button {
             background-color: #4caf50;
             color: #fff;
@@ -46,19 +50,15 @@
 </head>
 <body>
 
-    <h1>Page de Connexion</h1>
+    <h1>Page de Connexion Admin</h1>
 
-    <form id="loginForm" action="formulaire_eleve.html" method="post">
-        <label for="firstName">Prénom :</label>
-        <input type="text" id="firstName" name="firstName" required>
+    <form id="loginForm">
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" name="username" required>
         <br>
 
-        <label for="lastName">Nom :</label>
-        <input type="text" id="lastName" name="lastName" required>
-        <br>
-
-        <label for="dob">Date de Naissance :</label>
-        <input type="date" id="dob" name="dob" required>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
         <br>
 
         <button type="submit">Se Connecter</button>
