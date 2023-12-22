@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de connexion élève</title>
+</head>
+<body>
+
+    <h1>Page de connexion élève demandeur logement à la résidence Max Schmidt</h1>
+
+    <form id="validationForm">
+        <label for="firstName">Prénom :</label>
+        <input type="text" id="firstName" name="firstName" required>
+        <br>
+
+        <label for="lastName">Nom :</label>
+        <input type="text" id="lastName" name="lastName" required>
+        <br>
+
+        <label for="dob">Date de Naissance :</label>
+        <input type="date" id="dob" name="dob" required>
+        <br>
+
+        <button type="button" onclick="validateForm()">Valider</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+            var dob = document.getElementById('dob').value;
+
+            // Ajoutez votre logique de validation ici
+            // Pour simplifier, cet exemple alerte simplement les valeurs
+            alert("Prénom : " + firstName + "\nNom : " + lastName + "\nDate de Naissance : " + dob);
+        }
+    </script>
+
+</body>
+</html>
