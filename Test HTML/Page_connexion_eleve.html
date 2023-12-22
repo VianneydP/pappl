@@ -26,13 +26,10 @@
     </form>
 
     <script>
-        function validateForm() {
+        function validateForm() { // mettre en place la vraie validation ici à partir des infos de la bases de données
             var firstName = document.getElementById('firstName').value;
             var lastName = document.getElementById('lastName').value;
             var dob = document.getElementById('dob').value;
-
-            // Ajoutez votre logique de validation ici
-            // Pour simplifier, cet exemple alerte simplement les valeurs
             alert("Prénom : " + firstName + "\nNom : " + lastName + "\nDate de Naissance : " + dob);
         }
     </script>
