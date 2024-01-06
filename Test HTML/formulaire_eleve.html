@@ -4,30 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire de renseignement pour inscription</title>
+
 </head>
 <body>
 
-    <h1>Formulaire de renseignement pour inscription</h1>
-
-    <h2> Numéro de téléphone de la permanence si besoin :  02 40 37 15 22 </h2>
+    <h1><center>Formulaire de renseignement pour inscription</center></h1>
 
     <form id="userInfoForm">
-        <label for="lastName">Nom :</label>
+        <label for="lastName">Nom :</label><br>
         <input type="text" id="lastName" name="lastName" readonly value="Nom depuis la page de connexion" required>
-        <br>
+        <br><br>
 
-        <label for="firstName">Prénom :</label>
+        <label for="firstName">Prénom :</label><br>
         <input type="text" id="firstName" name="firstName" readonly value="Prénom depuis la page de connexion" required>
-        <br>
+        <br><br>
 
-        <label>Genre :</label>
+        <label>Genre :</label><br>
         <input type="radio" id="male" name="gender" value="male" required>
         <label for="male">Homme</label>
         <input type="radio" id="female" name="gender" value="female" required>
         <label for="female">Femme</label>
-        <br>
+        <br><br>
 
-        <label for="country">Pays de Résidence :</label>
+        <label for="country">Pays de Résidence :     <b>(doit être la même que lors de l'inscription sur SCEI !)</b></label><br>
         <select id="country" name="country" required>
             <option value="afghanistan">Afghanistan</option>
             <option value="albania">Albania</option>
@@ -226,48 +225,59 @@
             <option value="zimbabwe">Zimbabwe</option>
         </select>
 
-        <br>
+        <br><br>
 
-        <label for="city">Ville de Résidence :</label>
+        <label for="city">Ville de Résidence :     <b>(doit être la même que lors de l'inscription sur SCEI !)</b></label><br>
         <input type="text" id="city" name="city" required>
-        <br>
+        <br><br>
 
         <div id="franceFields" style="display: none;">
-            <label for="postalCode">Code Postal :</label>
+            <label for="postalCode">Code Postal :</label><br>
             <input type="number" id="postalCode" name="postalCode">
-            <br>
+            <br><br>
         </div>
 
-        <label for="email">Adresse E-mail :</label>
+        <label for="email">Adresse E-mail :</label><br>
         <input type="email" id="email" name="email" required>
-        <br>
+        <br><br>
 
-        <label for="phoneNumber">Numéro de Téléphone :</label>
+        <label for="phoneNumber">Numéro de Téléphone :</label><br>
         <input type="tel" id="phoneNumber" name="phoneNumber" required>
-        <br>
+        <br><br>
 
-        <label>Statut de Bourse :</label>
+        <label>Statut de Bourse :</label><br>
         <input type="radio" id="yesScholarship" name="scholarshipStatus" value="yes">
         <label for="yesScholarship">Oui</label>
         <input type="radio" id="noScholarship" name="scholarshipStatus" value="no">
         <label for="noScholarship">Non</label>
-        <br>
+        <br><br>
 
         <div id="scholarshipCertificate" style="display: none;">
             <label for="certificate">Télécharger le Certificat de Bourse :</label>
             <input type="file" id="certificate" name="certificate">
-            <br>
+            <br><br>
         </div>
 
-        <label for="accommodationPreferences">Préférences d'Hébergement (1-4) :</label>
-        <input type="number" id="accommodationPreferences" name="accommodationPreferences" min="1" max="4" required>
-        <br>
+        <label for="accommodationPreferences">Préférences d'Hébergement (1-4) :</label><br>
+        <input type="radio" id="none" name="pref" value="none" required>
+        <label for="none">Aucune</label><br>
+        <input type="radio" id="prefs" name="pref" value="prefs" required>
+        <label for="prefs">Seul de préférence (colocation possible)</label><br>
+        <input type="radio" id="sabs" name="pref" value="sabs" required>
+        <label for="sabs">Seul absolument</label><br>
+        <input type="radio" id="prefc" name="pref" value="prefc" required>
+        <label for="prefc">Colocation de préférence (seul possible)</label><br>
+        <br><br>
 
-        <label for="additionalInfo">Informations Supplémentaires :</label>
+        <label for="additionalInfo">Informations Supplémentaires :</label><br>
         <textarea id="additionalInfo" name="additionalInfo" rows="4"></textarea>
-        <br>
+        <br><br>
 
         <button type="submit">Soumettre</button>
+
+        <br><br><br>
+        <h3>Si vous avez un quelconque problème, contactez rapidement le 02 40 37 15 22.<br>Horaires de disponibilité: ******
+        </h3>
     </form>
 
     <script>
