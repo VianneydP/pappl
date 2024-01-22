@@ -18,9 +18,9 @@
             </li></c:when>
             <c:otherwise><li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fmt:message key="menu.${itemNav.menuCode}" bundle="${ressourcesBundle}"/></a>
-              <ul class="dropdown-menu" aria-labelledby="navbar${itemNav.menuCode}"><c:forEach var="item2" items="${menuList}"><c:if test="${((! empty item2.parentMenuId) && (item2.parentMenuId.menuId==itemNav.menuId))}">
+              <ul class="dropdown-menu" aria-labelledby="navbar${itemNav.menuCode}"><%--<c:forEach var="item2" items="${menuList}"><c:if test="${((! empty item2.parentMenuId) && (item2.parentMenuId.menuId==itemNav.menuId))}">
                  <li><a class="dropdown-item" href="#" onClick="launchNav('${item2.menuCode}')"><fmt:message key="menu.${item2.menuCode}" bundle="${ressourcesBundle}"/></a></li>
-              </c:forEach></ul>
+              </c:forEach>--%></ul>
             </li></c:otherwise></c:choose>
         </c:forEach></c:if>
       </ul></c:if>

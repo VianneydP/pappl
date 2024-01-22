@@ -38,7 +38,7 @@ public class LoginController {
 
     @RequestMapping(value = "index.do")
     public ModelAndView handleIndex(HttpServletRequest request) {
-        ModelAndView returned = ApplicationTools.getModel("index", null);
+        ModelAndView returned = ApplicationTools.getModel("login", null);
         return returned;
     }
 
