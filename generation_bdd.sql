@@ -1,25 +1,16 @@
-0    [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ArchitectUtils  - Log4J configured successfully
-612  [AWT-EventQueue-0] INFO  ca.sqlpower.sql.PlDotIni  - Beginning to read/merge new pl.ini data
-792  [AWT-EventQueue-0] INFO  ca.sqlpower.sql.PlDotIni  - Finished reading file.
-792  [AWT-EventQueue-0] INFO  ca.sqlpower.sql.PlDotIni  - Beginning to read/merge new pl.ini data
-867  [AWT-EventQueue-0] INFO  ca.sqlpower.sql.PlDotIni  - Finished reading file.
-11948 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
-CREATE SEQUENCE public.role_role_id_seq
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+
+CREATE SEQUENCE public.role_role_id_seq;
 
 CREATE TABLE public.role (
                 role_id INTEGER NOT NULL DEFAULT nextval('public.role_role_id_seq'),
                 role_nom VARCHAR(32) NOT NULL,
                 CONSTRAINT role_pk PRIMARY KEY (role_id)
-)
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
-ALTER SEQUENCE public.role_role_id_seq OWNED BY public.role.role_id
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+ALTER SEQUENCE public.role_role_id_seq OWNED BY public.role.role_id;
 
-CREATE SEQUENCE public.personne_personne_id_seq
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+CREATE SEQUENCE public.personne_personne_id_seq;
 
 CREATE TABLE public.personne (
                 personne_id INTEGER NOT NULL DEFAULT nextval('public.personne_personne_id_seq'),
@@ -27,22 +18,19 @@ CREATE TABLE public.personne (
                 personne_prenom VARCHAR(256) NOT NULL,
                 personne_login VARCHAR(256),
                 personne_password VARCHAR(3000),
-                role_id INTEGER NOT NULL,
+                role_id INTEGER,
                 CONSTRAINT personne_pk PRIMARY KEY (personne_id)
-)
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
-ALTER SEQUENCE public.personne_personne_id_seq OWNED BY public.personne.personne_id
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+ALTER SEQUENCE public.personne_personne_id_seq OWNED BY public.personne.personne_id;
 
 CREATE TABLE public.connexion (
                 connection_id VARCHAR NOT NULL,
                 expiration TIMESTAMP NOT NULL,
                 personne_id INTEGER NOT NULL,
                 CONSTRAINT connexion_pk PRIMARY KEY (connection_id)
-)
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
 CREATE TABLE public.commune (
@@ -53,15 +41,13 @@ CREATE TABLE public.commune (
                 longitude REAL NOT NULL,
                 dans_metropole_nantes BOOLEAN NOT NULL,
                 CONSTRAINT commune_pk PRIMARY KEY (code_commune)
-)
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
 CREATE TABLE public.type_appart (
                 type_appart_nom VARCHAR NOT NULL,
                 CONSTRAINT type_appart_pk PRIMARY KEY (type_appart_nom)
-)
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
 CREATE TABLE public.logement (
@@ -70,19 +56,16 @@ CREATE TABLE public.logement (
                 type_appart_nom VARCHAR NOT NULL,
                 logement_places_dispo INTEGER NOT NULL,
                 CONSTRAINT logement_pk PRIMARY KEY (logement_numero)
-)
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
 CREATE TABLE public.souhait (
                 type_souhait VARCHAR NOT NULL,
                 CONSTRAINT souhait_pk PRIMARY KEY (type_souhait)
-)
-11953 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
-CREATE SEQUENCE public.eleve_eleve_id_seq
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+CREATE SEQUENCE public.eleve_eleve_id_seq;
 
 CREATE TABLE public.eleve (
                 eleve_id INTEGER NOT NULL DEFAULT nextval('public.eleve_eleve_id_seq'),
@@ -100,66 +83,56 @@ CREATE TABLE public.eleve (
                 logement_numero VARCHAR,
                 code_commune INTEGER,
                 CONSTRAINT eleve_pk PRIMARY KEY (eleve_id)
-)
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+);
 
 
-ALTER SEQUENCE public.eleve_eleve_id_seq OWNED BY public.eleve.eleve_id
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+ALTER SEQUENCE public.eleve_eleve_id_seq OWNED BY public.eleve.eleve_id;
 
 ALTER TABLE public.personne ADD CONSTRAINT role_personne_fk
 FOREIGN KEY (role_id)
 REFERENCES public.role (role_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
-NOT DEFERRABLE
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+NOT DEFERRABLE;
 
 ALTER TABLE public.connexion ADD CONSTRAINT personne_connexion_fk
 FOREIGN KEY (personne_id)
 REFERENCES public.personne (personne_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
-NOT DEFERRABLE
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+NOT DEFERRABLE;
 
 ALTER TABLE public.eleve ADD CONSTRAINT personne_eleve_fk
 FOREIGN KEY (personne_id)
 REFERENCES public.personne (personne_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
-NOT DEFERRABLE
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+NOT DEFERRABLE;
 
 ALTER TABLE public.eleve ADD CONSTRAINT communesfrance_eleve_fk
 FOREIGN KEY (code_commune)
 REFERENCES public.commune (code_commune)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
-NOT DEFERRABLE
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+NOT DEFERRABLE;
 
 ALTER TABLE public.logement ADD CONSTRAINT apparttype_appartrez_fk
 FOREIGN KEY (type_appart_nom)
 REFERENCES public.type_appart (type_appart_nom)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
-NOT DEFERRABLE
-11962 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+NOT DEFERRABLE;
 
 ALTER TABLE public.eleve ADD CONSTRAINT appartrez_eleve_fk
 FOREIGN KEY (logement_numero)
 REFERENCES public.logement (logement_numero)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
-NOT DEFERRABLE
-11970 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.ddl.GenericDDLGenerator  - endStatement: 
+NOT DEFERRABLE;
 
 ALTER TABLE public.eleve ADD CONSTRAINT elevesouhait_eleve_fk
 FOREIGN KEY (type_souhait)
 REFERENCES public.souhait (type_souhait)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
-NOT DEFERRABLE
-11970 [AWT-EventQueue-0] INFO  ca.sqlpower.architect.swingui.SQLScriptDialog  - The list size is :21
-22831 [Thread-5] ERROR ca.sqlpower.architect.swingui.action.CheckForUpdateAction  - Fail to retrieve current version number!
+NOT DEFERRABLE;
