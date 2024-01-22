@@ -5,6 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 :root {
+  --ecnBlue: #102648;
   --blue: #007bff;
   --indigo: #6610f2;
   --purple: #6f42c1;
@@ -4965,6 +4966,13 @@ a.bg-dark:hover, a.bg-dark:focus,
 button.bg-dark:hover,
 button.bg-dark:focus {
   background-color: black !important; }
+
+.bg-ecnBlue {
+    background-color: #102648 !important; }
+a.bg-ecnBlue:hover, a.bg-ecnBlue:focus,
+button.bg-ecnBlue:hover,
+button.bg-ecnBlue:focus {
+  background-color: #07101e !important; }
 
 .bg-white {
   background-color: #fff !important; }
