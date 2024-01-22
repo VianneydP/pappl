@@ -70,7 +70,7 @@ public class LoginController {
                 user = connexionRepository.create(eleve.getPersonneId());
             }
         }
-        returned = ApplicationTools.getModel("index", user);
+        returned = ApplicationTools.getModel("questionnaire", user);
         return returned;
     }
 

@@ -144,7 +144,6 @@ public class ApplicationInitializer implements ServletContextListener {
             if (!password.isEmpty()) {
                 item.setPersonnePassword(ApplicationTools.encryptPassword(password));
             }
-            item.setPersonneNom(name);
             item.setPersonnePrenom(name);
             em.persist(item);
             em.flush();

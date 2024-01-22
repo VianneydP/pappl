@@ -1,10 +1,9 @@
 /* -----------------------------------------
- * Projet ECN Logement
+ * Projet Kepler
  *
  * Ecole Centrale Nantes
- * Vianney de Ponthaud - Maxence Nicolet
+ * Jean-Yves MARTIN
  * ----------------------------------------- */
- 
 package fr.centrale.nantes.ecnlogement.ldap;
 
 import java.io.UncheckedIOException;
@@ -23,6 +22,10 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+/**
+ *
+ * @author kwyhr
+ */
 public class LDAPManager {
 
     private String ldapBasedn;
@@ -32,34 +35,42 @@ public class LDAPManager {
     private boolean ldapAvailable;
 
     private static LDAPManager ldapServer;
+    private static boolean initialized = false;
 
+    /**
+     *
+     */
     public LDAPManager() {
         init();
-        this.ldapHost = ldapServer.ldapHost;
-        this.ldapBasedn = ldapServer.ldapBasedn;
-        this.ldapSecurityProtocol = ldapServer.ldapSecurityProtocol;
-        this.loginField = ldapServer.loginField;
+        if (ldapServer != null) {
+            this.ldapHost = ldapServer.ldapHost;
+            this.ldapBasedn = ldapServer.ldapBasedn;
+            this.ldapSecurityProtocol = ldapServer.ldapSecurityProtocol;
+            this.loginField = ldapServer.loginField;
 
-        this.ldapAvailable = ldapServer.ldapAvailable;
+            this.ldapAvailable = ldapServer.ldapAvailable;
+        }
     }
 
     /**
      * Initialize LDAP informations
      */
     private static void init() {
-        if (ldapServer == null) {
+        if (!initialized) {
+            initialized = true;
+            ldapServer = null;
             ldapServer = new LDAPManager();
             try {
                 ldapServer.ldapAvailable = false;
                 // USE config parameters
                 ResourceBundle res = ResourceBundle.getBundle(LDAPManager.class.getPackage().getName() + ".ldap");
-                ldapServer.ldapHost = res.getString( "ldapHost" );
-                ldapServer.ldapBasedn = res.getString( "ldapBasedn" );
-                ldapServer.ldapSecurityProtocol = res.getString( "ldapSecurityProtocol" );
-                ldapServer.loginField = res.getString( "loginField" );
+                ldapServer.ldapHost = res.getString("ldapHost");
+                ldapServer.ldapBasedn = res.getString("ldapBasedn");
+                ldapServer.ldapSecurityProtocol = res.getString("ldapSecurityProtocol");
+                ldapServer.loginField = res.getString("loginField");
 
                 if ((ldapServer.ldapHost != null) && (ldapServer.ldapBasedn != null) && (ldapServer.ldapSecurityProtocol != null)
-                    && (!ldapServer.ldapHost.isEmpty()) && (!ldapServer.ldapBasedn.isEmpty())) {
+                        && (!ldapServer.ldapHost.isEmpty()) && (!ldapServer.ldapBasedn.isEmpty())) {
                     ldapServer.checkConnexion();
                 }
             } catch (Exception ex) {
@@ -70,6 +81,7 @@ public class LDAPManager {
 
     /**
      * Check if LDAP is available
+     * @return 
      */
     public boolean isAvailable() {
         return ldapAvailable;
@@ -126,7 +138,7 @@ public class LDAPManager {
             // Add SSL encription
             env.put(Context.SECURITY_PROTOCOL, "ssl");
             // Use locally defined socked manager to avoid certificate validation
-            env.put("java.naming.ldap.factory.socket", "fr.centrale.nantes.ecnlogement.ldap.MySSLSocketFactory");
+            env.put("java.naming.ldap.factory.socket", "fr.centrale.nantes.kepler.ldap.MySSLSocketFactory");
         }
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, loginField + "=" + login + "," + ldapBasedn);
@@ -144,7 +156,7 @@ public class LDAPManager {
      */
     public boolean authenticate(String login, String password) {
         boolean isAuthenticated = false;
-        if ((ldapAvailable) && (login != null) && (password != null) && (! login.isEmpty()) && (! password.isEmpty())) {
+        if ((ldapAvailable) && (login != null) && (password != null) && (!login.isEmpty()) && (!password.isEmpty())) {
             try {
                 Properties env = getLDAPProperties(login, password);
                 DirContext ctx = new InitialDirContext(env);

@@ -18,7 +18,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
-
+    //TOUTES LES IMPLEMENTATIONS ICI
+    //Regarder les méthodes en get- pour comprendre l'utilisation
+    
     @Autowired
     @Lazy
     private CommuneRepository repository;

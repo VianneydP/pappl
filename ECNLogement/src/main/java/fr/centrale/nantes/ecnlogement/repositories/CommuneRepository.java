@@ -23,4 +23,6 @@ public interface CommuneRepository extends JpaRepository<Commune, Integer>, Comm
     public Collection<Commune> findByLongitude(@Param("longitude")float longitude);
     public Collection<Commune> findByDansMetropoleNantes(@Param("dansMetropoleNantes")boolean dansMetropoleNantes);
 
+    //PAS LA PEINE DE MODIFIER !!!
+    //Mais si l'on veut, on peut ajouter des Native Query... MAIS elles ne doivent retourner qu'un objet
 }

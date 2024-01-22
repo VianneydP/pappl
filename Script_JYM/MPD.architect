@@ -185,16 +185,16 @@
    </folder>
   </table>
   <relationships>
-   <relationship id="REL49" populated="true" UUID="b9778200-5e5c-4a84-806b-dcc505db865e" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="EleveSouhait_Eleve_fk" physicalName="elevesouhait_eleve_fk" pk-table-ref="TAB20" pkCardinality="2" updateRule="3" >
+   <relationship id="REL49" populated="true" UUID="b9778200-5e5c-4a84-806b-dcc505db865e" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="EleveSouhait_Eleve_fk" physicalName="EleveSouhait_Eleve_fk" pk-table-ref="TAB20" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP50" populated="true" UUID="e88abdaa-f3de-497f-b0bb-14aa64fc0f04" fk-column-ref="COL14" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL21" />
    </relationship>
-   <relationship id="REL51" populated="true" UUID="8946198f-d06d-4e2a-8f97-44ba469f63c1" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="AppartRez_Eleve_fk" physicalName="appartrez_eleve_fk" pk-table-ref="TAB24" pkCardinality="2" updateRule="3" >
+   <relationship id="REL51" populated="true" UUID="8946198f-d06d-4e2a-8f97-44ba469f63c1" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="AppartRez_Eleve_fk" physicalName="AppartRez_Eleve_fk" pk-table-ref="TAB24" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP52" populated="true" UUID="7f570a13-d458-4994-a57b-41fd4da14717" fk-column-ref="COL15" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL25" />
    </relationship>
-   <relationship id="REL53" populated="true" UUID="bdf457d3-b67d-4e30-9741-6f1b083a57b0" deferrability="7" deleteRule="3" fk-table-ref="TAB24" fkCardinality="7" identifying="false" name="AppartType_AppartRez_fk" physicalName="apparttype_appartrez_fk" pk-table-ref="TAB31" pkCardinality="2" updateRule="3" >
+   <relationship id="REL53" populated="true" UUID="bdf457d3-b67d-4e30-9741-6f1b083a57b0" deferrability="7" deleteRule="3" fk-table-ref="TAB24" fkCardinality="7" identifying="false" name="AppartType_AppartRez_fk" physicalName="AppartType_AppartRez_fk" pk-table-ref="TAB31" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP54" populated="true" UUID="8cd05405-40a1-46cc-81ca-eff1e3c90511" fk-column-ref="COL27" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL32" />
    </relationship>
-   <relationship id="REL55" populated="true" UUID="77ad3feb-7dc1-4895-b719-b9f2f413f85e" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="CommunesFrance_eleve_fk" physicalName="communesfrance_eleve_fk" pk-table-ref="TAB35" pkCardinality="2" updateRule="3" >
+   <relationship id="REL55" populated="true" UUID="77ad3feb-7dc1-4895-b719-b9f2f413f85e" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="CommunesFrance_eleve_fk" physicalName="CommunesFrance_eleve_fk" pk-table-ref="TAB35" pkCardinality="2" updateRule="3" >
     <column-mapping id="CMP56" populated="true" UUID="ce47cf44-43f4-496c-b1b6-21b294a3504c" fk-column-ref="COL16" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL36" />
    </relationship>
    <relationship id="REL57" populated="true" UUID="8cb0be61-ebe0-4cca-a602-0686a8eb3657" deferrability="7" deleteRule="3" fk-table-ref="TAB1" fkCardinality="7" identifying="false" name="connexion_eleve_fk" physicalName="connexion_eleve_fk" pk-table-ref="TAB44" pkCardinality="2" updateRule="3" >
@@ -202,7 +202,7 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.PostgresDDLGenerator" allow-connection="false" target-schema="public"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.PostgresDDLGenerator" allow-connection="true" target-schema="public"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="1.0" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">

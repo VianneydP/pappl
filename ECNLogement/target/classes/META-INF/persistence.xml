@@ -12,10 +12,10 @@
     <class>fr.centrale.nantes.ecnlogement.items.Role</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/ecnlog"/>
-      <property name="javax.persistence.jdbc.user" value="ecnlog"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/pappl"/>
+      <property name="javax.persistence.jdbc.user" value="Vianney"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="ecnlog"/>
+      <property name="javax.persistence.jdbc.password" value="VdP10"/>
     </properties>
   </persistence-unit>
 </persistence>
