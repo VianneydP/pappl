@@ -63,22 +63,24 @@ public class LoginController {
     public ModelAndView handlePOSTConnect(HttpServletRequest request) {
         ModelAndView returned = null;
         String nom = ApplicationTools.getStringFromRequest(request, "nom");
+        nom=ApplicationTools.correctString(nom);
         String prenom = ApplicationTools.getStringFromRequest(request, "prenom");
+        prenom=ApplicationTools.correctString(prenom);
         int numscei = ApplicationTools.getIntFromRequest(request, "numscei");
         Connexion user = null;
-        if ((nom != null) && (prenom != null) && (numscei != 0)
+        if ((nom != null) && (prenom != null) && (numscei != -1)
                 && (!nom.isEmpty()) && (!prenom.isEmpty())) {
             Eleve eleve = eleveRepository.getByPersonNomPrenomNumscei(nom, prenom, numscei);
             if (eleve == null) {
                 Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
-                System.out.println(pers.toString());
                 eleve=eleveRepository.create(numscei,pers);
-                System.out.println(eleve.toString());
                 user = connexionRepository.create(eleve.getPersonne());
-                returned = ApplicationTools.getModel("questionnaire", user);
+                returned = ApplicationTools.getModel("ouidef", user);
             }else{
                 returned = ApplicationTools.getModel("loginRe", null);
             }
+        }else{
+            returned=ApplicationTools.getModel("loginError", null);
         }
         return returned;
     }
