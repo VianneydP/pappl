@@ -24,23 +24,20 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2 class=""><fmt:message key="message.messagenom" bundle="${ressourcesBundle}"/></h2>
+          <h2 class=""><fmt:message key="message.titreloginre" bundle="${ressourcesBundle}"/></h2>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
-            <form id="c_form-h" class="" action="connect.do" method="POST">
-            <div class="form-group row"> <label for="inputnomh" class="col-2 col-form-label"><fmt:message key="message.nom" bundle="${ressourcesBundle}"/></label>
-              <div class="col-10">
-                <input type="text" class="form-control" id="inputnomh" placeholder="<fmt:message key="message.nom" bundle="${ressourcesBundle}"/>" name="nom" required="required"></div>
-            </div>
-            <div class="form-group row"> <label for="inputprenomh" class="col-2 col-form-label"><fmt:message key="message.prenom" bundle="${ressourcesBundle}"/></label>
-              <div class="col-10">
-                <input type="text" class="form-control" id="inputprenomh" placeholder="<fmt:message key="message.prenom" bundle="${ressourcesBundle}"/>" name="prenom" required="required"></div>
-            </div>
+            <form id="c_form-h" class="" action="reconnect.do" method="POST">
+            
             <div class="form-group row"> <label for="inputnumsceih" class="col-2 col-form-label"><fmt:message key="message.numscei" bundle="${ressourcesBundle}"/></label>
               <div class="col-10">
                 <input type="integer" class="form-control" id="inputnumsceih" placeholder="<fmt:message key="message.numscei" bundle="${ressourcesBundle}"/>" name="numscei" required="required"></div>
+            </div>
+            <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label"><fmt:message key="message.password" bundle="${ressourcesBundle}"/></label>
+              <div class="col-10">
+                <input type="text" class="form-control" id="inputpasswordh" placeholder="<fmt:message key="message.password" bundle="${ressourcesBundle}"/>" name="password" required="required"></div>
             </div>
             <button type="submit" class="btn btn-primary"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
           </form>
@@ -51,3 +48,4 @@
     <%@ include file="footer.jspf" %>
   </body>
 </html>
+

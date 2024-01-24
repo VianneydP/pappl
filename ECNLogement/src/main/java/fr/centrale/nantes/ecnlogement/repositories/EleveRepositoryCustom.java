@@ -18,18 +18,27 @@ public interface EleveRepositoryCustom {
      * @return Eleve
      */
     public Eleve create(Eleve item);
-
+    
     /**
      * Create new Eleve
+     * @param numscei
+     * @param personne
+     * @return 
+     */
+    public Eleve create(int numscei,Personne personne);
+    
+    /**
+     * Create new Eleve
+     * @param numscei 
      * @param eleveDateNaissance
      * @param genre
      * @param elevePayshab
      * @param eleveVillehab
      * @param eleveCodepostal
-     * @param personneId
+     * @param personne
      * @return Eleve
      */
-    public Eleve create(Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personneId);
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne);
 
     /**
      * Remove Eleve
@@ -62,10 +71,19 @@ public interface EleveRepositoryCustom {
     public Eleve getByPersonNomPrenomNaissance(String personneNom, String personnePrenom, Date eleveNaissance);
     
     /**
+     * Get a Eleve
+     * @param personneNom
+     * @param personnePrenom
+     * @param numscei
+     * @return 
+     */
+    public Eleve getByPersonNomPrenomNumscei(String personneNom, String personnePrenom,int numscei);
+    
+    /**
      * Set Personne
      * @param item
      * @param toSet
      * @param altRepository 
      */
-    public void setPersonneId(Eleve item, Personne toSet, PersonneRepository altRepository);
+    public void setPersonne(Eleve item, Personne toSet, PersonneRepository altRepository);
 }

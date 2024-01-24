@@ -52,26 +52,25 @@ public class Eleve implements Serializable {
     private Integer eleveId;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "eleve_numscei")
+    private int numscei;
+    @Basic(optional = false)
     @Column(name = "eleve_date_naissance")
     @Temporal(TemporalType.DATE)
     private Date eleveDateNaissance;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 2147483647)
     @Column(name = "genre")
     private String genre;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 2147483647)
     @Column(name = "eleve_payshab")
     private String elevePayshab;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 2147483647)
     @Column(name = "eleve_villehab")
     private String eleveVillehab;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "eleve_codepostal")
     private int eleveCodepostal;
     @Size(max = 2147483647)
@@ -93,7 +92,7 @@ public class Eleve implements Serializable {
     private Logement logementNumero;
     @JoinColumn(name = "personne_id", referencedColumnName = "personne_id")
     @ManyToOne(optional = false)
-    private Personne personneId;
+    private Personne personne;
     @JoinColumn(name = "type_souhait", referencedColumnName = "type_souhait")
     @ManyToOne
     private Souhait typeSouhait;
@@ -121,7 +120,15 @@ public class Eleve implements Serializable {
     public void setEleveId(Integer eleveId) {
         this.eleveId = eleveId;
     }
-
+    
+    public Integer getNumscei(){
+        return numscei;
+    }
+    
+    public void setNumscei(Integer numscei){
+        this.numscei = numscei;
+    }
+    
     public Date getEleveDateNaissance() {
         return eleveDateNaissance;
     }
@@ -210,12 +217,12 @@ public class Eleve implements Serializable {
         this.logementNumero = logementNumero;
     }
 
-    public Personne getPersonneId() {
-        return personneId;
+    public Personne getPersonne() {
+        return personne;
     }
 
-    public void setPersonneId(Personne personneId) {
-        this.personneId = personneId;
+    public void setPersonne(Personne personne) {
+        this.personne = personne;
     }
 
     public Souhait getTypeSouhait() {

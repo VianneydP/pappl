@@ -65,8 +65,8 @@ public class ConnexionRepositoryCustomImpl implements ConnexionRepositoryCustom 
     }
 
     @Override
-    public Connexion create(Personne personneId) {
-        if (personneId != null) {
+    public Connexion create(Personne personne) {
+        if (personne != null) {
             Calendar aCalendar = Calendar.getInstance();
             Date now = aCalendar.getTime();
             String connexionId = createCode(now);
@@ -75,7 +75,7 @@ public class ConnexionRepositoryCustomImpl implements ConnexionRepositoryCustom 
             Connexion item = new Connexion();
             item.setConnectionId(connexionId);
             item.setExpiration(expire);
-            item.setPersonneId(personneId);
+            item.setPersonne(personne);
             return create(item);
         }
         return null;
@@ -93,7 +93,7 @@ public class ConnexionRepositoryCustomImpl implements ConnexionRepositoryCustom 
           Connexion item = repository.getByConnectionId(connectionId);
           if ((item != null) && (value != null)) {
               item.setExpiration(value.getExpiration());
-              item.setPersonneId(value.getPersonneId());
+              item.setPersonne(value.getPersonne());
               repository.saveAndFlush(item);
           }
           return item;

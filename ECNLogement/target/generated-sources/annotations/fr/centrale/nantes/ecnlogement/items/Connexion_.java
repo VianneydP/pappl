@@ -6,11 +6,11 @@ import javax.annotation.processing.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2024-01-22T17:22:24", comments="EclipseLink-2.7.10.v20211216-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2024-01-24T14:15:43", comments="EclipseLink-2.7.10.v20211216-rNA")
 @StaticMetamodel(Connexion.class)
 public class Connexion_ { 
 
-    public static volatile SingularAttribute<Connexion, Personne> personneId;
+    public static volatile SingularAttribute<Connexion, Personne> personne;
     public static volatile SingularAttribute<Connexion, String> connectionId;
     public static volatile SingularAttribute<Connexion, Date> expiration;
 

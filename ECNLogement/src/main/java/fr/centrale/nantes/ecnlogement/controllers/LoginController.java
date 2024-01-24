@@ -15,10 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import fr.centrale.nantes.ecnlogement.repositories.ConnexionRepository;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
+import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
 import fr.centrale.nantes.ecnlogement.items.Connexion;
 import fr.centrale.nantes.ecnlogement.items.Eleve;
 
 import fr.centrale.nantes.ecnlogement.items.Personne;
+import fr.centrale.nantes.ecnlogement.items.Role;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
@@ -36,6 +38,9 @@ public class LoginController {
     @Autowired
     private EleveRepository eleveRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+    
     @RequestMapping(value = "index.do")
     public ModelAndView handleIndex(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("accueil", null);
@@ -59,18 +64,22 @@ public class LoginController {
         ModelAndView returned = null;
         String nom = ApplicationTools.getStringFromRequest(request, "nom");
         String prenom = ApplicationTools.getStringFromRequest(request, "prenom");
-        String naissanceStr = ApplicationTools.getStringFromRequest(request, "naissance");
-        Date naissance = ApplicationTools.isDate(naissanceStr);
-
+        int numscei = ApplicationTools.getIntFromRequest(request, "numscei");
         Connexion user = null;
-        if ((nom != null) && (prenom != null) && (naissance != null)
+        if ((nom != null) && (prenom != null) && (numscei != 0)
                 && (!nom.isEmpty()) && (!prenom.isEmpty())) {
-            Eleve eleve = eleveRepository.getByPersonNomPrenomNaissance(prenom, prenom, naissance);
-            if (eleve != null) {
-                user = connexionRepository.create(eleve.getPersonneId());
+            Eleve eleve = eleveRepository.getByPersonNomPrenomNumscei(nom, prenom, numscei);
+            if (eleve == null) {
+                Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
+                System.out.println(pers.toString());
+                eleve=eleveRepository.create(numscei,pers);
+                System.out.println(eleve.toString());
+                user = connexionRepository.create(eleve.getPersonne());
+                returned = ApplicationTools.getModel("questionnaire", user);
+            }else{
+                returned = ApplicationTools.getModel("loginRe", null);
             }
         }
-        returned = ApplicationTools.getModel("questionnaire", user);
         return returned;
     }
 
@@ -107,7 +116,7 @@ public class LoginController {
             connexionRepository.remove(user);
             user = null;
         }
-        ModelAndView returned = ApplicationTools.getModel("index", user);
+        ModelAndView returned = ApplicationTools.getModel("accueil", user);
         return returned;
     }
 

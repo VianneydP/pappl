@@ -37,17 +37,29 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
         return null;
     }
-
+    
     @Override
-    public Eleve create(Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personneId) {
-        if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personneId != null)) {
+    public Eleve create(int numscei, Personne personne){
+        if (numscei != 0 && personne != null){
             Eleve item = new Eleve();
+            item.setNumscei(numscei);
+            item.setPersonne(personne);
+            return create(item);
+        }
+        return null;
+    }
+    
+    @Override
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne) {
+        if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
+            Eleve item = new Eleve();
+            item.setNumscei(numscei);
             item.setEleveDateNaissance(eleveDateNaissance);
             item.setGenre(genre);
             item.setElevePayshab(elevePayshab);
             item.setEleveVillehab(eleveVillehab);
             item.setEleveCodepostal(eleveCodepostal);
-            item.setPersonneId(personneId);
+            item.setPersonne(personne);
             return create(item);
         }
         return null;
@@ -75,7 +87,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setEleveInfosup(value.getEleveInfosup());
             item.setCodeCommune(value.getCodeCommune());
             item.setLogementNumero(value.getLogementNumero());
-            item.setPersonneId(value.getPersonneId());
+            item.setPersonne(value.getPersonne());
             item.setTypeSouhait(value.getTypeSouhait());
             repository.saveAndFlush(item);
         }
@@ -108,11 +120,27 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
 
     @Override
-    public void setPersonneId(Eleve item, Personne toSet, PersonneRepository altRepository) {
+    public Eleve getByPersonNomPrenomNumscei(String personneNom, String personnePrenom,int numscei){
+        if ((personneNom != null) && (personnePrenom != null) && (numscei != 0)
+                && (!personneNom.isEmpty()) && (!personnePrenom.isEmpty())) {
+            Collection<Personne> list = personneRepository.findByPersonFirstAndLastName(personneNom, personnePrenom);
+            for (Personne p : list) {
+                for (Eleve e : p.getEleveCollection()) {
+                    if (e.getNumscei()==numscei) {
+                        return e;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public void setPersonne(Eleve item, Personne toSet, PersonneRepository altRepository) {
         if ((item != null) && (toSet != null)) {
             
-            if (item.getPersonneId()== null) {
-                item.setPersonneId(toSet);
+            if (item.getPersonne()== null) {
+                item.setPersonne(toSet);
                 repository.save(item);
             }
             if ((toSet.getEleveCollection()!= null) && (! toSet.getEleveCollection().contains(item))) {

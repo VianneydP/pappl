@@ -164,6 +164,7 @@ public class EleveController {
             Eleve dataToSave = new Eleve();
 
             // Retreive values from request
+            dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
             dataToSave.setGenre(ApplicationTools.getStringFromRequest(request, "genre"));
             dataToSave.setElevePayshab(ApplicationTools.getStringFromRequest(request, "elevePayshab"));
@@ -178,13 +179,13 @@ public class EleveController {
             String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
             dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             Integer personneIdTemp = ApplicationTools.getIntFromRequest(request, "personneId");
-            dataToSave.setPersonneId(personneRepository.getByPersonneId(personneIdTemp));
+            dataToSave.setPersonne(personneRepository.getByPersonneId(personneIdTemp));
             String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
             dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
 
             // Create if necessary then Update item
             if (item == null) {
-                item = repository.create(dataToSave.getEleveDateNaissance(), dataToSave.getGenre(), dataToSave.getElevePayshab(), dataToSave.getEleveVillehab(), dataToSave.getEleveCodepostal(), dataToSave.getPersonneId());
+                item = repository.create(dataToSave.getEleveId(), dataToSave.getEleveDateNaissance(), dataToSave.getGenre(), dataToSave.getElevePayshab(), dataToSave.getEleveVillehab(), dataToSave.getEleveCodepostal(), dataToSave.getPersonne());
             }
             repository.update(item.getEleveId(), dataToSave);
 
@@ -282,6 +283,9 @@ public class EleveController {
             if (valueIterator.hasNext()) {
                 String value = valueIterator.next().trim();
                 switch (name) {
+                    case "eleveId":
+                        item.setEleveId(ApplicationTools.getIntFromString(value));
+                        break;
                     case "nom":
                         personne.setPersonneNom(value);
                         break;
@@ -322,9 +326,9 @@ public class EleveController {
             
             if (temp == null) {
                 Personne tempP = personneRepository.create(personne.getPersonneNom(), personne.getPersonnePrenom(), roleId);
-                temp = repository.create(item.getEleveDateNaissance(), 
+                temp = repository.create(item.getEleveId(),item.getEleveDateNaissance(), 
                         item.getGenre(), item.getElevePayshab(), item.getEleveVillehab(), item.getEleveCodepostal() , personne);
-                repository.setPersonneId(item, tempP, personneRepository);
+                repository.setPersonne(item, tempP, personneRepository);
             }
         }
     }

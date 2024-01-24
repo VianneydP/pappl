@@ -48,7 +48,7 @@ public class Connexion implements Serializable {
     private Date expiration;
     @JoinColumn(name = "personne_id", referencedColumnName = "personne_id")
     @ManyToOne(optional = false)
-    private Personne personneId;
+    private Personne personne;
 
     public Connexion() {
     }
@@ -78,12 +78,12 @@ public class Connexion implements Serializable {
         this.expiration = expiration;
     }
 
-    public Personne getPersonneId() {
-        return personneId;
+    public Personne getPersonne() {
+        return personne;
     }
 
-    public void setPersonneId(Personne personneId) {
-        this.personneId = personneId;
+    public void setPersonne(Personne personne) {
+        this.personne = personne;
     }
 
     @Override

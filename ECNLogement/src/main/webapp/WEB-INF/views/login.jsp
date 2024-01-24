@@ -38,9 +38,9 @@
               <div class="col-10">
                 <input type="text" class="form-control" id="inputprenomh" placeholder="<fmt:message key="message.prenom" bundle="${ressourcesBundle}"/>" name="prenom" required="required"></div>
             </div>
-            <div class="form-group row"> <label for="inputnaissanceh" class="col-2 col-form-label"><fmt:message key="message.naissance" bundle="${ressourcesBundle}"/></label>
+            <div class="form-group row"> <label for="inputnumsceih" class="col-2 col-form-label"><fmt:message key="message.numscei" bundle="${ressourcesBundle}"/></label>
               <div class="col-10">
-                <input type="text" class="form-control" id="inputnaissanceh" placeholder="<fmt:message key="message.naissance" bundle="${ressourcesBundle}"/>" name="naissance (DD/MM/YYYY)" required="required"></div>
+                <input type="integer" class="form-control" id="inputnumsceih" placeholder="<fmt:message key="message.numscei" bundle="${ressourcesBundle}"/>" name="numscei" required="required"></div>
             </div>
             <button type="submit" class="btn btn-primary"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
           </form>
