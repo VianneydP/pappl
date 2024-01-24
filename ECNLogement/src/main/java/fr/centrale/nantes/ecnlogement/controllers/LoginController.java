@@ -121,5 +121,31 @@ public class LoginController {
         ModelAndView returned = ApplicationTools.getModel("accueil", user);
         return returned;
     }
+    
+    @RequestMapping(value = "reconnect.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTReconnect(HttpServletRequest request) {
+        ModelAndView returned = null;
+        String identifiant = ApplicationTools.getStringFromRequest(request, "identifiant");
+        String mdp = ApplicationTools.getStringFromRequest(request, "password");
+        Connexion user = null;
+        if ((identifiant != null) && (mdp != null) && (!identifiant.isEmpty()) && (!mdp.isEmpty())) {
+            Personne pers = personneRepository.getByPersonneLogin(identifiant);
+            if (pers == null) {
+                user = connexionRepository.create(pers);
+                returned = ApplicationTools.getModel("ouidef", user);
+            }else{
+                returned = ApplicationTools.getModel("loginRe", null);
+            }
+        }else{
+            returned=ApplicationTools.getModel("loginError", null);
+        }
+        return returned;
+    }
+    
+    public ModelAndView choixVueReconnexion(){
+        ModelAndView returned = null;
+        //TODO comparaison des dates
+        return returned;
+    }
 
 }
