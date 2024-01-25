@@ -41,11 +41,18 @@ public class LoginController {
     @Autowired
     private RoleRepository roleRepository;
     
+    @RequestMapping(value = "admin.do")
+    public ModelAndView handleAdmin(HttpServletRequest request) {
+        ModelAndView returned = ApplicationTools.getModel("loginAdmin", null);
+        return returned;
+    }
+    
     @RequestMapping(value = "index.do")
     public ModelAndView handleIndex(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("accueil", null);
         return returned;
     }
+
 
     @RequestMapping(value = "connect.do", method = RequestMethod.GET)
     public ModelAndView handleGETConnect(HttpServletRequest request) {
@@ -107,7 +114,13 @@ public class LoginController {
                 }
             }
         }
-        returned = ApplicationTools.getModel("index", user);
+        if (user!=null){
+            returned=ApplicationTools.getModel("accueilAdmin", user);
+        }
+        else {
+            returned = ApplicationTools.getModel("loginAdmin",null);
+        }
+        
         return returned;
     }
 

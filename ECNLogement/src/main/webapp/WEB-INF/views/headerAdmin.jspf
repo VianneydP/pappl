@@ -1,0 +1,72 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
+<fmt:setBundle basename="fr.centrale.nantes.ecnlogement.resources.messages" var="ressourcesBundle" />
+
+
+
+
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><b>ECNLogement</b></a>
+        <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <c:if test="${(! empty menuList)}"><ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <c:if test="${(! empty user)}"><c:forEach var="itemNav" items="${menuList}">
+                            <c:choose><c:when test="${not empty itemNav.menuParent}"></c:when>
+                                <c:when test="${empty itemNav.menuCollection}"><li class="nav-item active">
+                                        <a class="nav-link text-white" href="#" onClick="launchNav('${itemNav.menuCode}')"><button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
+                                                <span class="navbar-toggler-icon"></span>
+                                            </button><fmt:message key="menu.${itemNav.menuCode}" bundle="${ressourcesBundle}"/></a>
+                                    </li></c:when>
+                                <c:otherwise><li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fmt:message key="menu.${itemNav.menuCode}" bundle="${ressourcesBundle}"/></a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbar${itemNav.menuCode}"><%--<c:forEach var="item2" items="${menuList}"><c:if test="${((! empty item2.parentMenuId) && (item2.parentMenuId.menuId==itemNav.menuId))}">
+                                           <li><a class="dropdown-item" href="#" onClick="launchNav('${item2.menuCode}')"><fmt:message key="menu.${item2.menuCode}" bundle="${ressourcesBundle}"/></a></li>
+                                        </c:forEach>--%></ul>
+                                    </li></c:otherwise></c:choose>
+                        </c:forEach></c:if>
+                </ul></c:if>
+                <form action="#" method="GET">
+                    <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                <c:choose>
+                    <c:when test="${empty user}"><button type="submit" class="btn btn-light" formaction="connect.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button></c:when>
+                    <c:otherwise><button type="submit" class="btn btn-light" formaction="disconnect.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button></c:otherwise>
+                </c:choose>
+            </form>
+            <form action="#" method="POST" id="navLaunch">
+                <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                </form>
+                <form action="#" method="POST" id="actionLaunch">
+                    <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                    <input type="hidden" name="dataAction" id="dataAction" value="" />
+                    <input type="hidden" name="curAction" id="curAction" value="" />
+                </form>
+
+                <div class="mx-auto">
+                    <ul class="nav navbar-nav d-flex justify-content-start align-items-center bg-dark">
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-light text-black mx-2" href="visuBDD.jsp"><fmt:message key="button.visuBDD" bundle="${ressourcesBundle}"/></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-light text-black " href="pageAlertes.jsp"><fmt:message key="button.alertes" bundle="${ressourcesBundle}"/></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-light text-black mx-2" href="WEB-INF/views/importeAdmin" onClick="launchNav('${itemNav.menuCode}')">
+                            <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
+                                <span class="navbar-toggler-icon"></span>
+                            </button><fmt:message key="button.importExportAdmin" bundle="${ressourcesBundle}"/></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-light text-black" href="affectationLogement.jsp"><fmt:message key="button.affectationLogement" bundle="${ressourcesBundle}"/></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="py-1"><div class="container"></div></div>
