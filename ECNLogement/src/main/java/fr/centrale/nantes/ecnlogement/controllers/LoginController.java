@@ -77,6 +77,8 @@ public class LoginController {
                 user = connexionRepository.create(eleve.getPersonne());
                 returned = ApplicationTools.getModel("password", user);
                 returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
             }else{
                 returned = ApplicationTools.getModel("loginRe", null);
             }

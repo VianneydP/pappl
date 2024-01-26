@@ -53,10 +53,13 @@
         <div class="row">
             <div class="col-md-12">
                 <form id="c_form-h" class="" action="EleveSave.do" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                    <input type="hidden" name="eleveId" value="${eleve.eleveId}" />
+                    <input type="hidden" name="personneId" value="${personne.personneId}" />
                     <div class="form-group row">
-                        <label for="inputnaissanceh" class="col-2 col-form-label"><fmt:message key="message.questionnaireNaissance" bundle="${ressourcesBundle}"/></label>
+                        <label for="inputnaissanceh" class="col-2 col-form-label"><fmt:message key="message.naissance" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
-                            <input type="texte" class="form-control" id="inputnaissanceh" pattern="\d{2}-\d{2}-\d{4}" placeholder="JJ-MM-AAAA" placeholder="<fmt:message key="message.questionnaireNaissanceFormat" bundle="${ressourcesBundle}"/>" name="eleveDateNaissance" required="required">
+                            <input type="date" class="form-control" id="inputnaissanceh" placeholder="<fmt:message key="message.naissance" bundle="${ressourcesBundle}"/>" name="eleveDateNaissance" required="required">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -74,13 +77,13 @@
                     <div class="form-group row">
                         <label for="inputpaysh" class="col-2 col-form-label"><fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="inputpaysh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+$" placeholder="<fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/>" name="elevePayshab" required="required">
+                            <input type="text" class="form-control" id="inputpaysh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ-]+$" placeholder="<fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/>" name="elevePayshab" required="required">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
-                            <input type="texte" class="form-control" id="inputvilleh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                            <input type="texte" class="form-control" id="inputvilleh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ-]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
                         </div>
                     </div>
                     </div>
@@ -104,14 +107,14 @@
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Upload file</button>
                         </div>
                     </div> -->
-                    <div class="form-group row">
+                    <!--Celui ci est bon<div class="form-group row">
                         <label for="inputnotif" class="col-2 col-form-label"><fmt:message key="message.questionnaireNotif" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
                                 <label for="fileInput">Téléverser:</label>
                                 <input type="file" id="fileInput" name="eleveFile" accept=".jpg, .jpeg, .png, .pdf">
                                 <br>
                         </div>
-                    </div>
+                    </div>-->
                     
                     
                     <div class="form-group row"> 
@@ -135,7 +138,7 @@
                     </div>         
                                 
                     <div class="form-group row"> 
-                        <label for="inputchoix" class="col-2 col-form-label"><fmt:message key="message.questionnairePreference" bundle="${ressourcesBundle}"/></label>
+                        <label for="inputtypeSouhait" class="col-2 col-form-label"><fmt:message key="message.questionnairePreference" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
                             <div class="d-block my-3">
                                 <div class="custom-control custom-radio">

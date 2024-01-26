@@ -170,14 +170,14 @@ public class EleveController {
 
             Eleve dataToSave = new Eleve();
             //Ajoute par moi
-            File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
+            /**File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
             String projectResourcePath = "src/main/resources/televersements";
             if(notif!=null){
             Path destination = new File(projectResourcePath).toPath();
             String fileName = generateUniqueFileName(destination);
             Path destinationWithUniqueName = destination.resolve(fileName);
             Files.copy(notif.toPath(), destinationWithUniqueName);
-            }
+            }**/
             
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
@@ -190,10 +190,11 @@ public class EleveController {
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
+            dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
             Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
             dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
-            //String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
-            //dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
+            String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
+            dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             Integer personneIdTemp = ApplicationTools.getIntFromRequest(request, "personneId");
             dataToSave.setPersonne(personneRepository.getByPersonneId(personneIdTemp));
             String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");

@@ -25,7 +25,9 @@ import org.springframework.data.domain.Sort;
 import fr.centrale.nantes.ecnlogement.repositories.ConnexionRepository;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
 import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
+import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
 import fr.centrale.nantes.ecnlogement.items.Connexion;
+import fr.centrale.nantes.ecnlogement.items.Eleve;
 import fr.centrale.nantes.ecnlogement.items.Personne;
 import fr.centrale.nantes.ecnlogement.items.Role;
 
@@ -37,6 +39,9 @@ public class PersonneController {
 
     @Autowired
     private ConnexionRepository connexionRepository;
+    
+    @Autowired
+    private EleveRepository eleveRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -128,17 +133,19 @@ public class PersonneController {
             // Retreive item (null if not created)
             Integer id = ApplicationTools.getIntFromRequest(request,"personneId");
             Personne item = repository.getByPersonneId( id );
+            //Ajoute par moi
+            Integer id2 = ApplicationTools.getIntFromRequest(request,"eleveId");
+            Eleve eleve = eleveRepository.getByEleveId( id2 );
 
             Personne dataToSave = new Personne();
 
             // Retreive values from request
-            //dataToSave.setPersonneNom(ApplicationTools.getStringFromRequest(request,"personneNom"));
-            //dataToSave.setPersonnePrenom(ApplicationTools.getStringFromRequest(request,"personnePrenom"));
-            //dataToSave.setPersonneLogin(ApplicationTools.getStringFromRequest(request,"personneLogin"));
+            dataToSave.setPersonneNom(ApplicationTools.getStringFromRequest(request,"personneNom"));
+            dataToSave.setPersonnePrenom(ApplicationTools.getStringFromRequest(request,"personnePrenom"));
             dataToSave.setPersonneLogin(ApplicationTools.getStringFromRequest(request,"personneLogin"));
             dataToSave.setPersonnePassword(ApplicationTools.encryptPassword(ApplicationTools.getStringFromRequest(request,"personnePassword")));
-            //Integer roleIdTemp = ApplicationTools.getIntFromRequest(request,"roleId");
-            //dataToSave.setRoleId(roleRepository.getByRoleId(roleIdTemp));
+            Integer roleIdTemp = ApplicationTools.getIntFromRequest(request,"roleId");
+            dataToSave.setRoleId(roleRepository.getByRoleId(roleIdTemp));
 
             // Create if necessary then Update item
             if (item == null) {
@@ -149,6 +156,9 @@ public class PersonneController {
             // Return to the list
             //returned = handlePersonneList(user);
             returned = ApplicationTools.getModel( "questionnaire", user );
+            returned.addObject("personne", item);
+            returned.addObject("eleve", eleve);
+            
         }
         return returned;
     }
