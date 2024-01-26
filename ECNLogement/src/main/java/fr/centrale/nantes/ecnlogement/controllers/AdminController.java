@@ -51,9 +51,9 @@ public class AdminController {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user == null) {
-            returned = ApplicationTools.getModel( "index", null );
+            returned = ApplicationTools.getModel( "index", null);
         } else {
-            returned=ApplicationTools.getModel("importAdmin", null);
+            returned=ApplicationTools.getModel("importAdmin", user);
         }
         return returned;
     }
@@ -63,9 +63,9 @@ public class AdminController {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user == null) {
-            returned = ApplicationTools.getModel( "index", null );
+            returned = ApplicationTools.getModel( "EleveList", null );
         } else {
-            returned=ApplicationTools.getModel("visuBDD", null);
+            returned=ApplicationTools.getModel("EleveEdit", user);
         }
         return returned;
     }

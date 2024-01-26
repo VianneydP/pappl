@@ -54,10 +54,10 @@
                 <div id="fileImporter" style="display:none">
                     <form id="formImporter" action="#" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectCode}</c:if>" />
-                        <input type="file" id="importFile" name="importFile" style="display:none" onChange="this.form.submit();" />
+                        <input type="file" id="importFile" name="importFile" onChange="this.form.submit();" />
                     </form>
                 </div>
-                <table id="EleveList" class="table table-striped table-md sortable" style="visibility:hidden;">
+                <table id="EleveList" class="table table-striped table-md sortable" style="">
                 <thead>
                   <tr>
                     <th class="col-md-1"></th>
