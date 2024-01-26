@@ -13,6 +13,25 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Bootstrap -->
+        
+        <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 100% de la hauteur de la vue */
+        }
+
+        .container {
+            flex: 1; /* Occupe l'espace disponible restant */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+        
         <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
         <script type="text/javascript" src="js/jquery-3.6.1.min.js"></script>
@@ -25,6 +44,127 @@
     <body>
         <%@ include file="header.jspf" %>
         <h1>Vous êtes bien arrivé sur la page du questionnaire !!!</h1>
-        <%@ include file="footer.jspf" %>
+        <h4>Veuillez-remplir les informations ci-dessous pour vous affecter dans un logement. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <form id="c_form-h" class="" action="EleveSave.do" method="POST" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        <label for="inputmailh" class="col-2 col-form-label"><fmt:message key="message.questionnaireMail" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <input type="email" class="form-control" id="inputmailh" placeholder="<fmt:message key="message.questionnaireMail" bundle="${ressourcesBundle}"/>" name="eleveMail" required="required">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputnumtelh" class="col-2 col-form-label"><fmt:message key="message.questionnaireTelephone" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="inputnumtelh" placeholder="<fmt:message key="message.questionnaireTelephone" bundle="${ressourcesBundle}"/>" name="eleveNumtel" required="required">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputpaysh" class="col-2 col-form-label"><fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="inputpaysh" placeholder="<fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/>" name="elevePayshab" required="required">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <input type="texte" class="form-control" id="inputvilleh" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-group row"> 
+                        <label for="inputboursierh" class="col-2 col-form-label"><fmt:message key="message.questionnaireBoursier" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <div class="d-block my-3">
+                                <div class="custom-control custom-radio">
+                                    <input id="inputboursierh" name="eleveBoursier" type="radio" class="custom-control-input" checked="" required="" value="on"> <label class="custom-control-label" for="credit">Non</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="inputboursierh" name="eleveBoursier" type="radio" class="custom-control-input" checked="" required="" value="on"> <label class="custom-control-label" for="credit">Oui</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group row">
+                        <label for="inputnotif" class="col-2 col-form-label"><fmt:message key="message.questionnaireNotif" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <button class="btn btn-primary" type="button">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Upload file</button>
+                        </div>
+                    </div> -->
+                    <div class="form-group row">
+                        <label for="inputnotif" class="col-2 col-form-label"><fmt:message key="message.questionnaireNotif" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                                <label for="fileInput">Téléverser:</label>
+                                <input type="file" id="fileInput" name="eleveFile" accept=".jpg, .jpeg, .png, .pdf">
+                                <br>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="form-group row"> 
+                        <label for="inputgenre" class="col-2 col-form-label"><fmt:message key="message.questionnaireGenre" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <div class="d-block my-3">
+                                <div class="custom-control custom-radio">
+                                    <input id="masculin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="Masculin">
+                                    <label class="custom-control-label" for="masculin"><fmt:message key="message.questionnaireMasculin" bundle="${ressourcesBundle}"/></label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="feminin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="Féminin">
+                                    <label class="custom-control-label" for="feminin"><fmt:message key="message.questionnaireFeminin" bundle="${ressourcesBundle}"/></label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="autre" name="genre" type="radio" class="custom-control-input" required="",checked="", value="Autre">
+                                    <label class="custom-control-label" for="autre"><fmt:message key="message.questionnaireAutre" bundle="${ressourcesBundle}"/></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>         
+                                
+                    <div class="form-group row"> 
+                        <label for="inputchoix" class="col-2 col-form-label"><fmt:message key="message.questionnairePreference" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <div class="d-block my-3">
+                                <div class="custom-control custom-radio">
+                                    <input id="choix1" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Seul">
+                                    <label class="custom-control-label" for="choix1"><fmt:message key="message.questionnaireChoix1" bundle="${ressourcesBundle}"/></label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="choix2" name="typeSouhait" type="radio" class="custom-control-input" required="" value="SeulOuColoc">
+                                    <label class="custom-control-label" for="choix2"><fmt:message key="message.questionnaireChoix2" bundle="${ressourcesBundle}"/></label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="choix3" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Coloc">
+                                    <label class="custom-control-label" for="choix3"><fmt:message key="message.questionnaireChoix3" bundle="${ressourcesBundle}"/></label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="choix4" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Indifferent">
+                                    <label class="custom-control-label" for="choix4"><fmt:message key="message.questionnaireChoix4" bundle="${ressourcesBundle}"/></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputinfosuph" class="col-2 col-form-label"><fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="inputinfosuph" placeholder="<fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/>" name="eleveInfosup"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary"><fmt:message key="button.save" bundle="${ressourcesBundle}"/></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="">Pour toute information ou problème, merci de contacter le [numéro permanence logement]</h5>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+
+        <%@ include file="footer2.jspf" %>
     </body>
 </html>

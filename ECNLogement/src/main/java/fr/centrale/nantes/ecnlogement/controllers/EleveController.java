@@ -39,6 +39,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
@@ -148,9 +150,14 @@ public class EleveController {
         }
         return returned;
     }
+    
+    //Ajoute par moi
+    private static String generateUniqueFileName(Path destination) {
+        return System.currentTimeMillis() + "_" + destination.getFileName().toString();
+    }
 
     @RequestMapping(value = "EleveSave.do", method = RequestMethod.POST)
-    public ModelAndView handlePOSTEleveSave(HttpServletRequest request) {
+    public ModelAndView handlePOSTEleveSave(HttpServletRequest request) throws IOException {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user == null) {
@@ -162,7 +169,16 @@ public class EleveController {
             Eleve item = repository.getByEleveId(id);
 
             Eleve dataToSave = new Eleve();
-
+            //Ajoute par moi
+            File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
+            String projectResourcePath = "src/main/resources/televersements";
+            if(notif!=null){
+            Path destination = new File(projectResourcePath).toPath();
+            String fileName = generateUniqueFileName(destination);
+            Path destinationWithUniqueName = destination.resolve(fileName);
+            Files.copy(notif.toPath(), destinationWithUniqueName);
+            }
+            
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
@@ -176,8 +192,8 @@ public class EleveController {
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
             Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
             dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
-            String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
-            dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
+            //String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
+            //dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             Integer personneIdTemp = ApplicationTools.getIntFromRequest(request, "personneId");
             dataToSave.setPersonne(personneRepository.getByPersonneId(personneIdTemp));
             String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
@@ -190,7 +206,8 @@ public class EleveController {
             repository.update(item.getEleveId(), dataToSave);
 
             // Return to the list
-            returned = handleEleveList(user);
+            //returned = handleEleveList(user);
+            returned=ApplicationTools.getModel("questionnaire", user);
         }
         return returned;
     }
