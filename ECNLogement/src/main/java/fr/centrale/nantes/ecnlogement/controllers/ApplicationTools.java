@@ -899,4 +899,28 @@ public class ApplicationTools {
 
         return name;
     }
+    
+    public static String correctString(String text){
+        String returned=text.replace("à", "a");
+        returned=returned.replace("é", "e");
+        returned=returned.replace("è", "e");
+        returned=returned.replace("ê", "e");
+        returned=returned.replace("ë", "e");
+        returned=returned.replace("ù", "u");
+        returned=returned.replace("ç", "c");
+        returned=returned.replace("â", "a");
+        returned=returned.replace("î", "i");
+        returned=returned.replace("ï", "i");
+        returned=returned.replace("ô", "o");
+        returned=returned.replace("û", "u");
+        returned=returned.replace("ï", "u");
+        returned=returned.replace("ñ", "n");
+        returned=returned.replace("ç", "c");
+        returned=returned.replace("-", " ");
+        returned =returned.replace("'", " ");
+        returned =returned.replace("<", " ");
+        returned =returned.replace(">", " ");
+        returned =returned.toUpperCase();
+        return returned;
+    }
 }

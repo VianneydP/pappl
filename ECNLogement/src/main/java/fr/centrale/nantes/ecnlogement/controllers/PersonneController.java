@@ -132,12 +132,13 @@ public class PersonneController {
             Personne dataToSave = new Personne();
 
             // Retreive values from request
-            dataToSave.setPersonneNom(ApplicationTools.getStringFromRequest(request,"personneNom"));
-            dataToSave.setPersonnePrenom(ApplicationTools.getStringFromRequest(request,"personnePrenom"));
+            //dataToSave.setPersonneNom(ApplicationTools.getStringFromRequest(request,"personneNom"));
+            //dataToSave.setPersonnePrenom(ApplicationTools.getStringFromRequest(request,"personnePrenom"));
+            //dataToSave.setPersonneLogin(ApplicationTools.getStringFromRequest(request,"personneLogin"));
             dataToSave.setPersonneLogin(ApplicationTools.getStringFromRequest(request,"personneLogin"));
-            dataToSave.setPersonnePassword(ApplicationTools.getStringFromRequest(request,"personnePassword"));
-            Integer roleIdTemp = ApplicationTools.getIntFromRequest(request,"roleId");
-            dataToSave.setRoleId(roleRepository.getByRoleId(roleIdTemp));
+            dataToSave.setPersonnePassword(ApplicationTools.encryptPassword(ApplicationTools.getStringFromRequest(request,"personnePassword")));
+            //Integer roleIdTemp = ApplicationTools.getIntFromRequest(request,"roleId");
+            //dataToSave.setRoleId(roleRepository.getByRoleId(roleIdTemp));
 
             // Create if necessary then Update item
             if (item == null) {
@@ -146,7 +147,8 @@ public class PersonneController {
             repository.update(item.getPersonneId(), dataToSave);
 
             // Return to the list
-            returned = handlePersonneList(user);
+            //returned = handlePersonneList(user);
+            returned = ApplicationTools.getModel( "questionnaire", user );
         }
         return returned;
     }
@@ -163,7 +165,8 @@ public class PersonneController {
             ApplicationTools.importCSV(tempFile, this, "createItem");
             ApplicationTools.cleanRequest(request);
 
-            returned = handlePersonneList(user);
+            //returned = handlePersonneList(user);
+            returned = ApplicationTools.getModel( "loginRe", user );
         }
         return returned;
     }

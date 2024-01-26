@@ -183,8 +183,8 @@ public class EleveController {
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
             dataToSave.setGenre(ApplicationTools.getStringFromRequest(request, "genre"));
-            dataToSave.setElevePayshab(ApplicationTools.getStringFromRequest(request, "elevePayshab"));
-            dataToSave.setEleveVillehab(ApplicationTools.getStringFromRequest(request, "eleveVillehab"));
+            dataToSave.setElevePayshab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
+            dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
             dataToSave.setEleveCodepostal(ApplicationTools.getIntFromRequest(request, "eleveCodepostal"));
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));

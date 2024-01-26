@@ -30,6 +30,9 @@
             bottom: 0;
             width: 100%;
         }
+         h1 {
+            text-align: center;
+        }
     </style>
         
         <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
@@ -43,11 +46,19 @@
     </head>
     <body>
         <%@ include file="header.jspf" %>
-        <h1>Vous êtes bien arrivé sur la page du questionnaire !!!</h1>
-        <h4>Veuillez-remplir les informations ci-dessous pour vous affecter dans un logement. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h4>
+        <h1>Questionnaire</h1>
+        <br>
+        <h5>Veuillez-remplir les informations ci-dessous pour vous affecter dans un logement. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h5>
+        <br>
         <div class="row">
             <div class="col-md-12">
                 <form id="c_form-h" class="" action="EleveSave.do" method="POST" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        <label for="inputnaissanceh" class="col-2 col-form-label"><fmt:message key="message.questionnaireNaissance" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <input type="texte" class="form-control" id="inputnaissanceh" pattern="\d{2}-\d{2}-\d{4}" placeholder="JJ-MM-AAAA" placeholder="<fmt:message key="message.questionnaireNaissanceFormat" bundle="${ressourcesBundle}"/>" name="eleveDateNaissance" required="required">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="inputmailh" class="col-2 col-form-label"><fmt:message key="message.questionnaireMail" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
@@ -57,19 +68,19 @@
                     <div class="form-group row">
                         <label for="inputnumtelh" class="col-2 col-form-label"><fmt:message key="message.questionnaireTelephone" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="inputnumtelh" placeholder="<fmt:message key="message.questionnaireTelephone" bundle="${ressourcesBundle}"/>" name="eleveNumtel" required="required">
+                            <input type="text" class="form-control" id="inputnumtelh" pattern="[+0-9]{10,13}" placeholder="<fmt:message key="message.questionnaireTelephone" bundle="${ressourcesBundle}"/>" name="eleveNumtel" required="required">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputpaysh" class="col-2 col-form-label"><fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="inputpaysh" placeholder="<fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/>" name="elevePayshab" required="required">
+                            <input type="text" class="form-control" id="inputpaysh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+$" placeholder="<fmt:message key="message.questionnairePays" bundle="${ressourcesBundle}"/>" name="elevePayshab" required="required">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
-                            <input type="texte" class="form-control" id="inputvilleh" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                            <input type="texte" class="form-control" id="inputvilleh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
                         </div>
                     </div>
                     </div>
@@ -78,10 +89,10 @@
                         <div class="col-10">
                             <div class="d-block my-3">
                                 <div class="custom-control custom-radio">
-                                    <input id="inputboursierh" name="eleveBoursier" type="radio" class="custom-control-input" checked="" required="" value="on"> <label class="custom-control-label" for="credit">Non</label>
+                                    <input id="inputboursiernon" name="eleveBoursier" type="radio" class="custom-control-input" checked="" required="" value="non"> <label class="custom-control-label" for="inputboursionnon">Non</label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="inputboursierh" name="eleveBoursier" type="radio" class="custom-control-input" checked="" required="" value="on"> <label class="custom-control-label" for="credit">Oui</label>
+                                    <input id="inputboursieroui" name="eleveBoursier" type="radio" class="custom-control-input" checked="" required="" value="oui"> <label class="custom-control-label" for="inputboursieroui">Oui</label>
                                 </div>
                             </div>
                         </div>
@@ -108,15 +119,15 @@
                         <div class="col-10">
                             <div class="d-block my-3">
                                 <div class="custom-control custom-radio">
-                                    <input id="masculin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="Masculin">
+                                    <input id="masculin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="masculin">
                                     <label class="custom-control-label" for="masculin"><fmt:message key="message.questionnaireMasculin" bundle="${ressourcesBundle}"/></label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="feminin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="Féminin">
+                                    <input id="feminin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="feminin">
                                     <label class="custom-control-label" for="feminin"><fmt:message key="message.questionnaireFeminin" bundle="${ressourcesBundle}"/></label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="autre" name="genre" type="radio" class="custom-control-input" required="",checked="", value="Autre">
+                                    <input id="autre" name="genre" type="radio" class="custom-control-input" required="",checked="", value="autre">
                                     <label class="custom-control-label" for="autre"><fmt:message key="message.questionnaireAutre" bundle="${ressourcesBundle}"/></label>
                                 </div>
                             </div>
@@ -151,11 +162,13 @@
                         <div class="col-10">
                             <input type="text" class="form-control" id="inputinfosuph" placeholder="<fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/>" name="eleveInfosup"></div>
                     </div>
+                    <br>
                     <div class="row">
                         <div class="col-md-6">
                         <button type="submit" class="btn btn-primary"><fmt:message key="button.save" bundle="${ressourcesBundle}"/></button>
                         </div>
                     </div>
+                    <br>
                     <div class="row">
                         <div class="col-md-12">
                             <h5 class="">Pour toute information ou problème, merci de contacter le [numéro permanence logement]</h5>
