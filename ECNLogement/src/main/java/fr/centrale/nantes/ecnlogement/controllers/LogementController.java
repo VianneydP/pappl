@@ -149,6 +149,7 @@ public class LogementController {
         return returned;
     }
     
+    
      /**
      * Create an item form attribute lists
      *
