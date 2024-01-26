@@ -24,8 +24,8 @@
     </head>
     <body>
         <%@ include file="header.jspf" %>
-        <h1><fmt:message key="message.titreErrorPage" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageErrorPage" bundle="${ressourcesBundle}"/></h2>
+        <h1><fmt:message key="message.titreTropTard" bundle="${ressourcesBundle}"/></h1>
+        <h2 class=""><fmt:message key="message.messageTropTard" bundle="${ressourcesBundle}"/></h2>
         <%@ include file="footer.jspf" %>
     </body>
 </html>

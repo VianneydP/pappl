@@ -341,7 +341,7 @@ public class EleveController {
         if (oui){
             returned=ApplicationTools.getModel("questionnaire", user);
         }else{
-            returned=ApplicationTools.getModel("erreur_page", null);
+            returned=ApplicationTools.getModel("errorPage", null);
         }
         return returned;    
     }
