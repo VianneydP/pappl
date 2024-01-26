@@ -15,7 +15,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <c:if test="${(! empty menuList)}"><ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <c:if test="${(! empty menuList)}">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <c:if test="${(! empty user)}"><c:forEach var="itemNav" items="${menuList}">
                             <c:choose><c:when test="${not empty itemNav.menuParent}"></c:when>
                                 <c:when test="${empty itemNav.menuCollection}"><li class="nav-item active">
@@ -34,38 +35,47 @@
                 <form action="#" method="GET">
                     <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                 <c:choose>
-                    <c:when test="${empty user}"><button type="submit" class="btn btn-light" formaction="connect.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button></c:when>
-                    <c:otherwise><button type="submit" class="btn btn-light" formaction="disconnect.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button></c:otherwise>
+                    <c:when test="${empty user}"><button type="submit" class="btn btn-light" formaction="connectAdmin.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button></c:when>
+                    <c:otherwise><button type="submit" class="btn btn-light" formaction="disconnectAdmin.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button></c:otherwise>
                 </c:choose>
-            </form>
+                </form>
             <form action="#" method="POST" id="navLaunch">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                </form>
-                <form action="#" method="POST" id="actionLaunch">
-                    <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                    <input type="hidden" name="dataAction" id="dataAction" value="" />
-                    <input type="hidden" name="curAction" id="curAction" value="" />
-                </form>
+            </form>
+            <form action="#" method="POST" id="actionLaunch">
+                <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                <input type="hidden" name="dataAction" id="dataAction" value="" />
+                <input type="hidden" name="curAction" id="curAction" value="" />
+            </form>
 
-                <div class="mx-auto">
-                    <ul class="nav navbar-nav d-flex justify-content-start align-items-center bg-dark">
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-light text-black mx-2" href="visuBDD.jsp"><fmt:message key="button.visuBDD" bundle="${ressourcesBundle}"/></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-light text-black " href="pageAlertes.jsp"><fmt:message key="button.alertes" bundle="${ressourcesBundle}"/></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-light text-black mx-2" href="WEB-INF/views/importeAdmin" onClick="launchNav('${itemNav.menuCode}')">
-                            <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
-                                <span class="navbar-toggler-icon"></span>
-                            </button><fmt:message key="button.importExportAdmin" bundle="${ressourcesBundle}"/></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-light text-black" href="affectationLogement.jsp"><fmt:message key="button.affectationLogement" bundle="${ressourcesBundle}"/></a>
-                    </li>
-                </ul>
-            </div>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="nav navbar-nav d-flex justify-content-start align-items-center bg-dark mx-auto">
+                        <form id="c_form-h" class="" action="visuBDD.do" method="POST">
+                            <li class="nav-item"><button class="nav-link btn btn-light text-black mx-2" type="submit">
+                                <fmt:message key="button.visuBDD" bundle="${ressourcesBundle}"/></button>
+                            </li>
+                        </form>
+                        <form id="c_form-h" class="" action="alertes.do" method="POST">
+                            <li class="nav-item">
+                                <button class="nav-link btn btn-light text-black " type="submit">
+                                    <fmt:message key="button.alertes" bundle="${ressourcesBundle}"/></button>
+                            </li>
+                        </form>
+                        <form id="c_form-h" class="" action="pageImport.do" method="POST">
+                            <li class="nav-item">
+                                <button class="nav-link btn btn-light text-black mx-2" type="submit">
+                                    <fmt:message key="button.importAdmin" bundle="${ressourcesBundle}"/>
+                                </button>
+                            </li>
+                        </form>
+                        <form id="c_form-h" class="" action="affectLogement.do" method="POST">
+                            <li class="nav-item">
+                                <button class="nav-link btn btn-light text-black " type="submit">
+                                    <fmt:message key="button.affectationLogement" bundle="${ressourcesBundle}"/></button>
+                            </li>
+                        </form>
+                    </ul>
+                </div>
         </div>
     </div>
 </nav>

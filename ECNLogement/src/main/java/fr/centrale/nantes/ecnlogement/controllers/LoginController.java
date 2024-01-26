@@ -135,4 +135,14 @@ public class LoginController {
         return returned;
     }
 
+    @RequestMapping(value = "disconnectAdmin.do")
+    public ModelAndView handleDisconnectAdmin(HttpServletRequest request) {
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user != null) {
+            connexionRepository.remove(user);
+            user = null;
+        }
+        ModelAndView returned = ApplicationTools.getModel("loginAdmin", user);
+        return returned;
+    }
 }
