@@ -68,6 +68,7 @@ public class ApplicationInitializer implements ServletContextListener {
         createDefaultMenus();
         createDefaultRoles();
         createDefaultUsers();
+        //createDefaultSouhaits();
     }
 
     /* ----------------------------------------------------------------------- */
@@ -126,6 +127,38 @@ public class ApplicationInitializer implements ServletContextListener {
         transaction.begin();
         createRole(Role.ROLEADMIN, "Admin");
         createRole(Role.ROLEELEVE, "Eleve");
+        transaction.commit();
+    }
+    
+    /* ----------------------------------------------------------------------- */
+    
+    private Souhait getSouhait(String name) {
+        return (Souhait) getItemFromString(name, "Souhait.findBySouhaitNom", Souhait.class, "type_souhait");
+    }
+    
+    private Souhait createSouhait( String name) {
+        Souhait item = getSouhait(name);
+        if (item == null) {
+            // Does not exist
+            item = new Souhait();
+            item.setTypeSouhait(name);
+            em.persist(item);
+            em.flush();
+
+            // Reload from database to be sure to get it
+            item = getSouhait(name);
+        }
+        return item;
+    }
+    
+    private void createDefaultSouhaits() {
+        EntityTransaction transaction = em.getTransaction();
+
+        transaction.begin();
+        createSouhait("Seul");
+        createSouhait("SeulOuColoc");
+        createSouhait("Coloc");
+        createSouhait("Indifférent");
         transaction.commit();
     }
 

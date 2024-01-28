@@ -144,8 +144,9 @@ public class PersonneController {
             dataToSave.setPersonnePrenom(ApplicationTools.getStringFromRequest(request,"personnePrenom"));
             dataToSave.setPersonneLogin(ApplicationTools.getStringFromRequest(request,"personneLogin"));
             dataToSave.setPersonnePassword(ApplicationTools.encryptPassword(ApplicationTools.getStringFromRequest(request,"personnePassword")));
-            Integer roleIdTemp = ApplicationTools.getIntFromRequest(request,"roleId");
-            dataToSave.setRoleId(roleRepository.getByRoleId(roleIdTemp));
+            //Integer roleIdTemp = ApplicationTools.getIntFromRequest(request,"personneRole");
+            //dataToSave.setRoleId(roleRepository.getByRoleId(roleIdTemp));
+            dataToSave.setRoleId(item.getRoleId());
 
             // Create if necessary then Update item
             if (item == null) {

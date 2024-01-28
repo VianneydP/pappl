@@ -39,8 +39,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
@@ -153,8 +155,20 @@ public class EleveController {
     
     //Ajoute par moi
     private static String generateUniqueFileName(Path destination) {
+        //String fileExtension = destination.getFileName().substring(destination.getFileName().lastIndexOf("."));
+        //String fileExtension = getFileExtension(fileNameWithExtension);
+        //return System.currentTimeMillis() + "_" + destination.getFileName().toString()+fileExtension;
         return System.currentTimeMillis() + "_" + destination.getFileName().toString();
     }
+    /**
+    private static String getFileExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex != -1 && lastDotIndex < fileName.length() - 1) {
+            return fileName.substring(lastDotIndex + 1);
+        }
+        return ""; // No extension found
+    }
+    **/
 
     @RequestMapping(value = "EleveSave.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveSave(HttpServletRequest request) throws IOException {
@@ -170,14 +184,20 @@ public class EleveController {
 
             Eleve dataToSave = new Eleve();
             //Ajoute par moi
-            /**File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
-            String projectResourcePath = "src/main/resources/televersements";
+            File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
+            String filename=notif.getName();
+            //String extension=getFileExtension(filename);
+            String targetDirectory = request.getServletContext().getRealPath("televersements");
+            //String targetDirectory = "C:/Users/Céline/Documents/ECN/EI2/PGROU/PGROU2/pappl/ECNLogement/target/televersements";
+            //String targetDirectory = "televersements";
+            //String projectResourcePath = "src/main/resources/televersements";
             if(notif!=null){
-            Path destination = new File(projectResourcePath).toPath();
-            String fileName = generateUniqueFileName(destination);
-            Path destinationWithUniqueName = destination.resolve(fileName);
+            Path destination = Paths.get(targetDirectory);
+            //Path destination = new File(targetDirectory).toPath();
+            String newFileName = generateUniqueFileName(destination)+".pdf";
+            Path destinationWithUniqueName = destination.resolve(newFileName);
             Files.copy(notif.toPath(), destinationWithUniqueName);
-            }**/
+            }
             
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
@@ -197,8 +217,8 @@ public class EleveController {
             dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             Integer personneIdTemp = ApplicationTools.getIntFromRequest(request, "personneId");
             dataToSave.setPersonne(personneRepository.getByPersonneId(personneIdTemp));
-            String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
-            dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
+            //String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
+            //dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
 
             // Create if necessary then Update item
             if (item == null) {

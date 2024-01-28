@@ -30,10 +30,9 @@
       <div class="row">
         <div class="col-md-12">
             <form id="c_form-h" class="" action="reconnect.do" method="POST">
-            
-            <div class="form-group row"> <label for="inputnumsceih" class="col-2 col-form-label"><fmt:message key="message.numscei" bundle="${ressourcesBundle}"/></label>
+            <div class="form-group row"> <label for="inputlogin" class="col-2 col-form-label"><fmt:message key="message.identifiant" bundle="${ressourcesBundle}"/></label>
               <div class="col-10">
-                <input type="integer" class="form-control" id="inputnumsceih" placeholder="<fmt:message key="message.numscei" bundle="${ressourcesBundle}"/>" name="numscei" required="required"></div>
+                <input type="integer" class="form-control" id="inputlogin" placeholder="<fmt:message key="message.identifiant" bundle="${ressourcesBundle}"/>" name="login" required="required"></div>
             </div>
             <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label"><fmt:message key="message.password" bundle="${ressourcesBundle}"/></label>
               <div class="col-10">

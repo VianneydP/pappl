@@ -13,6 +13,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Bootstrap -->
+        <style>
+         h1 {
+            text-align: center;
+        }
+        h4 {
+            text-align: center;
+        }
+        </style>
         <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
         <script type="text/javascript" src="js/jquery-3.6.1.min.js"></script>
@@ -24,8 +32,11 @@
     </head>
     <body>
         <%@ include file="header.jspf" %>
-        <h1><fmt:message key="message.titreAccueil" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageAccueil" bundle="${ressourcesBundle}"/></h2>
+        <h1 class=""><fmt:message key="message.missionLogement" bundle="${ressourcesBundle}"/></h1>
+        <div class="text-center col-md-7 mx-auto"> <i class="fa d-block fa-bullseye fa-5x mb-4 text-info" ></i>
+        </div>
+        <br>
+        <h4 class=""><fmt:message key="message.messageAccueil" bundle="${ressourcesBundle}"/></h4>
         <%@ include file="footer.jspf" %>
     </body>
 </html>

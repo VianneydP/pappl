@@ -86,6 +86,12 @@
                             <input type="texte" class="form-control" id="inputvilleh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ-]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="inputcodepostalh" class="col-2 col-form-label"><fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
+                        <div class="col-10">
+                            <input type="int" class="form-control" id="inputcodepostalh" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
+                        </div>
+                    </div>
                     </div>
                     <div class="form-group row"> 
                         <label for="inputboursierh" class="col-2 col-form-label"><fmt:message key="message.questionnaireBoursier" bundle="${ressourcesBundle}"/></label>
@@ -107,14 +113,14 @@
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Upload file</button>
                         </div>
                     </div> -->
-                    <!--Celui ci est bon<div class="form-group row">
+                    <div class="form-group row">
                         <label for="inputnotif" class="col-2 col-form-label"><fmt:message key="message.questionnaireNotif" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
                                 <label for="fileInput">Téléverser:</label>
-                                <input type="file" id="fileInput" name="eleveFile" accept=".jpg, .jpeg, .png, .pdf">
+                                <input type="file" id="fileInput" name="eleveFile" accept=".pdf">
                                 <br>
                         </div>
-                    </div>-->
+                    </div>
                     
                     
                     <div class="form-group row"> 
@@ -122,15 +128,15 @@
                         <div class="col-10">
                             <div class="d-block my-3">
                                 <div class="custom-control custom-radio">
-                                    <input id="masculin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="masculin">
+                                    <input id="masculin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="M">
                                     <label class="custom-control-label" for="masculin"><fmt:message key="message.questionnaireMasculin" bundle="${ressourcesBundle}"/></label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="feminin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="feminin">
+                                    <input id="feminin" name="genre" type="radio" class="custom-control-input" required="",checked="", value="F">
                                     <label class="custom-control-label" for="feminin"><fmt:message key="message.questionnaireFeminin" bundle="${ressourcesBundle}"/></label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="autre" name="genre" type="radio" class="custom-control-input" required="",checked="", value="autre">
+                                    <input id="autre" name="genre" type="radio" class="custom-control-input" required="",checked="", value="A">
                                     <label class="custom-control-label" for="autre"><fmt:message key="message.questionnaireAutre" bundle="${ressourcesBundle}"/></label>
                                 </div>
                             </div>
