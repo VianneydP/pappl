@@ -181,6 +181,9 @@ public class EleveController {
             // Retreive item (null if not created)
             Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
             Eleve item = repository.getByEleveId(id);
+            //Ajoute par moi
+            Integer id2 = ApplicationTools.getIntFromRequest(request,"personneId");
+            Personne pers = personneRepository.getByPersonneId( id2 );
 
             Eleve dataToSave = new Eleve();
             //Ajoute par moi
@@ -194,8 +197,8 @@ public class EleveController {
             if(notif!=null){
             Path destination = Paths.get(targetDirectory);
             //Path destination = new File(targetDirectory).toPath();
-            String newFileName = generateUniqueFileName(destination)+".pdf";
-            Path destinationWithUniqueName = destination.resolve(newFileName);
+            String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
+            Path destinationWithUniqueName =destination.resolve(newFileName);
             Files.copy(notif.toPath(), destinationWithUniqueName);
             }
             

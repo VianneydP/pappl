@@ -116,7 +116,7 @@
                     <div class="form-group row">
                         <label for="inputnotif" class="col-2 col-form-label"><fmt:message key="message.questionnaireNotif" bundle="${ressourcesBundle}"/></label>
                         <div class="col-10">
-                                <label for="fileInput">Téléverser:</label>
+                                <label for="fileInput">Téléverser un pdf:</label>
                                 <input type="file" id="fileInput" name="eleveFile" accept=".pdf">
                                 <br>
                         </div>
