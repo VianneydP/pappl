@@ -370,5 +370,18 @@ public class EleveController {
             }
         }
     }
+    
+    @RequestMapping(value = "ouidef.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTouidef(HttpServletRequest request){
+        ModelAndView returned=null;
+        boolean oui = ApplicationTools.getBooleanFromRequest(request, "ouidef");
+        Connexion user = ApplicationTools.checkAccess(connexionRepository,request);
+        if (oui){
+            returned=ApplicationTools.getModel("questionnaire", user);
+        }else{
+            returned=ApplicationTools.getModel("errorPage", null);
+        }
+        return returned;    
+    }
 
 }

@@ -51,7 +51,7 @@
                     <div id="fountainG_7" class="fountainG"></div>
                     <div id="fountainG_8" class="fountainG"></div>
                 </div>
-                <div id="fileImporter" style="display:none">
+                <div id="fileImporter" style="display:inline">
                     <form id="formImporter" action="#" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectCode}</c:if>" />
                         <input type="file" id="importFile" name="importFile" style="display:none" onChange="this.form.submit();" />
