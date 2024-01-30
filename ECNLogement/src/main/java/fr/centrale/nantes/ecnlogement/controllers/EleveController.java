@@ -191,9 +191,6 @@ public class EleveController {
             String filename=notif.getName();
             //String extension=getFileExtension(filename);
             String targetDirectory = request.getServletContext().getRealPath("televersements");
-            //String targetDirectory = "C:/Users/Céline/Documents/ECN/EI2/PGROU/PGROU2/pappl/ECNLogement/target/televersements";
-            //String targetDirectory = "televersements";
-            //String projectResourcePath = "src/main/resources/televersements";
             if(notif!=null){
             Path destination = Paths.get(targetDirectory);
             //Path destination = new File(targetDirectory).toPath();
