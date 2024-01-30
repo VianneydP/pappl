@@ -88,7 +88,8 @@ public class LoginController {
                 Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
                 eleve=eleveRepository.create(numscei,pers);
                 user = connexionRepository.create(eleve.getPersonne());
-                returned = ApplicationTools.getModel("password", user);
+                //returned = ApplicationTools.getModel("password", user);
+                returned = choixVueConnexion(user);
                 returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
                 returned.addObject("eleve", eleve);
                 returned.addObject("personne", pers);
@@ -171,6 +172,10 @@ public class LoginController {
             if (pers != null && checkPassword(mdp, pers.getPersonnePassword())) {
                 user = connexionRepository.create(pers);
                 choixVueReconnexion(user);
+                returned=ApplicationTools.getModel("questionnaire", user);
+                Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
             }
         }else{
             returned=ApplicationTools.getModel("loginError", null);

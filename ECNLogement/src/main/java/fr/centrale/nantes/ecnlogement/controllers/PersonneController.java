@@ -156,7 +156,8 @@ public class PersonneController {
 
             // Return to the list
             //returned = handlePersonneList(user);
-            returned = ApplicationTools.getModel( "questionnaire", user );
+            //returned = ApplicationTools.getModel( "questionnaire", user );
+            returned = ApplicationTools.getModel( "relogin", null );
             returned.addObject("personne", item);
             returned.addObject("eleve", eleve);
             
