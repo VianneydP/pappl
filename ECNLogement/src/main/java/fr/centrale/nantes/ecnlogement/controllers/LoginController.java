@@ -55,12 +55,19 @@ public class LoginController {
     @Autowired
     private DatesRepository datesRepository;
     
+    @RequestMapping(value = "admin.do")
+    public ModelAndView handleAdmin(HttpServletRequest request) {
+        ModelAndView returned = ApplicationTools.getModel("loginAdmin", null);
+        return returned;
+    }
+    
     @RequestMapping(value = "index.do")
     public ModelAndView handleIndex(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("accueil", null);
         return returned;
     }
     
+
     @RequestMapping(value = "connect.do", method = RequestMethod.GET)
     public ModelAndView handleGETConnect(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("login", null);
@@ -106,7 +113,7 @@ public class LoginController {
         ModelAndView returned = null;
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // Formatage de la date actuelle en chaîne de caractères avec le format spécifié
+        // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
         Dates adminDates = datesRepository.getByAnnee(2024);
@@ -146,7 +153,13 @@ public class LoginController {
                 }
             }
         }
-        returned = ApplicationTools.getModel("index", user);
+        if (user!=null){
+            returned=ApplicationTools.getModel("accueilAdmin", user);
+        }
+        else {
+            returned = ApplicationTools.getModel("loginAdmin",null);
+        }
+        
         return returned;
     }
 
@@ -189,7 +202,7 @@ public class LoginController {
         ModelAndView returned = null;
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // Formatage de la date actuelle en chaîne de caractères avec le format spécifié
+        // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
         Dates adminDates = datesRepository.getByAnnee(2024);
@@ -202,6 +215,16 @@ public class LoginController {
         } if (now.after(adminDates.getDatesResultats())){
             returned = ApplicationTools.getModel("resultat", user);
         }        
+        return returned;
+    }
+    @RequestMapping(value = "disconnectAdmin.do")
+    public ModelAndView handleDisconnectAdmin(HttpServletRequest request) {
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user != null) {
+            connexionRepository.remove(user);
+            user = null;
+        }
+        ModelAndView returned = ApplicationTools.getModel("loginAdmin", user);
         return returned;
     }
 }
