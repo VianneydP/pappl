@@ -86,4 +86,11 @@ public interface EleveRepositoryCustom {
      * @param altRepository 
      */
     public void setPersonne(Eleve item, Personne toSet, PersonneRepository altRepository);
+    
+    /**
+     * Get a Eleve
+     * @param personneId
+     * @return 
+     */
+    public Eleve getByPersonneId(int personneId);
 }

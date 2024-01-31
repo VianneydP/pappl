@@ -905,12 +905,17 @@ public class ApplicationTools {
         returned=returned.replace("é", "e");
         returned=returned.replace("è", "e");
         returned=returned.replace("ê", "e");
+        returned=returned.replace("ë", "e");
         returned=returned.replace("ù", "u");
         returned=returned.replace("ç", "c");
         returned=returned.replace("â", "a");
         returned=returned.replace("î", "i");
+        returned=returned.replace("ï", "i");
         returned=returned.replace("ô", "o");
         returned=returned.replace("û", "u");
+        returned=returned.replace("ï", "u");
+        returned=returned.replace("ñ", "n");
+        returned=returned.replace("ç", "c");
         returned=returned.replace("-", " ");
         returned =returned.replace("'", " ");
         returned =returned.replace("<", " ");

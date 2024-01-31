@@ -31,6 +31,11 @@ import javax.validation.constraints.Size;
 public class Souhait implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static int SEUL = 1;
+    public static int SEULOUCOLOC = 2;
+    public static int COLOC = 3;
+    public static int INDIFFERENT = 4;
+    
     @Id
     @Basic(optional = false)
     @NotNull

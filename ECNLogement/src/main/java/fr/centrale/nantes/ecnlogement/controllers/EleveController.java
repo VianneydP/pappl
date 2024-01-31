@@ -40,6 +40,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
@@ -150,9 +154,26 @@ public class EleveController {
         }
         return returned;
     }
+    
+    //Ajoute par moi
+    private static String generateUniqueFileName(Path destination) {
+        //String fileExtension = destination.getFileName().substring(destination.getFileName().lastIndexOf("."));
+        //String fileExtension = getFileExtension(fileNameWithExtension);
+        //return System.currentTimeMillis() + "_" + destination.getFileName().toString()+fileExtension;
+        return System.currentTimeMillis() + "_" + destination.getFileName().toString();
+    }
+    /**
+    private static String getFileExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf(".");
+        if (lastDotIndex != -1 && lastDotIndex < fileName.length() - 1) {
+            return fileName.substring(lastDotIndex + 1);
+        }
+        return ""; // No extension found
+    }
+    **/
 
     @RequestMapping(value = "EleveSave.do", method = RequestMethod.POST)
-    public ModelAndView handlePOSTEleveSave(HttpServletRequest request) {
+    public ModelAndView handlePOSTEleveSave(HttpServletRequest request) throws IOException {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user == null) {
@@ -162,28 +183,44 @@ public class EleveController {
             // Retreive item (null if not created)
             Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
             Eleve item = repository.getByEleveId(id);
+            //Ajoute par moi
+            Integer id2 = ApplicationTools.getIntFromRequest(request,"personneId");
+            Personne pers = personneRepository.getByPersonneId( id2 );
 
             Eleve dataToSave = new Eleve();
-
+            //Ajoute par moi
+            File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
+            String filename=notif.getName();
+            //String extension=getFileExtension(filename);
+            String targetDirectory = request.getServletContext().getRealPath("televersements");
+            if(notif!=null){
+            Path destination = Paths.get(targetDirectory);
+            //Path destination = new File(targetDirectory).toPath();
+            String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
+            Path destinationWithUniqueName =destination.resolve(newFileName);
+            Files.copy(notif.toPath(), destinationWithUniqueName);
+            }
+            
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
             dataToSave.setGenre(ApplicationTools.getStringFromRequest(request, "genre"));
-            dataToSave.setElevePayshab(ApplicationTools.getStringFromRequest(request, "elevePayshab"));
-            dataToSave.setEleveVillehab(ApplicationTools.getStringFromRequest(request, "eleveVillehab"));
+            dataToSave.setElevePayshab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
+            dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
             dataToSave.setEleveCodepostal(ApplicationTools.getIntFromRequest(request, "eleveCodepostal"));
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
+            dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
             Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
             dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
             String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
             dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             Integer personneIdTemp = ApplicationTools.getIntFromRequest(request, "personneId");
             dataToSave.setPersonne(personneRepository.getByPersonneId(personneIdTemp));
-            String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
-            dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
+            //String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
+            //dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
 
             // Create if necessary then Update item
             if (item == null) {
@@ -192,7 +229,8 @@ public class EleveController {
             repository.update(item.getEleveId(), dataToSave);
 
             // Return to the list
-            returned = handleEleveList(user);
+            //returned = handleEleveList(user);
+            returned=ApplicationTools.getModel("questionnaire", user);
         }
         return returned;
     }

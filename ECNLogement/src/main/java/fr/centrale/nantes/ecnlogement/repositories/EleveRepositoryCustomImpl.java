@@ -151,4 +151,20 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             altRepository.flush();
         }
     }
+    
+  //Ajoute par moi  
+    public Eleve getByPersonneId(int personneId){
+        Personne pers=personneRepository.getByPersonneId(personneId);
+        if ((personneId != -1) && (pers != null) && (pers.getRoleId().getRoleId()==2)) {
+            Collection<Personne> list = personneRepository.findByPersonneId(personneId);
+            for (Personne p : list) {
+                for (Eleve e : p.getEleveCollection()) {
+                    if (e.getPersonne().getPersonneId()==personneId) {
+                        return e;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }
