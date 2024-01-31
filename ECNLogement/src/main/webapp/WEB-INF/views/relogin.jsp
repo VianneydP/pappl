@@ -30,14 +30,14 @@
       <div class="row">
         <div class="col-md-12">
             <form id="c_form-h" class="" action="reconnect.do" method="POST">
-            
+            <input type="hidden" name="eleveId" value="${eleve.eleveId}" />
             <div class="form-group row"> <label for="inputidentifianth" class="col-2 col-form-label"><fmt:message key="message.identifiant" bundle="${ressourcesBundle}"/></label>
               <div class="col-10">
                 <input type="integer" class="form-control" id="inputidentifianth" placeholder="<fmt:message key="message.identifiant" bundle="${ressourcesBundle}"/>" name="identifiant" required="required"></div>
             </div>
             <div class="form-group row"> <label for="inputpasswordh" class="col-2 col-form-label"><fmt:message key="message.password" bundle="${ressourcesBundle}"/></label>
               <div class="col-10">
-                <input type="text" class="form-control" id="inputpasswordh" placeholder="<fmt:message key="message.password" bundle="${ressourcesBundle}"/>" name="password" required="required"></div>
+                <input type="password" class="form-control" id="inputpasswordh" placeholder="<fmt:message key="message.password" bundle="${ressourcesBundle}"/>" name="password" required="required"></div>
             </div>
             <button type="submit" class="btn btn-primary"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
           </form>

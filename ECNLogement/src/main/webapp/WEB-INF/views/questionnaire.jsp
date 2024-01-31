@@ -55,6 +55,7 @@
                 <form id="c_form-h" class="" action="EleveSave.do" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                     <input type="hidden" name="eleveId" value="${eleve.eleveId}" />
+                    <input type="hidden" name="NumScei" value="${eleve.numscei}" />
                     <input type="hidden" name="personneId" value="${personne.personneId}" />
                     <div class="form-group row">
                         <label for="inputnaissanceh" class="col-2 col-form-label"><fmt:message key="message.naissance" bundle="${ressourcesBundle}"/></label>

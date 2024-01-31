@@ -34,6 +34,7 @@ import java.util.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Properties;
 
 @Controller
@@ -88,7 +89,6 @@ public class LoginController {
                 Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
                 eleve=eleveRepository.create(numscei,pers);
                 user = connexionRepository.create(eleve.getPersonne());
-                //returned = ApplicationTools.getModel("password", user);
                 returned = choixVueConnexion(user);
                 returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
                 returned.addObject("eleve", eleve);
@@ -173,7 +173,9 @@ public class LoginController {
                 user = connexionRepository.create(pers);
                 choixVueReconnexion(user);
                 returned=ApplicationTools.getModel("questionnaire", user);
-                Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
+                //Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
+                Eleve eleve=eleveRepository.getByEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
+                //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
                 returned.addObject("eleve", eleve);
                 returned.addObject("personne", pers);
             }

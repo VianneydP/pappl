@@ -78,6 +78,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         if ((item != null) && (value != null)) {
             item.setEleveDateNaissance(value.getEleveDateNaissance());
             item.setGenre(value.getGenre());
+            item.setNumscei(value.getNumscei());
             item.setElevePayshab(value.getElevePayshab());
             item.setEleveVillehab(value.getEleveVillehab());
             item.setEleveCodepostal(value.getEleveCodepostal());
@@ -153,6 +154,8 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
   //Ajoute par moi  
+  /**  
+    @Override
     public Eleve getByPersonneId(int personneId){
         Personne pers=personneRepository.getByPersonneId(personneId);
         if ((personneId != -1) && (pers != null) && (pers.getRoleId().getRoleId()==2)) {
@@ -167,4 +170,18 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
         return null;
     }
+    @Override
+public Eleve getByPersonneId(int personneId) {
+    Personne personne = personneRepository.getByPersonneId(personneId);
+
+    if (personne != null) {
+        return personne.getEleveCollection()
+                .stream()
+                .filter(eleve -> eleve.getPersonne().getPersonneId() == personneId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    return null;
+}**/
 }

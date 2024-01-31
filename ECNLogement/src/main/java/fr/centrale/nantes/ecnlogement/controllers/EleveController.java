@@ -184,6 +184,8 @@ public class EleveController {
             //Ajoute par moi
             Integer id2 = ApplicationTools.getIntFromRequest(request,"personneId");
             Personne pers = personneRepository.getByPersonneId( id2 );
+            //Eleve item=repository.getByPersonneId(id2);
+            //Eleve item=repository.getByPersonNomPrenomNumscei(pers.getPersonneNom(),pers.getPersonnePrenom(),ApplicationTools.getIntFromRequest(request, "login"));
 
             Eleve dataToSave = new Eleve();
             //Ajoute par moi
@@ -198,7 +200,8 @@ public class EleveController {
             Path destinationWithUniqueName =destination.resolve(newFileName);
             Files.copy(notif.toPath(), destinationWithUniqueName);
             }
-            
+            dataToSave.setNumscei(item.getNumscei());
+            dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
