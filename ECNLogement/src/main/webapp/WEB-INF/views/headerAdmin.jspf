@@ -59,7 +59,7 @@
                         <form id="c_form-h" class="" action="alertes.do" method="POST">
                             <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                             <li class="nav-item">
-                                <button class="nav-link btn btn-light text-black " type="submit">
+                                <button class="nav-link btn btn-light text-black mx-2" type="submit">
                                     <fmt:message key="button.alertes" bundle="${ressourcesBundle}"/></button>
                             </li>
                         </form>

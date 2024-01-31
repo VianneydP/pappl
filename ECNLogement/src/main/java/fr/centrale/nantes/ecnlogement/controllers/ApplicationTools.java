@@ -369,6 +369,20 @@ public class ApplicationTools {
     public static int getIntFromRequest(HttpServletRequest request, String value) {
         return getIntFromString(genericStringFromRequest(request, value));
     }
+    
+    
+    public static Date getTimestampFromRequest(HttpServletRequest request, String value){
+        try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat origin= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            String extraite=genericStringFromRequest(request,value);
+            Date mauvaisFormat=origin.parse(extraite);
+            String formattedDate = dateFormat.format(mauvaisFormat);
+            return dateFormat.parse(formattedDate);
+        }catch (ParseException ex){
+            return null;
+        }
+    }
 
     /**
      * Get BigInteger from request

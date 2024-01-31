@@ -113,7 +113,7 @@ public class LoginController {
         ModelAndView returned = null;
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // Formatage de la date actuelle en chaîne de caractères avec le format spécifié
+        // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
         Dates adminDates = datesRepository.getByAnnee(2024);
@@ -200,7 +200,7 @@ public class LoginController {
         ModelAndView returned = null;
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // Formatage de la date actuelle en chaîne de caractères avec le format spécifié
+        // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
         Dates adminDates = datesRepository.getByAnnee(2024);
