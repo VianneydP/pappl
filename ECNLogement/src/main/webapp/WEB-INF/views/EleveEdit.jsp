@@ -19,7 +19,7 @@
   </head>
 
   <body>
-    <%@ include file="header.jspf" %>
+    <%@ include file="headerAdmin.jspf" %>
     <div class="py-5">
       <div class="container">
         <div class="row">
@@ -127,12 +127,12 @@
                       </td>
                     </tr>
                     <tr>
-                      <th scope="col"><fmt:message key="message.personneId" bundle="${ressourcesBundle}"/></th>
+                      <th scope="col"><fmt:message key="message.personne" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <select name="personneId">
-                        <c:forEach var="itemIter" items="${personneIdList}">
+                        <select name="personne">
+                        <c:forEach var="itemIter" items="${personneList}">
                           <c:choose>
-                          <c:when test="${itemIter.personneId==item.personneId.personneId}"><option value="${itemIter.personneId}" selected>${itemIter.personneNom}</option></c:when>
+                          <c:when test="${itemIter.personneId==item.personne.personneId}"><option value="${itemIter.personneId}" selected>${itemIter.personneNom}</option></c:when>
                           <c:otherwise><option value="${itemIter.personneId}">${itemIter.personneNom}</option></c:otherwise>
                           </c:choose>
                         </c:forEach>

@@ -38,7 +38,7 @@
               <div class="col-10">
                 <input type="password" class="form-control" id="inputpasswordh" placeholder="<fmt:message key="message.password" bundle="${ressourcesBundle}"/>" name="password" required="required"></div>
             </div>
-            <button type="submit" class="btn btn-primary"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
+            <button type="submit" class="btn btn-primary"><fmt:message key="button.connectAdmin" bundle="${ressourcesBundle}"/></button>
           </form>
         </div>
       </div>

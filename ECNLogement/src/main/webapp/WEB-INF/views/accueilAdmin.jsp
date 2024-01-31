@@ -1,8 +1,9 @@
 <%-- 
-    Document   : accueil
-    Created on : 22 janv. 2024, 17:08:35
-    Author     : viann
+    Document   : accueilAdmin
+    Created on : 25 janv. 2024, 10:58:00
+    Author     : elsaa
 --%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -23,9 +24,10 @@
         <title>ECNLogement</title>
     </head>
     <body>
-        <%@ include file="header.jspf" %>
-        <h1><fmt:message key="message.titreAccueil" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageAccueil" bundle="${ressourcesBundle}"/></h2>  
+        <%@ include file="headerAdmin.jspf" %>
+        <h1><fmt:message key="message.titreAccueilAdmin" bundle="${ressourcesBundle}"/></h1>
+        <h2 class=""><fmt:message key="message.messageAccueilAdmin" bundle="${ressourcesBundle}"/></h2>  
         <%@ include file="footer.jspf" %>
     </body>
 </html>
+

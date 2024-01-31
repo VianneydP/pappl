@@ -1,7 +1,7 @@
 <%-- 
-    Document   : accueil
-    Created on : 22 janv. 2024, 17:08:35
-    Author     : viann
+    Document   : importeAdmin
+    Created on : 25 janv. 2024, 09:46:00
+    Author     : elsaa
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -23,9 +23,9 @@
         <title>ECNLogement</title>
     </head>
     <body>
-        <%@ include file="header.jspf" %>
-        <h1><fmt:message key="message.titreAccueil" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageAccueil" bundle="${ressourcesBundle}"/></h2>  
+        <%@ include file="headerAdmin.jspf" %>
+        <h1><fmt:message key="message.titreImport" bundle="${ressourcesBundle}"/></h1>
+        <h2 class=""><fmt:message key="message.messageImport" bundle="${ressourcesBundle}"/></h2>  
         <%@ include file="footer.jspf" %>
     </body>
 </html>
