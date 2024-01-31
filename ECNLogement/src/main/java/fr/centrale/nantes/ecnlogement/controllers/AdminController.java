@@ -24,6 +24,7 @@ import fr.centrale.nantes.ecnlogement.items.Role;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -102,6 +103,15 @@ public class AdminController {
             returned = ApplicationTools.getModel( "loginAdmin", null );
         } else {
             returned=ApplicationTools.getModel("gestionAdmin", user);
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(now);
+            int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
+            Dates adminDates = datesRepository.getByAnnee(annee);
+            returned.addObject("dateAnnee", annee);
+            returned.addObject("dateDebut",dateFormat.format(adminDates.getDatesDebut()));
+            returned.addObject("dateFin",dateFormat.format(adminDates.getDatesFin()));
+            returned.addObject("dateResultats",dateFormat.format(adminDates.getDatesResultats()));
         }
         return returned;
     }
