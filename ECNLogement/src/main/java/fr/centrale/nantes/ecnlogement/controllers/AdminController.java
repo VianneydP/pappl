@@ -77,7 +77,7 @@ public class AdminController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned=ApplicationTools.getModel("alertes", null);
+            returned=ApplicationTools.getModel("alertes", user);
         }
         return returned;
     }
@@ -89,7 +89,19 @@ public class AdminController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned=ApplicationTools.getModel("affectLogement", null);
+            returned=ApplicationTools.getModel("affectLogement", user);
+        }
+        return returned;
+    }
+    
+    @RequestMapping(value = "gestionAdmin.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTGestionAdmin(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            returned=ApplicationTools.getModel("gestionAdmin", user);
         }
         return returned;
     }

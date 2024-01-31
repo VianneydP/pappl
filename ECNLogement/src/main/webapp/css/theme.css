@@ -4960,19 +4960,12 @@ button.bg-light:focus {
   background-color: #dadada !important; }
 
 .bg-dark {
-  background-color: #151515 !important; }
+  background-color: #102648 !important; }
 
 a.bg-dark:hover, a.bg-dark:focus,
 button.bg-dark:hover,
 button.bg-dark:focus {
   background-color: black !important; }
-
-.bg-ecnBlue {
-    background-color: #102648 !important; }
-a.bg-ecnBlue:hover, a.bg-ecnBlue:focus,
-button.bg-ecnBlue:hover,
-button.bg-ecnBlue:focus {
-  background-color: #07101e !important; }
 
 .bg-white {
   background-color: #fff !important; }

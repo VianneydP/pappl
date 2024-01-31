@@ -39,6 +39,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
@@ -70,7 +71,8 @@ public class EleveController {
     private ModelAndView handleEleveList(Connexion user) {
         String modelName = "EleveList";
         ModelAndView returned = ApplicationTools.getModel(modelName, user);
-        returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "eleveId")));
+        Collection<Eleve> maListe=repository.findAll(Sort.by(Sort.Direction.ASC, "eleveId"));
+        returned.addObject("itemList", maListe);
         return returned;
     }
 
@@ -103,7 +105,7 @@ public class EleveController {
             returned.addObject("item", item);
             returned.addObject("codeCommuneList", communeRepository.findAll());
             returned.addObject("logementNumeroList", logementRepository.findAll());
-            returned.addObject("personneIdList", personneRepository.findAll());
+            returned.addObject("personneList", personneRepository.findAll());
             returned.addObject("typeSouhaitList", souhaitRepository.findAll());
         }
         return returned;
