@@ -216,18 +216,37 @@ public class EleveController {
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
             dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
-            Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
-            dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
+            //Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
+            //dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
             String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
             dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             Integer personneIdTemp = ApplicationTools.getIntFromRequest(request, "personneId");
             dataToSave.setPersonne(personneRepository.getByPersonneId(personneIdTemp));
+            //dataToSave.setCodeCommune(new Commune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()).getCodeCommune()));
+            
+            //On set la commune grâce au nom de la ville
+            dataToSave.setCodeCommune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()));
+            
+            //Si l'élève n'a pas renseigné le code postal, on le rajoute
+            if(dataToSave.getEleveCodepostal()==-1 || dataToSave.getEleveCodepostal()==0){
+                dataToSave.setEleveCodepostal(dataToSave.getCodeCommune().getCodePostal());
+            }
+            
+            //Si la commune n'a pas été trouvée à partir du nom (faute de frappe dans le nom) et que l'élève a renseigné un code postal, on la set à partir du code postal
+            if(dataToSave.getEleveCodepostal()!=-1 && dataToSave.getEleveCodepostal()!=0 && dataToSave.getCodeCommune()==null){
+                dataToSave.setCodeCommune(ApplicationTools.findCodeForCodePostal(dataToSave.getEleveCodepostal()));
+                //Si la commune a été trouvé à partir du CP, il doit être bon, on rectifie donc le nom de la ville
+                if(dataToSave.getCodeCommune()!=null){
+                    dataToSave.setEleveVillehab(dataToSave.getCodeCommune().getNomCommune());
+                }
+            }
+            //TODO : si code commune est encore null (n'a été trouvé ni à partir de la ville ni à partir du CP, créer une ALERTE pour la VE)
             //String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
             //dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
 
             // Create if necessary then Update item
             if (item == null) {
-                item = repository.create(dataToSave.getEleveId(), dataToSave.getEleveDateNaissance(), dataToSave.getGenre(), dataToSave.getElevePayshab(), dataToSave.getEleveVillehab(), dataToSave.getEleveCodepostal(), dataToSave.getPersonne());
+                item = repository.create(dataToSave.getEleveId(), dataToSave.getEleveDateNaissance(), dataToSave.getGenre(), dataToSave.getElevePayshab(), dataToSave.getEleveVillehab(), dataToSave.getEleveCodepostal(), dataToSave.getPersonne(),dataToSave.getCodeCommune());
             }
             repository.update(item.getEleveId(), dataToSave);
 

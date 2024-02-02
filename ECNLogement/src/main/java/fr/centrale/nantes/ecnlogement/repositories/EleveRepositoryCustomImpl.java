@@ -64,6 +64,23 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
         return null;
     }
+    
+        @Override
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune codeCommune) {
+        if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
+            Eleve item = new Eleve();
+            item.setNumscei(numscei);
+            item.setEleveDateNaissance(eleveDateNaissance);
+            item.setGenre(genre);
+            item.setElevePayshab(elevePayshab);
+            item.setEleveVillehab(eleveVillehab);
+            item.setEleveCodepostal(eleveCodepostal);
+            item.setPersonne(personne);
+            item.setCodeCommune(codeCommune);
+            return create(item);
+        }
+        return null;
+    }
 
     @Override
     public void remove(Eleve item) {
