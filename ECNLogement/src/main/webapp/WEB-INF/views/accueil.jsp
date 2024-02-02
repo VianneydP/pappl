@@ -38,5 +38,11 @@
         <br>
         <h4 class=""><fmt:message key="message.messageAccueil" bundle="${ressourcesBundle}"/></h4>
         <%@ include file="footer.jspf" %>
+        <form action="#" method="GET">
+        <button type="submit" class="btn btn-light" formaction="connect.do" formmethod="GET"><fmt:message key="button.inscription" bundle="${ressourcesBundle}"/></button>
+        </form>
+        <form action="#" method="GET">
+        <button type="submit" class="btn btn-light" formaction="reconnect.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
+        </form>
     </body>
 </html>
