@@ -39,6 +39,20 @@ public interface EleveRepositoryCustom {
      * @return Eleve
      */
     public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne);
+    
+        /**
+     * Create new Eleve
+     * @param numscei 
+     * @param eleveDateNaissance
+     * @param genre
+     * @param elevePayshab
+     * @param eleveVillehab
+     * @param eleveCodepostal
+     * @param personne
+     * @param codeCommune
+     * @return Eleve
+     */
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne, Commune codeCommune);
 
     /**
      * Remove Eleve
