@@ -64,6 +64,23 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
         return null;
     }
+    
+        @Override
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune codeCommune) {
+        if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
+            Eleve item = new Eleve();
+            item.setNumscei(numscei);
+            item.setEleveDateNaissance(eleveDateNaissance);
+            item.setGenre(genre);
+            item.setElevePayshab(elevePayshab);
+            item.setEleveVillehab(eleveVillehab);
+            item.setEleveCodepostal(eleveCodepostal);
+            item.setPersonne(personne);
+            item.setCodeCommune(codeCommune);
+            return create(item);
+        }
+        return null;
+    }
 
     @Override
     public void remove(Eleve item) {
@@ -78,6 +95,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         if ((item != null) && (value != null)) {
             item.setEleveDateNaissance(value.getEleveDateNaissance());
             item.setGenre(value.getGenre());
+            item.setNumscei(value.getNumscei());
             item.setElevePayshab(value.getElevePayshab());
             item.setEleveVillehab(value.getEleveVillehab());
             item.setEleveCodepostal(value.getEleveCodepostal());
@@ -153,6 +171,8 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
   //Ajoute par moi  
+  /**  
+    @Override
     public Eleve getByPersonneId(int personneId){
         Personne pers=personneRepository.getByPersonneId(personneId);
         if ((personneId != -1) && (pers != null) && (pers.getRoleId().getRoleId()==2)) {
@@ -167,4 +187,18 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
         return null;
     }
+    @Override
+public Eleve getByPersonneId(int personneId) {
+    Personne personne = personneRepository.getByPersonneId(personneId);
+
+    if (personne != null) {
+        return personne.getEleveCollection()
+                .stream()
+                .filter(eleve -> eleve.getPersonne().getPersonneId() == personneId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    return null;
+}**/
 }

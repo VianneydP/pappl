@@ -25,7 +25,8 @@
     <body>
         <%@ include file="header.jspf" %>
         <h1><fmt:message key="message.titreAttenteResultat" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageAttenteResultat" bundle="${ressourcesBundle}"/></h2>
+        <h3 class=""><fmt:message key="message.messageAttenteResultat" bundle="${ressourcesBundle}"/></h3>
+        <h3> ${dateResultats}</h3>
         <%@ include file="footer.jspf" %>
     </body>
 </html>
