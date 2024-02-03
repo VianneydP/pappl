@@ -116,7 +116,7 @@ public class LoginController {
         // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
-        Dates adminDates = datesRepository.getByAnnee(2024);
+        Dates adminDates = datesRepository.getByAnnee(annee);
         if (adminDates!=null){
             if (now.before(adminDates.getDatesDebut())){
                 returned = ApplicationTools.getModel("preouverture",null);
@@ -203,7 +203,7 @@ public class LoginController {
         // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
-        Dates adminDates = datesRepository.getByAnnee(2024);
+        Dates adminDates = datesRepository.getByAnnee(annee);
         if (now.before(adminDates.getDatesDebut())){
             returned = ApplicationTools.getModel("preouverture",null);
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){

@@ -87,6 +87,19 @@
   }
 }
 
+.btn-delete {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 150px; /* Ajustez la largeur et la hauteur selon vos besoins */
+  height: 150px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none; /* Pour supprimer la bordure de focus */
+}
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);

@@ -126,6 +126,7 @@ public class ApplicationInitializer implements ServletContextListener {
 
         transaction.begin();
         createRole(Role.ROLEADMIN, "Admin");
+        createRole(Role.ROLEASSIST,"Assistant");
         createRole(Role.ROLEELEVE, "Eleve");
         transaction.commit();
     }
