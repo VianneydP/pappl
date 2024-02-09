@@ -37,7 +37,7 @@
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <input type="date" class="form-control" name="eleveDateNaissance" value=${item.eleveDateNaissance} />
+                        <input type="date" class="form-control" name="eleveDateNaissance" <fmt:formatDate value="${item.eleveDateNaissance}" pattern="dd/MM/yyyy" /> />
                       </td>
                     </tr>
                     <tr>
@@ -101,10 +101,10 @@
                         <th scope="col"><fmt:message key="message.eleveBoursier" bundle="${ressourcesBundle}"/></th>
                         <td>
                             <label>
-                              <input type="radio" name="eleveBoursier" value="oui" <c:if test="${item.eleveBoursier eq 'oui'}">checked</c:if>> Oui
+                              <input type="radio" name="eleveBoursier" value="true" <c:if test="${item.eleveBoursier eq 'true'}">checked</c:if>> Oui
                             </label>
                             <label>
-                              <input type="radio" name="eleveBoursier" value="non" <c:if test="${item.eleveBoursier eq 'non'}">checked</c:if>> Non
+                              <input type="radio" name="eleveBoursier" value="false" <c:if test="${item.eleveBoursier eq 'false'}">checked</c:if>> Non
                             </label>
                         </td>
                     </tr>

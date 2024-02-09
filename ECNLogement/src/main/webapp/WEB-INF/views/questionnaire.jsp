@@ -52,7 +52,7 @@
         <%@ include file="header.jspf" %>
         <div class="py-5">
             <div class="container md-10 justify-content-center">
-                <h1>Questionnaire</h1>
+                <h1>Formulaire</h1>
                 <br>
                 <h5>Veuillez remplir les informations ci-dessous pour vous affecter dans un logement. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h5>
                 <br>
@@ -306,10 +306,10 @@
                                 <div class="col-10">
                                     <div class="d-block my-3">
                                         <div class="custom-control custom-radio">
-                                            <input id="inputboursiernon" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="non"> <label class="custom-control-label" for="inputboursiernon">Non</label>
+                                            <input id="inputboursiernon" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="false"> <label class="custom-control-label" for="inputboursiernon">Non</label>
                                         </div>
                                         <div class="custom-control custom-radio">
-                                            <input id="inputboursieroui" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="oui"> <label class="custom-control-label" for="inputboursieroui">Oui</label>
+                                            <input id="inputboursieroui" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="true"> <label class="custom-control-label" for="inputboursieroui">Oui</label>
                                         </div>
                                     </div>
                                 </div>
