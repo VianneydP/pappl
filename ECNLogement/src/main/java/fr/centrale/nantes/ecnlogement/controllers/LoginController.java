@@ -6,6 +6,7 @@
  * ----------------------------------------- */
 package fr.centrale.nantes.ecnlogement.controllers;
 
+import static fr.centrale.nantes.ecnlogement.controllers.ApplicationTools.checkPassword;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,21 @@ import fr.centrale.nantes.ecnlogement.items.Eleve;
 
 import fr.centrale.nantes.ecnlogement.items.Personne;
 import fr.centrale.nantes.ecnlogement.items.Role;
+import fr.centrale.nantes.ecnlogement.items.Dates;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
+import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Properties;
 
 @Controller
 public class LoginController {
@@ -41,6 +53,9 @@ public class LoginController {
     @Autowired
     private RoleRepository roleRepository;
     
+    @Autowired
+    private DatesRepository datesRepository;
+    
     @RequestMapping(value = "admin.do")
     public ModelAndView handleAdmin(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("loginAdmin", null);
@@ -52,11 +67,17 @@ public class LoginController {
         ModelAndView returned = ApplicationTools.getModel("accueil", null);
         return returned;
     }
-
+    
 
     @RequestMapping(value = "connect.do", method = RequestMethod.GET)
     public ModelAndView handleGETConnect(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("login", null);
+        return returned;
+    }
+    
+     @RequestMapping(value = "reconnect.do", method = RequestMethod.GET)
+    public ModelAndView handleGETReconnect(HttpServletRequest request) {
+        ModelAndView returned = ApplicationTools.getModel("relogin", null);
         return returned;
     }
 
@@ -67,22 +88,18 @@ public class LoginController {
     }
 
     @RequestMapping(value = "connect.do", method = RequestMethod.POST)
-    public ModelAndView handlePOSTConnect(HttpServletRequest request) {
+    public ModelAndView handlePOSTConnect(HttpServletRequest request) throws ParseException {
         ModelAndView returned = null;
         String nom = ApplicationTools.getStringFromRequest(request, "nom");
         nom=ApplicationTools.correctString(nom);
         String prenom = ApplicationTools.getStringFromRequest(request, "prenom");
         prenom=ApplicationTools.correctString(prenom);
         int numscei = ApplicationTools.getIntFromRequest(request, "numscei");
-        Connexion user = null;
         if ((nom != null) && (prenom != null) && (numscei != -1)
                 && (!nom.isEmpty()) && (!prenom.isEmpty())) {
             Eleve eleve = eleveRepository.getByPersonNomPrenomNumscei(nom, prenom, numscei);
             if (eleve == null) {
-                Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
-                eleve=eleveRepository.create(numscei,pers);
-                user = connexionRepository.create(eleve.getPersonne());
-                returned = ApplicationTools.getModel("ouidef", user);
+                returned = choixVueConnexion(nom, prenom, numscei);
             }else{
                 returned = ApplicationTools.getModel("loginRe", null);
             }
@@ -91,7 +108,35 @@ public class LoginController {
         }
         return returned;
     }
-
+    
+    public ModelAndView choixVueConnexion(String nom, String prenom, int numscei) throws ParseException{
+        ModelAndView returned = null;
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // Formatage de la date actuelle en chaine de caracteres avec le format specifie
+        String formattedDate = dateFormat.format(now);
+        int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
+        Dates adminDates = datesRepository.getByAnnee(annee);
+        if (adminDates!=null){
+            if (now.before(adminDates.getDatesDebut())){
+                returned = ApplicationTools.getModel("preouverture",null);
+            } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
+                Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
+                Eleve eleve =eleveRepository.create(numscei,pers);
+                Connexion user = connexionRepository.create(eleve.getPersonne());
+                returned = ApplicationTools.getModel("password", user);
+                returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
+            } if (now.after(adminDates.getDatesFin())){
+                returned = ApplicationTools.getModel("tropTard", null);
+            }
+        }else{
+            returned = ApplicationTools.getModel("preouverture",null);
+        }
+        return returned;
+    }
+    
     @RequestMapping(value = "connectAdmin.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTConnectAdmin(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -101,16 +146,12 @@ public class LoginController {
         if ((login != null) && (pass != null) && (!login.isEmpty()) && (!pass.isEmpty())) {
             Personne person = personneRepository.getByPersonneLogin(login);
             if (person != null) {
-                // Try to authenticate
-                LDAPManager ldapManager = new LDAPManager();
-                if ((user == null) && (ldapManager.isAvailable()) && (ldapManager.authenticate(login, pass))) {
-                    // User is LDAP authenticated
-                    user = connexionRepository.create(person);
-                }
                 String savedPassword = person.getPersonnePassword();
                 if ((user == null) && (savedPassword != null) && (!savedPassword.isEmpty()) && (ApplicationTools.checkPassword(pass, savedPassword))) {
-                    // User is Database authenticated
-                    user = connexionRepository.create(person);
+                    if (person.getRoleId().getRoleId()==Role.ROLEASSIST || person.getRoleId().getRoleId()==Role.ROLEADMIN){
+                        //Authentifié comme Admin ou Assistant
+                        user = connexionRepository.create(person);
+                    }
                 }
             }
         }
@@ -134,7 +175,53 @@ public class LoginController {
         ModelAndView returned = ApplicationTools.getModel("accueil", user);
         return returned;
     }
-
+    
+    @RequestMapping(value = "reconnect.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTReconnect(HttpServletRequest request) throws ParseException {
+        ModelAndView returned = null;
+        String identifiant = ApplicationTools.getStringFromRequest(request, "identifiant");
+        String mdp = ApplicationTools.getStringFromRequest(request, "password");
+        Connexion user = null;
+        if ((identifiant != null) && (mdp != null) && (!identifiant.isEmpty()) && (!mdp.isEmpty())) {
+            Personne pers = personneRepository.getByPersonneLogin(identifiant);
+            if (pers != null && checkPassword(mdp, pers.getPersonnePassword())) {
+                user = connexionRepository.create(pers);
+                Eleve eleve=eleveRepository.getByEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
+                returned = choixVueReconnexion(user, eleve, pers);
+                //Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
+                
+            }
+        }else{
+            returned=ApplicationTools.getModel("loginError", null);
+        }
+        return returned;
+    }
+    
+    public ModelAndView choixVueReconnexion(Connexion user, Eleve eleve, Personne pers) throws ParseException{
+        ModelAndView returned = null;
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // Formatage de la date actuelle en chaine de caracteres avec le format specifie
+        String formattedDate = dateFormat.format(now);
+        int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
+        Dates adminDates = datesRepository.getByAnnee(annee);
+        if (now.before(adminDates.getDatesDebut())){
+            returned = ApplicationTools.getModel("preouverture",null);
+        } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
+            returned = ApplicationTools.getModel("questionnaire", user);
+            //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
+            returned.addObject("eleve", eleve);
+            returned.addObject("personne", pers);
+        } if (now.after(adminDates.getDatesFin()) && now.before(adminDates.getDatesResultats())){
+            returned = ApplicationTools.getModel("attenteResultat", null);
+            SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
+            String dateRes=dateFormat1.format(adminDates.getDatesResultats());
+            returned.addObject("dateResultats", dateRes);
+        } if (now.after(adminDates.getDatesResultats())){
+            returned = ApplicationTools.getModel("resultat", user);
+        }        
+        return returned;
+    }
     @RequestMapping(value = "disconnectAdmin.do")
     public ModelAndView handleDisconnectAdmin(HttpServletRequest request) {
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);

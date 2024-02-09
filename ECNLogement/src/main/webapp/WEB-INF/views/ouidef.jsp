@@ -14,6 +14,7 @@
     <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Local -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/theme.css">
     <script src="js/main.js"></script>
     <title>ECNLogement</title>
   </head>
@@ -31,6 +32,7 @@
       <div class="row">
         <div class="col-md-12">
             <form id="c_form-h" class="" action="ouidef.do" method="POST">
+                <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
             <div class=""> 
                 <input type="checkbox" id="inputouidefh" name="ouidef"/>
                 <label for="inputouidefh"><fmt:message key="message.ouidef" bundle="${ressourcesBundle}"/></label>

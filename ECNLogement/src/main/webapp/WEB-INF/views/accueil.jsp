@@ -19,13 +19,35 @@
         <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- Local -->
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/theme.css">
         <script src="js/main.js"></script>
-        <title>ECNLogement</title>
+        <title>Accueil</title>
     </head>
     <body>
         <%@ include file="header.jspf" %>
-        <h1><fmt:message key="message.titreAccueil" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageAccueil" bundle="${ressourcesBundle}"/></h2>  
+        <div class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center"><fmt:message key="message.missionLogement" bundle="${ressourcesBundle}"/></h1>
+                        <div class="text-center col-md-7 mx-auto"> <i class="fa fa-bullseye fa-5x mb-4" style="color: #fab600" ></i></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="text-center"><fmt:message key="message.messageAccueil" bundle="${ressourcesBundle}"/></h4>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group row">
+                    <form action="#" method="GET" class="d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-light" formaction="connect.do" formmethod="GET"><fmt:message key="button.inscription" bundle="${ressourcesBundle}"/></button>
+                        <div class="mx-2"></div>
+                        <button type="submit" class="btn btn-light" formaction="reconnect.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
+                    </form>
+                </div>
+            </div>
+        </div>
         <%@ include file="footer.jspf" %>
     </body>
 </html>

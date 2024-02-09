@@ -137,3 +137,12 @@ REFERENCES public.souhait (type_souhait)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
+
+CREATE TABLE public.date
+(
+    date_annee integer NOT NULL,
+    date_debut timestamp without time zone NOT NULL,
+    date_fin timestamp without time zone NOT NULL,
+    date_resultats timestamp without time zone NOT NULL,
+    CONSTRAINT date_pkey PRIMARY KEY (date_annee)
+);

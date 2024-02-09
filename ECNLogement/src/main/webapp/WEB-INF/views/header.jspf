@@ -3,7 +3,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setBundle basename="fr.centrale.nantes.ecnlogement.resources.messages" var="ressourcesBundle" />
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-ecnBlue">
   <div class="container-fluid">
     <a class="navbar-brand" href="#"><b>ECNLogement</b></a>
     <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
@@ -27,7 +27,7 @@
       <form action="#" method="GET">
         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
       <c:choose>
-        <c:when test="${empty user}"><button type="submit" class="btn btn-light" formaction="connect.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button></c:when>
+        <c:when test="${empty user}"><button type="submit" class="btn btn-light" formaction="reconnect.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button></c:when>
         <c:otherwise><button type="submit" class="btn btn-light" formaction="disconnect.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button></c:otherwise>
       </c:choose>
       </form>

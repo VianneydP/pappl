@@ -80,6 +80,21 @@ public class Commune implements Serializable {
         this.longitude = longitude;
         this.dansMetropoleNantes = dansMetropoleNantes;
     }
+    
+    public Commune(Integer codeCommune, String nomCommune, float latitude, float longitude) {
+        this.codeCommune = codeCommune;
+        this.nomCommune = nomCommune;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+    
+        public Commune(Integer codeCommune, String nomCommune, int codePostal, float latitude, float longitude) {
+        this.codeCommune = codeCommune;
+        this.nomCommune = nomCommune;
+        this.codePostal = codePostal;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public Integer getCodeCommune() {
         return codeCommune;
