@@ -6,7 +6,7 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-ecnBlue">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><b>ECNLogement</b></a>
+        <a class="navbar-brand" href="admin.do"><b>ECNLogement</b></a>
         <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -28,14 +28,19 @@
                                     </li></c:otherwise></c:choose>
                         </c:forEach></c:if>
                 </ul></c:if>
-                <form action="#" method="GET">
-                    <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                    <c:choose>
-                        <c:when test="${empty user}"><button type="submit" class="btn btn-light" formaction="connectAdmin.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button></c:when>
-                        <c:otherwise><button type="submit" class="btn btn-light" formaction="disconnectAdmin.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button></c:otherwise>
-                    </c:choose>
-                </form>
-            <form action="#" method="POST" id="navLaunch">
+                <c:choose>
+                        <c:when test="${empty user}">
+                            <form action="#" method="GET">
+                            <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                            <button type="submit" class="btn btn-light" formaction="connectAdmin.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <form action="#" method="GET">
+                            <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                            <button type="submit" class="btn btn-light" formaction="disconnectAdmin.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button>
+                            </form>
+                            <form action="#" method="POST" id="navLaunch">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
             </form>
             <form action="#" method="POST" id="actionLaunch">
@@ -84,6 +89,10 @@
                         </form>
                     </ul>
                 </div>
+                        </c:otherwise>
+                    </c:choose>
+                
+            
         </div>
     </div>
 </nav>
