@@ -1,3 +1,6 @@
+<%@page import="java.text.ParseException"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -31,70 +34,51 @@
               <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
               <input type="hidden" name="eleveId" value="${item.eleveId}" />
               <input type="hidden" name="field" value="Eleve" />
+              <input type="hidden" name="dateNaissance" value="${dateNaissance}" />
               <div class="table-responsive">
                 <table class="table table-striped table-sm ">
                   <tbody>
+                      
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <input type="date" class="form-control" name="eleveDateNaissance" <fmt:formatDate value="${item.eleveDateNaissance}" pattern="dd/MM/yyyy" /> />
+                        <input type="date" class="form-control" name="eleveDateNaissance" value="${dateNaissance}" />
                       </td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.genre" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <textarea class="form-control" name="genre">
-                        ${item.genre}
-                        </textarea>
+                        <input type="text" class="form-control" name="genre" value="${item.genre}">
                       </td>
                     </tr>
                     <tr>
-                        <th scope="col"><fmt:message key="message.typeSouhait" bundle="${ressourcesBundle}"/></th>
-                        <td>
-                          <select name="typeSouhait">
-                            <c:forEach var="itemIter" items="${typeSouhaitList}">
-                              <option value="${itemIter.typeSouhait}" <c:if test="${itemIter.typeSouhait eq item.typeSouhait}">selected</c:if>>${itemIter.typeSouhait}</option>
-                            </c:forEach>
-                          </select>
-                        </td>
-                      </tr>
-                    
-                    <tr>
                       <th scope="col"><fmt:message key="message.elevePayshab" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <textarea class="form-control" name="elevePayshab">
-                        ${item.elevePayshab}
-                        </textarea>
+                        <input type="text" class="form-control" name="elevePayshab" value="${item.elevePayshab}">
                       </td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveVillehab" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <textarea class="form-control" name="eleveVillehab">
-                        ${item.eleveVillehab}
-                        </textarea>
+                        <input type="text" class="form-control" name="eleveVillehab" value="${item.eleveVillehab}">
                       </td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveCodepostal" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <input type="text" class="form-control" name="eleveCodepostal" value="${item.eleveCodepostal}" />
+                        <input type="int" class="form-control" name="eleveCodepostal" value="${item.eleveCodepostal}" />
                       </td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveMail" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <textarea class="form-control" name="eleveMail">
-                        ${item.eleveMail}
-                        </textarea>
+                        <input type="text" class="form-control" name="eleveMail" value="${item.eleveMail}">
                       </td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveNumtel" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <textarea class="form-control" name="eleveNumtel">
-                        ${item.eleveNumtel}
-                        </textarea>
+                        <input type="int" class="form-control" name="eleveNumtel" value="${item.eleveNumtel}">
                       </td>
                     </tr>
                     <tr>
@@ -108,14 +92,6 @@
                             </label>
                         </td>
                     </tr>
-                    <!--
-                    <tr>
-                      <th scope="col"><fmt:message key="message.eleveBoursier" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="radio" class="form-control" name="eleveBoursier" value="oui" checked="" />
-                        <input type="radio" class="form-control" name="eleveBoursier" value="non" />
-                      </td>
-                    </tr> -->
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveInfosup" bundle="${ressourcesBundle}"/></th>
                       <td>

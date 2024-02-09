@@ -44,6 +44,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -108,6 +109,9 @@ public class EleveController {
             String modelName = "EleveEdit";
             returned = ApplicationTools.getModel(modelName, user);
             returned.addObject("item", item);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = sdf.format(item.getEleveDateNaissance());
+            returned.addObject("dateNaissance", formattedDate);
             returned.addObject("codeCommuneList", communeRepository.findAll());
             returned.addObject("logementNumeroList", logementRepository.findAll());
             returned.addObject("personneList", personneRepository.findAll());
