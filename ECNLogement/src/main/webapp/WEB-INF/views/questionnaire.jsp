@@ -291,7 +291,7 @@
                         <label for="inputcodepostalh" class="col-2 col-form-label d-none d-md-block"><fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
                           
                             <div class="col-10">
-                                <input type="int" class="form-control" id="inputcodepostalh" required style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
+                                <input type="int" class="form-control" id="inputcodepostalh" style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
                             </div>
                             </div>
                     </div> 
