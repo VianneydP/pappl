@@ -179,6 +179,7 @@ public class ApplicationInitializer implements ServletContextListener {
                 item.setPersonnePassword(ApplicationTools.encryptPassword(password));
             }
             item.setPersonnePrenom(name);
+            item.setRoleId(getRole("Admin"));
             em.persist(item);
             em.flush();
 

@@ -20,6 +20,7 @@
     <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Local -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/theme.css">
     <script src="js/main.js"></script>
     <title>ECNLogement</title>
   </head>
@@ -28,43 +29,42 @@
     <%@ include file="headerAdmin.jspf" %>
   <div class="py-5">
     <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <ul class="d-flex align-items-center mx-auto">
+      <div class="row mb-4">
+        <div class="col-md-6 d-flex justify-content-center">
             <form id="c_form-h" class="" action="afficheDates.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                <li class="nav-item"><button class="nav-link btn btn-light text-black mx-2" type="submit">
-                    <fmt:message key="button.datesMissionLogement" bundle="${ressourcesBundle}"/></button>
-                </li>
+                <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
+                    <fmt:message key="button.datesml" bundle="${ressourcesBundle}"/></button>
             </form>
-            <form id="c_form-h" class="" action="alertes.do" method="POST">
+        </div>
+        <div class="col-md-6 d-flex justify-content-center">
+            <form id="c_form-h" class="" action="àdéfinir.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                <li class="nav-item">
-                    <button class="nav-link btn btn-light text-black mx-2" type="submit">
-                        <fmt:message key="button.alertes" bundle="${ressourcesBundle}"/></button>
-                </li>
+                    <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
+                        <fmt:message key="button.àdéfinir" bundle="${ressourcesBundle}"/></button>
             </form>
-            <form id="c_form-h" class="" action="pageImport.do" method="POST">
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-md-6 d-flex justify-content-center">
+            <form id="c_form-h" class="" action="gestionAssistants.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                <li class="nav-item">
-                    <button class="nav-link btn btn-light text-black mx-2" type="submit">
-                        <fmt:message key="button.importAdmin" bundle="${ressourcesBundle}"/>
+                    <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
+                        <fmt:message key="button.gestionAssistants" bundle="${ressourcesBundle}"/>
                     </button>
-                </li>
             </form>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center">
             <form id="c_form-h" class="" action="suppressionBDD.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                <li class="nav-item">
-                    <button class="nav-link btn btn-light text-black mx-2" type="submit">
+                    <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
                         <fmt:message key="button.suppressionBDD" bundle="${ressourcesBundle}"/></button>
-                </li>
             </form>
-          </ul>
         </div>
       </div>
     </div>
   </div>
-    <%@ include file="footer2.jspf" %>
+    <%@ include file="footer.jspf" %>
   </body>
 </html>
 

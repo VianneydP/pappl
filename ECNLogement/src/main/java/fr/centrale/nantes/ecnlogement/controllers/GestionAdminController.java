@@ -26,7 +26,12 @@ import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
 import fr.centrale.nantes.ecnlogement.repositories.LogementRepository;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Sort;
 
 @Controller
 public class GestionAdminController {
@@ -170,6 +175,98 @@ public class GestionAdminController {
                 returned=ApplicationTools.getModel("suppressionBDD", user);
                 returned.addObject("suppressionFaite",false);
             }
+        }
+        return returned;
+    }
+    
+    
+    private ModelAndView handleAssistList(Connexion user) {
+        String modelName = "AssistList";
+        ModelAndView returned = ApplicationTools.getModel(modelName, user);
+        Collection<Personne> maListe=personneRepository.findAll(Sort.by(Sort.Direction.ASC, "personneNom"));
+        // Filtrer maListe pour retirer toutes les personnes dont le roleId est égal à Role.ROLEASSIST
+        List<Personne> filteredList = new ArrayList<>();
+        // Parcourir la liste et ajouter les personnes avec un roleId différent de Role.ROLEASSIST à la nouvelle liste
+        for (Personne personne : maListe) {
+            if (personne.getRoleId().getRoleId()==Role.ROLEASSIST) {
+                filteredList.add(personne);
+            }
+        }
+        maListe.clear();
+        returned.addObject("itemList", filteredList);
+        return returned;
+    }
+    
+    @RequestMapping(value = "gestionAssistants.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTGestionAssistants(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            returned=handleAssistList(user);
+        }
+        return returned;
+    }
+    
+    @RequestMapping(value="AssistEdit.do", method=RequestMethod.POST)
+    public ModelAndView handlePOSTAssistEdit(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            // Retreive item (null if not created)
+            Integer id = ApplicationTools.getIntFromRequest(request,"personneId");
+            Personne item = personneRepository.getByPersonneId( id );
+            returned = ApplicationTools.getModel("AssistEdit", user );
+            if (item!=null){
+                // Envoi de l'item pour modification
+                returned.addObject("item", item );
+            }
+        }
+        return returned;
+    }
+    
+    @RequestMapping(value="AssistSave.do", method=RequestMethod.POST)
+    public ModelAndView handlePOSTAssistSave(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            // Get item to save request
+            // Retreive item (null if not created)
+            Integer id = ApplicationTools.getIntFromRequest(request,"personneId");
+            Personne item = personneRepository.getByPersonneId( id );
+            Personne dataToSave = new Personne();
+            // Retreive values from request
+            dataToSave.setPersonneNom(ApplicationTools.getStringFromRequest(request,"personneNom"));
+            dataToSave.setPersonnePrenom(ApplicationTools.getStringFromRequest(request,"personnePrenom"));
+            dataToSave.setPersonneLogin(ApplicationTools.getStringFromRequest(request,"personneLogin"));
+            dataToSave.setPersonnePassword(ApplicationTools.encryptPassword(ApplicationTools.getStringFromRequest(request,"personnePassword")));
+            dataToSave.setRoleId(roleRepository.getByRoleId(Role.ROLEASSIST));
+
+            // Create if necessary then Update item
+            if (item == null){
+                if (!dataToSave.getPersonneNom().equals("") && !dataToSave.getPersonnePrenom().equals("") && !dataToSave.getPersonneLogin().equals("") && !dataToSave.getPersonnePassword().equals("")) {
+                    item = personneRepository.create(dataToSave.getPersonneNom(), dataToSave.getPersonnePrenom(), dataToSave.getRoleId());
+                    personneRepository.update(item.getPersonneId(), dataToSave);
+                }
+            }else{
+                if (dataToSave.getPersonneNom().equals("")){
+                    dataToSave.setPersonneNom(item.getPersonneNom());
+                } if (dataToSave.getPersonnePrenom().equals("")){
+                    dataToSave.setPersonnePrenom(item.getPersonnePrenom());
+                } if (dataToSave.getPersonneLogin().equals("")){
+                    dataToSave.setPersonneLogin(item.getPersonneLogin());
+                } if (dataToSave.getPersonnePassword().equals("")){
+                    dataToSave.setPersonnePassword(item.getPersonnePassword());
+                }
+                personneRepository.update(item.getPersonneId(), dataToSave);
+            }
+            // Return to the list
+            returned = handleAssistList(user);
         }
         return returned;
     }

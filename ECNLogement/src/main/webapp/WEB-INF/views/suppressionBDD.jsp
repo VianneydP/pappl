@@ -19,27 +19,9 @@
     <script type="text/javascript" src="js/jquery-3.6.1.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Local -->
-    <link rel="stylesheet" href="css/main.css" type="text/css">
-    <script src="js/main.js"></script>
-    <title>ECNLogement</title>
-    <style>
-        .btn-delete {
-            background-color: red;
-            color: black;
-            border: 2px solid black;
-            border-radius: 50%;
-            width: 150px; /* Ajustez la largeur et la hauteur selon vos besoins */
-            height: 150px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: block; /* Pour centrer le bouton */
-            margin: 0 auto; /* Pour centrer le bouton */
-            text-align: center; /* Pour centrer le texte à l'intérieur du bouton */
-            line-height: 150px; /* Pour centrer le texte à l'intérieur du bouton */
-            outline: none; /* Pour supprimer la bordure de focus */
-          }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <title>SuppressionBDD</title>
   </head>
 
   <body>

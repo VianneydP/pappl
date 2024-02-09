@@ -14,6 +14,7 @@
     <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Local -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/theme.css">
     <script src="js/main.js"></script>
     <!-- Datatable -->
     <link rel="stylesheet" type="text/css" href="dataTables/css/jquery.dataTables.css"/>
@@ -31,12 +32,15 @@
   </head>
 
   <body>
-    <%@ include file="header.jspf" %>
+    <%@ include file="headerAdmin.jspf" %>
     <div class="py-5">
       <div class="container">
         <div class="row">
-          <hr/>
-          <div class="col-md-12"><h3><fmt:message key="message.PersonneList" bundle="${ressourcesBundle}"/></h3></div>
+          <div class="col-md-12"><h2><fmt:message key="message.assistListTitre" bundle="${ressourcesBundle}"/></h2></div>
+        </div>
+        <hr/>
+        <div class="row">
+          <div class="col-md-12"><h3><fmt:message key="message.assistList" bundle="${ressourcesBundle}"/></h3></div>
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -51,47 +55,47 @@
                     <div id="fountainG_7" class="fountainG"></div>
                     <div id="fountainG_8" class="fountainG"></div>
                 </div>
-                <div id="fileImporter" style="display:none">
-                    <form id="formImporter" action="#" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectCode}</c:if>" />
-                        <input type="file" id="importFile" name="importFile" style="display:none" onChange="this.form.submit();" />
-                    </form>
-                </div>
-                <table id="PersonneList" class="table table-striped table-md sortable" style="visibility:hidden;">
+                <table id="PersonneList" class="table table-striped table-md sortable">
                 <thead>
                   <tr>
-                    <th class="col-md-1"></th>
-                    <th scope="col" col="col-md-2"></th>
-                    <th scope="col" class="col-md-3"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
-                    <th scope="col" class="col-md-3"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
-                    <th scope="col" class="col-md-3"><fmt:message key="message.roleNom" bundle="${ressourcesBundle}"/></th>
+                    <th class="col-md-2"></th>
+                    <th scope="col" class="col-md-2"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
+                    <th scope="col" class="col-md-2"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
+                    <th scope="col" class="col-md-2"><fmt:message key="message.personneLogin" bundle="${ressourcesBundle}"/></th>
+                    <th scope="col" class="col-md-2"><fmt:message key="message.roleNom" bundle="${ressourcesBundle}"/></th>
+                    <th class="col-md-2"></th>
                   </tr>
                 </thead>
                 <tbody class="bodyTable">
                 <c:forEach var="item" items="${itemList}" varStatus="count">
                     <tr>
                     <td class="text-center">${count.index+1}</td>
+                    <td class="text-left">${item.personneNom}</td>
+                    <td class="text-left">${item.personnePrenom}</td>
+                    <td class="text-left">${item.personneLogin}</td>
+                    <td class="text-left">${item.roleId.roleNom}</td>
                     <td class="text-center">
                       <form action="#" method="POST">
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                      <input type="hidden" name="personneId" value="${item.personneId}">
-                        <button class="btn btn-xs" formaction="PersonneEdit.do"><img src="img/edit.png" alt="edit" class="localButton" /></button>
+                        <input type="hidden" name="personneId" value="${item.personneId}">
+                        <button class="btn btn-xs" formaction="AssistEdit.do"><img src="img/edit.png" alt="edit" class="localButton" /></button>
                         <button class="btn btn-xs" formaction="PersonneRemove.do"><img src="img/delete.png" alt="delete" class="localButton" /></button>
                       </form>
                     </td>
-                    <td class="text-left">${item.personneNom}</td>
-                    <td class="text-left">${item.personnePrenom}</td>
-                    <td class="text-left">${item.roleId.roleNom}</td>
                    </tr>
                 </c:forEach>
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th></th>
-                    <th></th>
-                    <th id="spersonneNom"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
-                    <th id="spersonnePrenom"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
-                    <th id="sroleNom"><fmt:message key="message.roleNom" bundle="${ressourcesBundle}"/></th>
+                    <th colspan="5"></th>
+                    <th>
+                        <form action="AssistEdit.do" method="POST">
+                            <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                            <button class="nav-link btn btn-new text-black mx-2" type="submit">
+                                <fmt:message key="button.new" bundle="${ressourcesBundle}"/>
+                            </button>
+                        </form>
+                    </th>
                   </tr>
                 </tfoot>
               </table>
@@ -100,40 +104,6 @@
         </div>
       </div>
     </div>
-    <script>
-        var tableName = "PersonneList";
-        $(document).ready(function () {
-            // Setup - add a text input to each footer cell
-            $('#' + tableName + ' tfoot th').each(function () {
-                var theId = $(this).attr("id");
-                if ((theId !== null) && (typeof theId !== 'undefined') && (theId !== "")) {
-                    var title = $(this).text();
-                    $(this).html('<input type="text" name="search_' + theId + '" placeholder="' + title + '" value="" />');
-                }
-            });
-
-            // addDataTableButtonCopy();
-            // addDataTableButtonCsv();
-            // addDataTableButtonPrint();
-            // addDataTableButtonExcel();
-            // addDataTableButtonSelectAll();
-            // addDataTableButtonDeselectAll();
-            // addDataTableButtonImport("Personne");
-            // addDataTableButtonOther("Personne", "buttonName", "actionName");
-            addDataTableButtonNew("Personne");
-            var table = buildTable(tableName);
-
-            // Apply the search
-            table.columns().every(function () {
-                var that = this;
-                $('input', this.footer()).on('keyup change', function () {
-                    if (that.search() !== this.value) {
-                        that.search(this.value).draw();
-                    }
-                });
-            });
-        });
-    </script>
- 
+    <%@ include file="footer.jspf" %> 
   </body>
 </html>

@@ -146,16 +146,12 @@ public class LoginController {
         if ((login != null) && (pass != null) && (!login.isEmpty()) && (!pass.isEmpty())) {
             Personne person = personneRepository.getByPersonneLogin(login);
             if (person != null) {
-                // Try to authenticate
-                LDAPManager ldapManager = new LDAPManager();
-                if ((user == null) && (ldapManager.isAvailable()) && (ldapManager.authenticate(login, pass))) {
-                    // User is LDAP authenticated
-                    user = connexionRepository.create(person);
-                }
                 String savedPassword = person.getPersonnePassword();
                 if ((user == null) && (savedPassword != null) && (!savedPassword.isEmpty()) && (ApplicationTools.checkPassword(pass, savedPassword))) {
-                    // User is Database authenticated
-                    user = connexionRepository.create(person);
+                    if (person.getRoleId().getRoleId()==Role.ROLEASSIST || person.getRoleId().getRoleId()==Role.ROLEADMIN){
+                        //Authentifié comme Admin ou Assistant
+                        user = connexionRepository.create(person);
+                    }
                 }
             }
         }
