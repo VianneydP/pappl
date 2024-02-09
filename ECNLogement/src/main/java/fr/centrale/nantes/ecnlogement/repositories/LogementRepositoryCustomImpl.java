@@ -64,6 +64,18 @@ public class LogementRepositoryCustomImpl implements LogementRepositoryCustom {
           }
           return item;
     }
+    
+    @Override
+    public Logement update(String logementNumero, Logement value,int placesDispos, TypeAppart typeAppart) {
+          Logement item = repository.getByLogementNumero(logementNumero);
+          if ((item != null) && (value != null)) {
+              item.setLogementGenreRequis(value.getLogementGenreRequis());
+              item.setLogementPlacesDispo(placesDispos);
+              item.setTypeAppartNom(typeAppart);
+              repository.saveAndFlush(item);
+          }
+          return item;
+    }
 
     @Override
     public Logement getByLogementNumero(String logementNumero) {

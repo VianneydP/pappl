@@ -3,9 +3,9 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setBundle basename="fr.centrale.nantes.ecnlogement.resources.messages" var="ressourcesBundle" />
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-ecnBlue">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#"><b>ECNLogement</b></a>
+      <a class="navbar-brand" href="index.do"><b>ECNLogement</b></a>
     <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar10">
       <span class="navbar-toggler-icon"></span>
     </button>

@@ -38,6 +38,7 @@ public class Role implements Serializable {
 
     public static int ROLEADMIN = 1;
     public static int ROLEELEVE = 2;
+    public static int ROLEASSIST = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

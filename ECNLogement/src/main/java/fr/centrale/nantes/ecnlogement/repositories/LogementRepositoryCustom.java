@@ -39,6 +39,16 @@ public interface LogementRepositoryCustom {
      * @return Logement
      */
     public Logement update(String logementNumero, Logement value);
+    
+     /**
+     * Update a Logement
+     * @param logementNumero
+     * @param value
+     * @param placesDispos
+     * @param typeAppart
+     * @return Logement
+     */
+    public Logement update(String logementNumero, Logement value,int placesDispos, TypeAppart typeAppart) ;
 
     /**
      * Get a Logement

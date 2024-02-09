@@ -14,12 +14,13 @@
     <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Local -->
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/main.js"></script>
+        <link rel="stylesheet" href="css/theme.css">
+        <script src="js/main.js"></script>
     <title>ECNLogement</title>
   </head>
 
   <body>
-    <%@ include file="header.jspf" %>
+    <%@ include file="headerAdmin.jspf" %>
   <div class="py-5">
     <div class="container">
       <div class="row">

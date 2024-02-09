@@ -65,6 +65,20 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         return null;
     }
     
+    @Override
+    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne) {
+        if ((mail != null) && (genre != null) && (elevePayshab != null)  && (personne != null)) {
+            Eleve item = new Eleve();
+            item.setNumscei(numscei);
+            item.setEleveMail(mail);
+            item.setGenre(genre);
+            item.setElevePayshab(elevePayshab);
+            item.setPersonne(personne);
+            return create(item);
+        }
+        return null;
+    }
+    
         @Override
     public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune codeCommune) {
         if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
@@ -152,6 +166,23 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
         return null;
     }
+    
+    @Override 
+    public Eleve getByPersonNomPrenomMail(String personneNom, String personnePrenom, String eleveMail) {
+        if ((personneNom != null) && (personnePrenom != null) && (eleveMail != null)
+                && (!personneNom.isEmpty()) && (!personnePrenom.isEmpty())) {
+            Collection<Personne> list = personneRepository.findByPersonFirstAndLastName(personneNom, personnePrenom);
+            for (Personne p : list) {
+                for (Eleve e : p.getEleveCollection()) {
+                    if (e.getEleveMail().equals(eleveMail)) {
+                        return e;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     
     @Override
     public void setPersonne(Eleve item, Personne toSet, PersonneRepository altRepository) {

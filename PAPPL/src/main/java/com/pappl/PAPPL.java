@@ -15,7 +15,7 @@ public class PAPPL {
 
     public static void main(String[] args) throws IOException {
         Gremlin gre=new Gremlin();
-        gre.recupDonneesLogements("C:\\Users\\viann\\Documents\\Centrale Nantes\\Cours 2e année\\pappl\\Tableurs REZ_test.csv");
+        gre.recupDonneesLogements("C:\\Users\\elsaa\\Documents\\Centrale\\INFOSI\\PGROU\\GIT\\pappl\\Fichiers_csv\\Tableurs_REZ_test.csv");
         gre.afficheLogements();
     }
 }

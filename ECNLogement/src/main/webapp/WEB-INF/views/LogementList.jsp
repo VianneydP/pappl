@@ -53,7 +53,7 @@
                 </div>
                 <div id="fileImporter" style="display:none">
                     <form id="formImporter" action="#" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectCode}</c:if>" />
+                        <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                         <input type="file" id="importFile" name="importFile" style="display:none" onChange="this.form.submit();" />
                     </form>
                 </div>

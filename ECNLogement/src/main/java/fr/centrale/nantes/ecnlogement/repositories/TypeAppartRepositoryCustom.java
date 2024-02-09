@@ -9,6 +9,14 @@ package fr.centrale.nantes.ecnlogement.repositories;
 
 import fr.centrale.nantes.ecnlogement.items.*;
 
+
+import java.util.Optional;
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
+
 public interface TypeAppartRepositoryCustom {
 
     /**
@@ -17,6 +25,14 @@ public interface TypeAppartRepositoryCustom {
      * @return TypeAppart
      */
     public TypeAppart create(TypeAppart item);
+    
+    /**
+     * Create new TypeAppart
+     * @param typeAppartNom
+     * @return TypeAppart
+     */
+    public TypeAppart create(String typeAppartNom);
+
 
     /**
      * Create new TypeAppart
@@ -44,5 +60,7 @@ public interface TypeAppartRepositoryCustom {
      * @return typeAppartNom
      */
     public TypeAppart getByTypeAppartNom(String typeAppartNom);
+
+    
 
 }

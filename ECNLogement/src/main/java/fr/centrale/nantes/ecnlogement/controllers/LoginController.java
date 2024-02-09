@@ -116,7 +116,7 @@ public class LoginController {
         // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
-        Dates adminDates = datesRepository.getByAnnee(2024);
+        Dates adminDates = datesRepository.getByAnnee(annee);
         if (adminDates!=null){
             if (now.before(adminDates.getDatesDebut())){
                 returned = ApplicationTools.getModel("preouverture",null);
@@ -146,16 +146,12 @@ public class LoginController {
         if ((login != null) && (pass != null) && (!login.isEmpty()) && (!pass.isEmpty())) {
             Personne person = personneRepository.getByPersonneLogin(login);
             if (person != null) {
-                // Try to authenticate
-                LDAPManager ldapManager = new LDAPManager();
-                if ((user == null) && (ldapManager.isAvailable()) && (ldapManager.authenticate(login, pass))) {
-                    // User is LDAP authenticated
-                    user = connexionRepository.create(person);
-                }
                 String savedPassword = person.getPersonnePassword();
                 if ((user == null) && (savedPassword != null) && (!savedPassword.isEmpty()) && (ApplicationTools.checkPassword(pass, savedPassword))) {
-                    // User is Database authenticated
-                    user = connexionRepository.create(person);
+                    if (person.getRoleId().getRoleId()==Role.ROLEASSIST || person.getRoleId().getRoleId()==Role.ROLEADMIN){
+                        //Authentifié comme Admin ou Assistant
+                        user = connexionRepository.create(person);
+                    }
                 }
             }
         }
@@ -208,7 +204,7 @@ public class LoginController {
         // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
-        Dates adminDates = datesRepository.getByAnnee(2024);
+        Dates adminDates = datesRepository.getByAnnee(annee);
         if (now.before(adminDates.getDatesDebut())){
             returned = ApplicationTools.getModel("preouverture",null);
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
