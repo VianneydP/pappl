@@ -84,7 +84,7 @@ public class PersonneController {
         }
         return returned;
     }
-
+    
     @RequestMapping(value="PersonneCreate.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTPersonneCreate(HttpServletRequest request) {
         ModelAndView returned = null;

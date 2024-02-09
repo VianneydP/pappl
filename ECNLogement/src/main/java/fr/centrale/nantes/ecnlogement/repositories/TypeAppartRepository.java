@@ -17,5 +17,5 @@ import org.springframework.data.repository.query.Param;
 public interface TypeAppartRepository extends JpaRepository<TypeAppart, String>, TypeAppartRepositoryCustom {
 
     public Collection<TypeAppart> findByTypeAppartNom(@Param("typeAppartNom")String typeAppartNom);
-
+    
 }

@@ -14,6 +14,7 @@
     <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Local -->
     <link rel="stylesheet" href="css/main.css">
+    <<link rel="stylesheet" href="css/theme.css"/>
     <script src="js/main.js"></script>
     <!-- Datatable -->
     <link rel="stylesheet" type="text/css" href="dataTables/css/jquery.dataTables.css"/>

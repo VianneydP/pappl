@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -32,7 +34,12 @@ import javax.validation.constraints.Size;
 public class TypeAppart implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    public static String APPARTSTUDIO = "Studio";
+    public static String APPARTCOLOC = "Colocation";
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2147483647)

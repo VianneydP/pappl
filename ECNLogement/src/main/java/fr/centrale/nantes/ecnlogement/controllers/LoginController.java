@@ -35,6 +35,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Properties;
 
 @Controller
@@ -73,6 +74,12 @@ public class LoginController {
         ModelAndView returned = ApplicationTools.getModel("login", null);
         return returned;
     }
+    
+     @RequestMapping(value = "reconnect.do", method = RequestMethod.GET)
+    public ModelAndView handleGETReconnect(HttpServletRequest request) {
+        ModelAndView returned = ApplicationTools.getModel("relogin", null);
+        return returned;
+    }
 
     @RequestMapping(value = "connectAdmin.do", method = RequestMethod.GET)
     public ModelAndView handleGETConnectAdmin(HttpServletRequest request) {
@@ -88,18 +95,11 @@ public class LoginController {
         String prenom = ApplicationTools.getStringFromRequest(request, "prenom");
         prenom=ApplicationTools.correctString(prenom);
         int numscei = ApplicationTools.getIntFromRequest(request, "numscei");
-        Connexion user = null;
         if ((nom != null) && (prenom != null) && (numscei != -1)
                 && (!nom.isEmpty()) && (!prenom.isEmpty())) {
             Eleve eleve = eleveRepository.getByPersonNomPrenomNumscei(nom, prenom, numscei);
             if (eleve == null) {
-                Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
-                eleve=eleveRepository.create(numscei,pers);
-                user = connexionRepository.create(eleve.getPersonne());
-                returned = choixVueConnexion(user);
-                returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
-                returned.addObject("eleve", eleve);
-                returned.addObject("personne", pers);
+                returned = choixVueConnexion(nom, prenom, numscei);
             }else{
                 returned = ApplicationTools.getModel("relogin", null);
             }
@@ -109,19 +109,25 @@ public class LoginController {
         return returned;
     }
     
-    public ModelAndView choixVueConnexion(Connexion user) throws ParseException{
+    public ModelAndView choixVueConnexion(String nom, String prenom, int numscei) throws ParseException{
         ModelAndView returned = null;
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
-        Dates adminDates = datesRepository.getByAnnee(2024);
+        Dates adminDates = datesRepository.getByAnnee(annee);
         if (adminDates!=null){
             if (now.before(adminDates.getDatesDebut())){
                 returned = ApplicationTools.getModel("preouverture",null);
             } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
+                Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
+                Eleve eleve =eleveRepository.create(numscei,pers);
+                Connexion user = connexionRepository.create(eleve.getPersonne());
                 returned = ApplicationTools.getModel("password", user);
+                returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
             } if (now.after(adminDates.getDatesFin())){
                 returned = ApplicationTools.getModel("tropTard", null);
             }
@@ -140,16 +146,12 @@ public class LoginController {
         if ((login != null) && (pass != null) && (!login.isEmpty()) && (!pass.isEmpty())) {
             Personne person = personneRepository.getByPersonneLogin(login);
             if (person != null) {
-                // Try to authenticate
-                LDAPManager ldapManager = new LDAPManager();
-                if ((user == null) && (ldapManager.isAvailable()) && (ldapManager.authenticate(login, pass))) {
-                    // User is LDAP authenticated
-                    user = connexionRepository.create(person);
-                }
                 String savedPassword = person.getPersonnePassword();
                 if ((user == null) && (savedPassword != null) && (!savedPassword.isEmpty()) && (ApplicationTools.checkPassword(pass, savedPassword))) {
-                    // User is Database authenticated
-                    user = connexionRepository.create(person);
+                    if (person.getRoleId().getRoleId()==Role.ROLEASSIST || person.getRoleId().getRoleId()==Role.ROLEADMIN){
+                        //Authentifié comme Admin ou Assistant
+                        user = connexionRepository.create(person);
+                    }
                 }
             }
         }
@@ -184,13 +186,10 @@ public class LoginController {
             Personne pers = personneRepository.getByPersonneLogin(identifiant);
             if (pers != null && checkPassword(mdp, pers.getPersonnePassword())) {
                 user = connexionRepository.create(pers);
-                choixVueReconnexion(user);
-                returned=ApplicationTools.getModel("questionnaire", user);
-                //Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
                 Eleve eleve=eleveRepository.getByEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
-                //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
-                returned.addObject("eleve", eleve);
-                returned.addObject("personne", pers);
+                returned = choixVueReconnexion(user, eleve, pers);
+                //Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
+                
             }
         }else{
             returned=ApplicationTools.getModel("loginError", null);
@@ -198,20 +197,26 @@ public class LoginController {
         return returned;
     }
     
-    public ModelAndView choixVueReconnexion(Connexion user) throws ParseException{
+    public ModelAndView choixVueReconnexion(Connexion user, Eleve eleve, Personne pers) throws ParseException{
         ModelAndView returned = null;
         Date now = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // Formatage de la date actuelle en chaine de caracteres avec le format specifie
         String formattedDate = dateFormat.format(now);
         int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
-        Dates adminDates = datesRepository.getByAnnee(2024);
+        Dates adminDates = datesRepository.getByAnnee(annee);
         if (now.before(adminDates.getDatesDebut())){
             returned = ApplicationTools.getModel("preouverture",null);
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
             returned = ApplicationTools.getModel("questionnaire", user);
+            //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
+            returned.addObject("eleve", eleve);
+            returned.addObject("personne", pers);
         } if (now.after(adminDates.getDatesFin()) && now.before(adminDates.getDatesResultats())){
-            returned = ApplicationTools.getModel("attente", null);
+            returned = ApplicationTools.getModel("attenteResultat", null);
+            SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
+            String dateRes=dateFormat1.format(adminDates.getDatesResultats());
+            returned.addObject("dateResultats", dateRes);
         } if (now.after(adminDates.getDatesResultats())){
             returned = ApplicationTools.getModel("resultat", user);
         }        

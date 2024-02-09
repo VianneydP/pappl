@@ -19,13 +19,15 @@
         <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- Local -->
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/theme.css">
         <script src="js/main.js"></script>
         <title>ECNLogement</title>
     </head>
     <body>
         <%@ include file="header.jspf" %>
         <h1><fmt:message key="message.titreAttenteResultat" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageAttenteResultat" bundle="${ressourcesBundle}"/></h2>
+        <h3 class=""><fmt:message key="message.messageAttenteResultat" bundle="${ressourcesBundle}"/></h3>
+        <h3> ${dateResultats}</h3>
         <%@ include file="footer.jspf" %>
     </body>
 </html>

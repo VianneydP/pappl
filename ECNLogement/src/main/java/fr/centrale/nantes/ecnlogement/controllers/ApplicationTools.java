@@ -13,6 +13,12 @@ import fr.centrale.nantes.ecnlogement.items.Connexion;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
 import fr.centrale.nantes.ecnlogement.items.Personne;
 
+import fr.centrale.nantes.ecnlogement.repositories.LogementRepository;
+import fr.centrale.nantes.ecnlogement.items.Logement;
+
+import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
+import fr.centrale.nantes.ecnlogement.items.Role;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,6 +54,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -826,7 +833,7 @@ public class ApplicationTools {
             }
         }
     }
-
+    
     /**
      * Get string index in an array
      *

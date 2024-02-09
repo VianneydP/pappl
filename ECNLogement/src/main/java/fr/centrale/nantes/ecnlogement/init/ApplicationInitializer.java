@@ -68,6 +68,7 @@ public class ApplicationInitializer implements ServletContextListener {
         createDefaultMenus();
         createDefaultRoles();
         createDefaultUsers();
+        createDefaultTypeAppart();
         //createDefaultSouhaits();
     }
 
@@ -126,6 +127,7 @@ public class ApplicationInitializer implements ServletContextListener {
 
         transaction.begin();
         createRole(Role.ROLEADMIN, "Admin");
+        createRole(Role.ROLEASSIST,"Assistant");
         createRole(Role.ROLEELEVE, "Eleve");
         transaction.commit();
     }
@@ -178,6 +180,7 @@ public class ApplicationInitializer implements ServletContextListener {
                 item.setPersonnePassword(ApplicationTools.encryptPassword(password));
             }
             item.setPersonnePrenom(name);
+            item.setRoleId(getRole("Admin"));
             em.persist(item);
             em.flush();
 
@@ -197,9 +200,9 @@ public class ApplicationInitializer implements ServletContextListener {
 
     /* ----------------------------------------------------------------------- */
     private TypeAppart getTypeAppart(String value) {
-        return (TypeAppart) getItemFromString(value, "TypeAppart.findByTypeAppartNom", TypeAppart.class, "typeAppartName");
+        return (TypeAppart) getItemFromString(value, "TypeAppart.findByTypeAppartNom", TypeAppart.class, "typeAppartNom");
     }
-
+    
     private TypeAppart createTypeAppart(String value) {
         TypeAppart item = getTypeAppart(value);
         if (item == null) {
@@ -220,6 +223,8 @@ public class ApplicationInitializer implements ServletContextListener {
 
         transaction.begin();
         // createTypeAppart("Sous les ponts");
+        createTypeAppart(TypeAppart.APPARTSTUDIO);
+        createTypeAppart(TypeAppart.APPARTCOLOC);
         transaction.commit();
     }
 
