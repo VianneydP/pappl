@@ -35,7 +35,7 @@ public class RoleController {
 
     @Autowired
     private ConnexionRepository connexionRepository;
-
+    
     private ModelAndView handleRoleList(Connexion user) {
         String modelName = "RoleList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );

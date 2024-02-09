@@ -39,6 +39,17 @@ public interface EleveRepositoryCustom {
      * @return Eleve
      */
     public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne);
+    
+     /**
+     * Create new Eleve
+     * @param numscei 
+     * @param mail
+     * @param genre
+     * @param elevePayshab
+     * @param personne
+     * @return Eleve
+     */
+    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne) ;
 
     /**
      * Remove Eleve
@@ -78,6 +89,16 @@ public interface EleveRepositoryCustom {
      * @return 
      */
     public Eleve getByPersonNomPrenomNumscei(String personneNom, String personnePrenom,int numscei);
+    
+    /**
+     * Get a Eleve
+     * @param personneNom
+     * @param personnePrenom
+     * @param mail
+     * @return 
+     */
+    public Eleve getByPersonNomPrenomMail(String personneNom, String personnePrenom,String eleveMail);
+    
     
     /**
      * Set Personne

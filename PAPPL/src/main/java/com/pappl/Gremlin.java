@@ -56,14 +56,14 @@ public class Gremlin {
             while (ligne!=null){
                 //Défilement et lecture de chaque ligne une à une
                 //Processus d'extraction des information d'une ligne CSV
-                //Pourquoi pas StringTokenizer ? Parce qu'il se débarasse des éléments vides
+                //Pourquoi pas StringTokenizer ? Parce qu'il se débarrasse des éléments vides
                 // => problèmes d'indexation des informations... Essaie ! Tu verras
-                ArrayList<String> mots=new ArrayList<>();
+                ArrayList<String> lineValues=new ArrayList<>();
                 int i=0;
                 String elem="";
                 while (i<ligne.length()){
                     if (ligne.substring(i, i+1).equals(";")){
-                        mots.add(elem);
+                        lineValues.add(elem);
                         elem="";
                     }else{
                         if(ligne.substring(i,i+1).equals(",")){
@@ -74,20 +74,20 @@ public class Gremlin {
                     }
                     i++;
                 }
-                if (mots.get(1)!=("")){
+                if (lineValues.get(1)!=("")){
                     //Création logement
-                    Logement log=new Logement(mots);
+                    Logement log=new Logement(lineValues);
                     logements.add(log);
                 }else{
-                    if(mots.get(5)!=""){
+                    if(lineValues.get(5)!=""){
                         for(Logement log:logements){
-                            if(log.getNumero_id().equals(mots.get(3).substring(0, 5))){
-                                log.maj(mots);
+                            if(log.getNumero_id().equals(lineValues.get(3).substring(0, 5))){
+                                log.maj(lineValues);
                             }
                         }
                     }
                 }
-                System.out.println(mots);
+                System.out.println(lineValues);
                 ligne=fichier.readLine();
             }
         }catch (FileNotFoundException ex){

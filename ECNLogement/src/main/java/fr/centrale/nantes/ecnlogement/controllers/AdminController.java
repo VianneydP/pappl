@@ -24,7 +24,14 @@ import fr.centrale.nantes.ecnlogement.items.Role;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -53,8 +60,12 @@ public class AdminController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned=ApplicationTools.getModel("importAdmin", null);
+            returned=ApplicationTools.getModel("importAdmin", user);
         }
+        
+        
+        
+            
         return returned;
     }
     
@@ -65,7 +76,7 @@ public class AdminController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned=ApplicationTools.getModel("visuBDD", null);
+            returned=ApplicationTools.getModel("visuBDD", user);
         }
         return returned;
     }
@@ -77,7 +88,7 @@ public class AdminController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned=ApplicationTools.getModel("alertes", null);
+            returned=ApplicationTools.getModel("alertes", user);
         }
         return returned;
     }
@@ -89,7 +100,7 @@ public class AdminController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned=ApplicationTools.getModel("affectLogement", null);
+            returned=ApplicationTools.getModel("affectLogement", user);
         }
         return returned;
     }

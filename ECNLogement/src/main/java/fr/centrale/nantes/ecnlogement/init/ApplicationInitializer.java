@@ -68,6 +68,7 @@ public class ApplicationInitializer implements ServletContextListener {
         createDefaultMenus();
         createDefaultRoles();
         createDefaultUsers();
+        createDefaultTypeAppart();
     }
 
     /* ----------------------------------------------------------------------- */
@@ -164,9 +165,9 @@ public class ApplicationInitializer implements ServletContextListener {
 
     /* ----------------------------------------------------------------------- */
     private TypeAppart getTypeAppart(String value) {
-        return (TypeAppart) getItemFromString(value, "TypeAppart.findByTypeAppartNom", TypeAppart.class, "typeAppartName");
+        return (TypeAppart) getItemFromString(value, "TypeAppart.findByTypeAppartNom", TypeAppart.class, "typeAppartNom");
     }
-
+    
     private TypeAppart createTypeAppart(String value) {
         TypeAppart item = getTypeAppart(value);
         if (item == null) {
@@ -187,6 +188,8 @@ public class ApplicationInitializer implements ServletContextListener {
 
         transaction.begin();
         // createTypeAppart("Sous les ponts");
+        createTypeAppart(TypeAppart.APPARTSTUDIO);
+        createTypeAppart(TypeAppart.APPARTCOLOC);
         transaction.commit();
     }
 

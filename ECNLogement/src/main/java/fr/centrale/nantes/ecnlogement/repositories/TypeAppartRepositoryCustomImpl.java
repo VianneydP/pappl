@@ -27,9 +27,9 @@ public class TypeAppartRepositoryCustomImpl implements TypeAppartRepositoryCusto
         if (item != null) {
             repository.saveAndFlush(item);
 
-            Optional<TypeAppart> result = repository.findById(item.getTypeAppartNom());
-            if (result.isPresent()) {
-                return result.get();
+            Collection<TypeAppart> result = repository.findByTypeAppartNom(item.getTypeAppartNom());
+            if (!result.isEmpty()) {
+                return result.iterator().next();
             }
         }
         return null;
@@ -41,6 +41,16 @@ public class TypeAppartRepositoryCustomImpl implements TypeAppartRepositoryCusto
         return create(item);
     }
 
+    @Override
+    public TypeAppart create(String typeAppartNom) {
+        if ((typeAppartNom != null)) {
+            TypeAppart item = new TypeAppart();
+            item.setTypeAppartNom(typeAppartNom);
+            return create(item);
+        }
+        return null;
+    }
+    
     @Override
     public void remove(TypeAppart item) {
           if (item != null) {
@@ -65,5 +75,6 @@ public class TypeAppartRepositoryCustomImpl implements TypeAppartRepositoryCusto
           }
           return null;
     }
+
 
 }
