@@ -31,7 +31,7 @@
   </head>
 
   <body>
-    <%@ include file="header.jspf" %>
+    <%@ include file="headerAdmin.jspf" %>
     <div class="py-5">
       <div class="container">
         <div class="row">
@@ -53,22 +53,20 @@
                 </div>
                 <div id="fileImporter" style="display:none">
                     <form id="formImporter" action="#" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectCode}</c:if>" />
-                        <input type="file" id="importFile" name="importFile" style="display:none" onChange="this.form.submit();" />
+                        <input type="file" id="importFile" name="importFile" onChange="this.form.submit();" />
                     </form>
                 </div>
-                <table id="EleveList" class="table table-striped table-md sortable" style="visibility:hidden;">
+                <table id="EleveList" class="table table-striped table-md sortable" style="">
                 <thead>
                   <tr>
                     <th class="col-md-1"></th>
-                    <th scope="col" col="col-md-2"></th>
-                    <th scope="col" class="col-md-1"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
+                    <th scope="col" class="col-md-1"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
+                    <th scope="col" class="col-md-1"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-1"><fmt:message key="message.genre" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-1"><fmt:message key="message.elevePayshab" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-1"><fmt:message key="message.eleveVillehab" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-1"><fmt:message key="message.eleveCodepostal" bundle="${ressourcesBundle}"/></th>
-                    <th scope="col" class="col-md-1"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
-                    <th scope="col" class="col-md-1"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
+                    <th scope="col" class="col-md-1"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-1"><fmt:message key="message.roleId" bundle="${ressourcesBundle}"/></th>
                   </tr>
                 </thead>
@@ -76,36 +74,35 @@
                 <c:forEach var="item" items="${itemList}" varStatus="count">
                     <tr>
                     <td class="text-center">${count.index+1}</td>
-                    <td class="text-center">
-                      <form action="#" method="POST">
-                        <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                      <input type="hidden" name="eleveId" value="${item.eleveId}">
-                        <button class="btn btn-xs" formaction="EleveEdit.do"><img src="img/edit.png" alt="edit" class="localButton" /></button>
-                        <button class="btn btn-xs" formaction="EleveRemove.do"><img src="img/delete.png" alt="delete" class="localButton" /></button>
-                      </form>
-                    </td>
-                    <td class="text-left"><fmt:formatDate value="${item.eleveDateNaissance}" pattern="dd/MM/yyyy" /></td>
+                    <td class="text-left">${item.personne.personneNom}</td>
+                    <td class="text-left">${item.personne.personnePrenom}</td>
                     <td class="text-left">${item.genre}</td>
                     <td class="text-left">${item.elevePayshab}</td>
                     <td class="text-left">${item.eleveVillehab}</td>
                     <td class="text-left">${item.eleveCodepostal}</td>
-                    <td class="text-left">${item.personneId.personneNom}</td>
-                    <td class="text-left">${item.personneId.personnePrenom}</td>
-                    <td class="text-left">${item.personneId.roleId}</td>
+                    <td class="text-left"><fmt:formatDate value="${item.eleveDateNaissance}" pattern="dd/MM/yyyy" /></td>
+                    <td class="text-left">${item.personne.roleId}</td>
+                    <td class="text-center">
+                      <form action="#" method="POST">
+                        <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                        <input type="hidden" name="eleveId" value="${item.eleveId}">
+                        <button class="btn btn-xs" formaction="EleveEdit.do"><img src="img/edit.png" alt="edit" class="localButton" /></button>
+                        <button class="btn btn-xs" formaction="EleveRemove.do"><img src="img/delete.png" alt="delete" class="localButton" onclick="return confirm('Voulez-vous vraiment supprimer ? L\'opération est irréversible');" /></button>
+                      </form>
+                    </td>
                    </tr>
                 </c:forEach>
                 </tbody>
                 <tfoot>
                   <tr>
                     <th></th>
-                    <th></th>
-                    <th id="seleveDateNaissance"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
+                    <th id="spersonneNom"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
+                    <th id="spersonnePrenom"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
                     <th id="sgenre"><fmt:message key="message.genre" bundle="${ressourcesBundle}"/></th>
                     <th id="selevePayshab"><fmt:message key="message.elevePayshab" bundle="${ressourcesBundle}"/></th>
                     <th id="seleveVillehab"><fmt:message key="message.eleveVillehab" bundle="${ressourcesBundle}"/></th>
                     <th id="seleveCodepostal"><fmt:message key="message.eleveCodepostal" bundle="${ressourcesBundle}"/></th>
-                    <th id="spersonneNom"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
-                    <th id="spersonnePrenom"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
+                    <th id="seleveDateNaissance"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
                     <th id="sroleId"><fmt:message key="message.roleId" bundle="${ressourcesBundle}"/></th>
                   </tr>
                 </tfoot>

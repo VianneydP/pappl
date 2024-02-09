@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +59,7 @@ public class AdminController {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user == null) {
-            returned = ApplicationTools.getModel( "index", null );
+            returned = ApplicationTools.getModel( "index", null);
         } else {
             returned=ApplicationTools.getModel("importAdmin", user);
         }
@@ -76,7 +77,7 @@ public class AdminController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned=ApplicationTools.getModel("visuBDD", user);
+            returned=ApplicationTools.getModel("EleveEdit", user);
         }
         return returned;
     }
@@ -101,6 +102,27 @@ public class AdminController {
             returned = ApplicationTools.getModel( "index", null );
         } else {
             returned=ApplicationTools.getModel("affectLogement", user);
+        }
+        return returned;
+    }
+    
+    @RequestMapping(value = "gestionAdmin.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTGestionAdmin(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            returned=ApplicationTools.getModel("gestionAdmin", user);
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(now);
+            int annee=ApplicationTools.getIntFromString(formattedDate.substring(0,4));
+            Dates adminDates = datesRepository.getByAnnee(annee);
+            returned.addObject("dateAnnee", annee);
+            returned.addObject("dateDebut",dateFormat.format(adminDates.getDatesDebut()));
+            returned.addObject("dateFin",dateFormat.format(adminDates.getDatesFin()));
+            returned.addObject("dateResultats",dateFormat.format(adminDates.getDatesResultats()));
         }
         return returned;
     }
