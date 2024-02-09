@@ -37,7 +37,7 @@
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <input type="date" class="form-control" name="eleveDateNaissance" value="1" />
+                        <input type="date" class="form-control" name="eleveDateNaissance" value=${item.eleveDateNaissance} />
                       </td>
                     </tr>
                     <tr>
@@ -48,6 +48,17 @@
                         </textarea>
                       </td>
                     </tr>
+                    <tr>
+                        <th scope="col"><fmt:message key="message.typeSouhait" bundle="${ressourcesBundle}"/></th>
+                        <td>
+                          <select name="typeSouhait">
+                            <c:forEach var="itemIter" items="${typeSouhaitList}">
+                              <option value="${itemIter.typeSouhait}" <c:if test="${itemIter.typeSouhait eq item.typeSouhait}">selected</c:if>>${itemIter.typeSouhait}</option>
+                            </c:forEach>
+                          </select>
+                        </td>
+                      </tr>
+                    
                     <tr>
                       <th scope="col"><fmt:message key="message.elevePayshab" bundle="${ressourcesBundle}"/></th>
                       <td>
@@ -87,11 +98,24 @@
                       </td>
                     </tr>
                     <tr>
+                        <th scope="col"><fmt:message key="message.eleveBoursier" bundle="${ressourcesBundle}"/></th>
+                        <td>
+                            <label>
+                              <input type="radio" name="eleveBoursier" value="oui" <c:if test="${item.eleveBoursier eq 'oui'}">checked</c:if>> Oui
+                            </label>
+                            <label>
+                              <input type="radio" name="eleveBoursier" value="non" <c:if test="${item.eleveBoursier eq 'non'}">checked</c:if>> Non
+                            </label>
+                        </td>
+                    </tr>
+                    <!--
+                    <tr>
                       <th scope="col"><fmt:message key="message.eleveBoursier" bundle="${ressourcesBundle}"/></th>
                       <td>
-                        <input type="checkbox" class="form-control" name="eleveBoursier" value="1" />
+                        <input type="radio" class="form-control" name="eleveBoursier" value="oui" checked="" />
+                        <input type="radio" class="form-control" name="eleveBoursier" value="non" />
                       </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveInfosup" bundle="${ressourcesBundle}"/></th>
                       <td>
@@ -127,7 +151,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <th scope="col"><fmt:message key="message.personne" bundle="${ressourcesBundle}"/></th>
+                      <th scope="col"><fmt:message key="message.Personne" bundle="${ressourcesBundle}"/></th>
                       <td>
                         <select name="personne">
                         <c:forEach var="itemIter" items="${personneList}">
@@ -139,6 +163,7 @@
                         </select>
                       </td>
                     </tr>
+                    <!--
                     <tr>
                       <th scope="col"><fmt:message key="message.typeSouhait" bundle="${ressourcesBundle}"/></th>
                       <td>
@@ -151,14 +176,26 @@
                         </c:forEach>
                         </select>
                       </td>
-                    </tr>
+                    </tr> -->
+                     <tr>
+                        <th scope="col"><fmt:message key="message.typeSouhait" bundle="${ressourcesBundle}"/></th>
+                        <td>
+                          <select name="typeSouhait">
+                            <c:forEach var="itemIter" items="${typeSouhaitList}">
+                              <option value="${itemIter.typeSouhait}" <c:if test="${itemIter.typeSouhait eq item.typeSouhait}">selected</c:if>>${itemIter.typeSouhait}</option>
+                            </c:forEach>
+                          </select>
+                        </td>
+                      </tr>
+
+                    
                   </tbody>
                   <tfoot>
                     <tr id="save">
                       <th scope="col"></th>
                       <td class="text-center">
                         <button class="btn btn-warning" formaction="EleveList.do"><img src="img/cancel.png" alt="save" class="icon" /><fmt:message key="button.cancel" bundle="${ressourcesBundle}"/></button>
-                        <button class="btn btn-success" formaction="EleveSave.do"><img src="img/save.png" alt="save" class="icon" /><fmt:message key="button.save" bundle="${ressourcesBundle}"/></button>
+                        <button class="btn btn-success" formaction="EleveSaveAdmin.do"><img src="img/save.png" alt="save" class="icon" /><fmt:message key="button.save" bundle="${ressourcesBundle}"/></button>
                       </td>
                     </tr>
                   </tfoot>
