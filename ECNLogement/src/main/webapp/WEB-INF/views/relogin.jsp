@@ -31,6 +31,7 @@
         <div class="col-md-12">
             <form id="c_form-h" class="" action="reconnect.do" method="POST">
             <input type="hidden" name="eleveId" value="${eleve.eleveId}" />
+            <input type="hidden" name="personneId" value="${personne.personneId}" />
             <div class="form-group row"> <label for="inputidentifianth" class="col-2 col-form-label"><fmt:message key="message.identifiant" bundle="${ressourcesBundle}"/></label>
               <div class="col-10">
                 <input type="integer" class="form-control" id="inputidentifianth" placeholder="<fmt:message key="message.identifiant" bundle="${ressourcesBundle}"/>" name="identifiant" required="required"></div>

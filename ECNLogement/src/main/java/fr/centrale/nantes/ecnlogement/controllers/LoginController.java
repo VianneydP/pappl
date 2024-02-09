@@ -101,7 +101,7 @@ public class LoginController {
                 returned.addObject("eleve", eleve);
                 returned.addObject("personne", pers);
             }else{
-                returned = ApplicationTools.getModel("loginRe", null);
+                returned = ApplicationTools.getModel("relogin", null);
             }
         }else{
             returned=ApplicationTools.getModel("loginError", null);
