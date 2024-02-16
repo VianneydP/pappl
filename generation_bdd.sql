@@ -32,15 +32,17 @@ CREATE TABLE public.connexion (
                 CONSTRAINT connexion_pk PRIMARY KEY (connection_id)
 );
 
+CREATE SEQUENCE public.commune_commune_id_seq;
 
 CREATE TABLE public.commune (
-                code_commune INTEGER NOT NULL,
+                commune_id INTEGER NOT NULL DEFAULT nextval('public.commune_commune_id_seq'),
+                code_commune VARCHAR NOT NULL,
                 nom_commune VARCHAR NOT NULL,
                 code_postal INTEGER NOT NULL,
                 latitude REAL NOT NULL,
                 longitude REAL NOT NULL,
                 dans_metropole_nantes BOOLEAN NOT NULL,
-                CONSTRAINT commune_pk PRIMARY KEY (code_commune)
+                CONSTRAINT commune_pk PRIMARY KEY (commune_id)
 );
 
 
@@ -78,11 +80,13 @@ CREATE TABLE public.eleve (
                 eleve_codepostal INTEGER,
                 eleve_mail VARCHAR,
                 eleve_numtel VARCHAR,
+                eleve_confirm BOOLEAN NOT NULL,
                 eleve_boursier BOOLEAN,
                 eleve_infosup VARCHAR,
+                eleve_infosup_ve VARCHAR,
                 type_souhait VARCHAR,
                 logement_numero VARCHAR,
-                code_commune INTEGER,
+                commune_id INTEGER,
                 CONSTRAINT eleve_pk PRIMARY KEY (eleve_id)
 );
 
@@ -111,8 +115,8 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE public.eleve ADD CONSTRAINT communesfrance_eleve_fk
-FOREIGN KEY (code_commune)
-REFERENCES public.commune (code_commune)
+FOREIGN KEY (commune_id)
+REFERENCES public.commune (commune_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;

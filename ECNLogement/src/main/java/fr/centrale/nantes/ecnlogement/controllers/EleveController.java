@@ -485,5 +485,61 @@ public class EleveController {
         }
         return returned;    
     }
+    
+    @RequestMapping(value = "trier.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTtrier(HttpServletRequest request){
+        ModelAndView returned=null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository,request);
+        if (user!=null){
+            returned=ApplicationTools.getModel("EleveList", user);
+            Collection<Eleve> aTrier=repository.findAll();
+            Collection<Eleve> boursiers=new ArrayList<>();
+            Collection<Eleve> internat=new ArrayList<>();
+            Collection<Eleve> autres=new ArrayList<>();
+            for(Eleve item:aTrier){
+                if (item.getNumscei()!=-1 && item.getEleveConfirm()==true){
+                    boolean flag=false;
+                    if(!item.getElevePayshab().equalsIgnoreCase("france") && !flag){
+                        internat.add(item);
+                        flag=true;
+                    }if(item.getEleveBoursier() && !flag){
+                        boursiers.add(item);
+                        flag=true;
+                    }if(!flag){
+                        autres.add(item);
+                    }
+                }
+            }
+            trierElevesDistance(autres);
+            returned.addObject("boursiers",boursiers);
+            returned.addObject("internat",internat);
+            returned.addObject("autres",autres);
+        }else{
+            returned=ApplicationTools.getModel("loginAdmin", null);
+        }
+    return returned;    
+    }
+    
+    public ArrayList<Eleve> trierElevesDistance(Collection<Eleve> aTrier){
+        //Création du contenant de la future liste triée
+        ArrayList<Eleve> returned=new ArrayList<>();
+        ArrayList<Double> distances=new ArrayList<>();
+        for (Eleve item:aTrier){
+            Commune ville=communeRepository.getByCodePostalNom(item.getEleveCodepostal(),item.getEleveVillehab());
+            Double dist=communeRepository.distNantesCommune(ville.getCodeCommune());
+            if(returned.isEmpty()){
+                returned.add(item);
+                distances.add(dist);
+            }else{
+                int i=0;
+                while(dist<distances.get(i)){
+                    i+=1;
+                }
+                distances.add(i, dist);
+                returned.add(i,item);
+            }
+        }
+        return returned;
+    }
 
 }

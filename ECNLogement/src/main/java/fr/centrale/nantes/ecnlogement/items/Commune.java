@@ -11,6 +11,8 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,12 +37,18 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Commune.findByDansMetropoleNantes", query = "SELECT c FROM Commune c WHERE c.dansMetropoleNantes = :dansMetropoleNantes")})
 public class Commune implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "commune_id")
+    private Integer communeId;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 2147483647)
     @Column(name = "code_commune")
-    private Integer codeCommune;
+    private String codeCommune;
+
+    private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2147483647)
@@ -68,11 +76,11 @@ public class Commune implements Serializable {
     public Commune() {
     }
 
-    public Commune(Integer codeCommune) {
+    public Commune(String codeCommune) {
         this.codeCommune = codeCommune;
     }
 
-    public Commune(Integer codeCommune, String nomCommune, int codePostal, float latitude, float longitude, boolean dansMetropoleNantes) {
+    public Commune(String codeCommune, String nomCommune, int codePostal, float latitude, float longitude, boolean dansMetropoleNantes) {
         this.codeCommune = codeCommune;
         this.nomCommune = nomCommune;
         this.codePostal = codePostal;
@@ -81,14 +89,14 @@ public class Commune implements Serializable {
         this.dansMetropoleNantes = dansMetropoleNantes;
     }
     
-    public Commune(Integer codeCommune, String nomCommune, float latitude, float longitude) {
+    public Commune(String codeCommune, String nomCommune, float latitude, float longitude) {
         this.codeCommune = codeCommune;
         this.nomCommune = nomCommune;
         this.latitude = latitude;
         this.longitude = longitude;
     }
     
-        public Commune(Integer codeCommune, String nomCommune, int codePostal, float latitude, float longitude) {
+    public Commune(String codeCommune, String nomCommune, int codePostal, float latitude, float longitude) {
         this.codeCommune = codeCommune;
         this.nomCommune = nomCommune;
         this.codePostal = codePostal;
@@ -96,11 +104,11 @@ public class Commune implements Serializable {
         this.longitude = longitude;
     }
 
-    public Integer getCodeCommune() {
+    public String getCodeCommune() {
         return codeCommune;
     }
 
-    public void setCodeCommune(Integer codeCommune) {
+    public void setCodeCommune(String codeCommune) {
         this.codeCommune = codeCommune;
     }
 
@@ -176,5 +184,12 @@ public class Commune implements Serializable {
     public String toString() {
         return "fr.centrale.nantes.ecnlogement.items.Commune[ codeCommune=" + codeCommune + " ]";
     }
-    
+
+    public Integer getCommuneId() {
+        return communeId;
+    }
+
+    public void setCommuneId(Integer communeId) {
+        this.communeId = communeId;
+    }
 }

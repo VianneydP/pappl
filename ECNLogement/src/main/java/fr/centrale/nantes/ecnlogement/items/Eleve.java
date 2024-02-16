@@ -44,6 +44,19 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Eleve.findByEleveInfosup", query = "SELECT e FROM Eleve e WHERE e.eleveInfosup = :eleveInfosup")})
 public class Eleve implements Serializable {
 
+    @Column(name = "eleve_codepostal")
+    private Integer eleveCodepostal;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "eleve_confirm")
+    private boolean eleveConfirm;
+    @Size(max = 2147483647)
+    @Column(name = "eleve_infosup_ve")
+    private String eleveInfosupVe;
+    @JoinColumn(name = "commune_id", referencedColumnName = "commune_id")
+    @ManyToOne
+    private Commune communeId;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,9 +83,6 @@ public class Eleve implements Serializable {
     @Size(min = 1, max = 2147483647)
     @Column(name = "eleve_villehab")
     private String eleveVillehab;
-    @Basic(optional = false)
-    @Column(name = "eleve_codepostal")
-    private int eleveCodepostal;
     @Size(max = 2147483647)
     @Column(name = "eleve_mail")
     private String eleveMail;
@@ -256,6 +266,34 @@ public class Eleve implements Serializable {
     @Override
     public String toString() {
         return "fr.centrale.nantes.ecnlogement.items.Eleve[ eleveId=" + eleveId + " ]";
+    }
+
+    public void setEleveCodepostal(Integer eleveCodepostal) {
+        this.eleveCodepostal = eleveCodepostal;
+    }
+
+    public boolean getEleveConfirm() {
+        return eleveConfirm;
+    }
+
+    public void setEleveConfirm(boolean eleveConfirm) {
+        this.eleveConfirm = eleveConfirm;
+    }
+
+    public String getEleveInfosupVe() {
+        return eleveInfosupVe;
+    }
+
+    public void setEleveInfosupVe(String eleveInfosupVe) {
+        this.eleveInfosupVe = eleveInfosupVe;
+    }
+
+    public Commune getCommuneId() {
+        return communeId;
+    }
+
+    public void setCommuneId(Commune communeId) {
+        this.communeId = communeId;
     }
     
 }
