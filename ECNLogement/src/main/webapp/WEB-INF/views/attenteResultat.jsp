@@ -31,7 +31,7 @@
                     <div class="col-md-12">
                         <h1 class="text-center"><fmt:message key="message.titreAttenteResultat" bundle="${ressourcesBundle}"/> ${dateResultats}</h1>
                         <h3 class="text-center"><fmt:message key="message.messageAttenteResultat" bundle="${ressourcesBundle}"/></h3>
-                    <div class="text-center col-md-7 mx-auto"> <i class="fa fa-bullseye fa-5x mb-4" style="color: #fab600" ></i></div>
+                        <div class="text-center col-md-7 mx-auto"> <i class="fa fa-bullseye fa-5x mb-4" style="color: #fab600" ></i></div>
                     </div>
                 </div>
             </div>
