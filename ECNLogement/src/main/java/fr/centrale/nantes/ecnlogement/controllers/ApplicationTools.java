@@ -36,6 +36,7 @@ import java.security.SecureRandom;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -947,6 +949,26 @@ public class ApplicationTools {
         returned =returned.toUpperCase();
         return returned;
     }
+    
+    public static String removeAccentsAndSpecialCharacters(String input) {
+        // Suppression des accents
+        String normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String withoutAccents = pattern.matcher(normalizedString).replaceAll("");
+
+        // Remplacement des caractères spécifiques
+        String result = withoutAccents
+            .replace("-", " ")
+            .replace("'", " ")
+            .replace("<", " ")
+            .replace(">", " ")
+            .replace("?", "")
+            .replace("Saint", "St");
+
+        result =result.toUpperCase();
+        return result;
+    }
+    
   /**  
     public static String getCodeCommune(String communeName) throws IOException {
         try (Reader reader = new FileReader(C:/Users/Céline/Documents/ECN/EI2/PGROU/PGROU2/pappl/Fichiers_csv/communes-departement-region.csv));
