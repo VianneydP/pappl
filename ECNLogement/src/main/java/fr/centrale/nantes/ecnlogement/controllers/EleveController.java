@@ -260,7 +260,7 @@ public class EleveController {
 
             // Return to the list
             //returned = handleEleveList(user);
-            returned=ApplicationTools.getModel("questionnaire", user);
+            returned=ApplicationTools.getModel("confirmation", user);
         }
         return returned;
     }

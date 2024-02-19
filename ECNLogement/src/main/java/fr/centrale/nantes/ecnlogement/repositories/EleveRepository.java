@@ -27,5 +27,6 @@ public interface EleveRepository extends JpaRepository<Eleve, Integer>, EleveRep
     public Collection<Eleve> findByEleveNumtel(@Param("eleveNumtel")String eleveNumtel);
     public Collection<Eleve> findByEleveBoursier(@Param("eleveBoursier")Boolean eleveBoursier);
     public Collection<Eleve> findByEleveInfosup(@Param("eleveInfosup")String eleveInfosup);
+    public Collection<Eleve> findByPersonneId(@Param("personne")Personne personne);
 
 }

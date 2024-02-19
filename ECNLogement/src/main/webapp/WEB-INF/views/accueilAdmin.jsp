@@ -27,7 +27,8 @@
         <%@ include file="headerAdmin.jspf" %>
         
         <h1><fmt:message key="message.titreAccueilAdmin" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageAccueilAdmin" bundle="${ressourcesBundle}"/></h2>  
+        <br>
+        <h5 class=""><fmt:message key="message.messageAccueilAdmin" bundle="${ressourcesBundle}"/></h5>  
         <%@ include file="footer.jspf" %>
     </body>
 </html>

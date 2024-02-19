@@ -41,7 +41,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Eleve.findByEleveMail", query = "SELECT e FROM Eleve e WHERE e.eleveMail = :eleveMail"),
     @NamedQuery(name = "Eleve.findByEleveNumtel", query = "SELECT e FROM Eleve e WHERE e.eleveNumtel = :eleveNumtel"),
     @NamedQuery(name = "Eleve.findByEleveBoursier", query = "SELECT e FROM Eleve e WHERE e.eleveBoursier = :eleveBoursier"),
-    @NamedQuery(name = "Eleve.findByEleveInfosup", query = "SELECT e FROM Eleve e WHERE e.eleveInfosup = :eleveInfosup")})
+    @NamedQuery(name = "Eleve.findByEleveInfosup", query = "SELECT e FROM Eleve e WHERE e.eleveInfosup = :eleveInfosup"),
+    @NamedQuery(name = "Eleve.findByPersonneId", query = "SELECT e FROM Eleve e WHERE e.personne = :personne")})
 public class Eleve implements Serializable {
 
     @Column(name = "eleve_codepostal")

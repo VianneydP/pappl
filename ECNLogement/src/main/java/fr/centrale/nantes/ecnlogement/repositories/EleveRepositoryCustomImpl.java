@@ -80,7 +80,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
         @Override
-    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune codeCommune) {
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune codecommune) {
         if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
             Eleve item = new Eleve();
             item.setNumscei(numscei);
@@ -90,7 +90,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setEleveVillehab(eleveVillehab);
             item.setEleveCodepostal(eleveCodepostal);
             item.setPersonne(personne);
-            item.setCodeCommune(codeCommune);
+            item.setCodeCommune(codecommune);
             return create(item);
         }
         return null;
@@ -202,7 +202,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
   //Ajoute par moi  
-  /**  
+  
     @Override
     public Eleve getByPersonneId(int personneId){
         Personne pers=personneRepository.getByPersonneId(personneId);
@@ -218,6 +218,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
         return null;
     }
+    /**
     @Override
 public Eleve getByPersonneId(int personneId) {
     Personne personne = personneRepository.getByPersonneId(personneId);
