@@ -117,7 +117,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setEleveNumtel(value.getEleveNumtel());
             item.setEleveBoursier(value.getEleveBoursier());
             item.setEleveInfosup(value.getEleveInfosup());
-            item.setCodeCommune(value.getCodeCommune());
+            item.setCommune(value.getCommune());
             item.setLogementNumero(value.getLogementNumero());
             item.setPersonne(value.getPersonne());
             item.setTypeSouhait(value.getTypeSouhait());

@@ -56,7 +56,7 @@ public class Eleve implements Serializable {
     private String eleveInfosupVe;
     @JoinColumn(name = "commune_id", referencedColumnName = "commune_id")
     @ManyToOne
-    private Commune communeId;
+    private Commune commune;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -95,9 +95,6 @@ public class Eleve implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "eleve_infosup")
     private String eleveInfosup;
-    @JoinColumn(name = "code_commune", referencedColumnName = "code_commune")
-    @ManyToOne
-    private Commune codeCommune;
     @JoinColumn(name = "logement_numero", referencedColumnName = "logement_numero")
     @ManyToOne
     private Logement logementNumero;
@@ -212,12 +209,12 @@ public class Eleve implements Serializable {
         this.eleveInfosup = eleveInfosup;
     }
 
-    public Commune getCodeCommune() {
-        return codeCommune;
+    public Commune getCommune() {
+        return commune;
     }
 
-    public void setCodeCommune(Commune codeCommune) {
-        this.codeCommune = codeCommune;
+    public void setCommune(Commune commune) {
+        this.commune = commune;
     }
 
     public Logement getLogementNumero() {
@@ -287,14 +284,6 @@ public class Eleve implements Serializable {
 
     public void setEleveInfosupVe(String eleveInfosupVe) {
         this.eleveInfosupVe = eleveInfosupVe;
-    }
-
-    public Commune getCommuneId() {
-        return communeId;
-    }
-
-    public void setCommuneId(Commune communeId) {
-        this.communeId = communeId;
     }
     
 }

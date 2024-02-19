@@ -120,6 +120,9 @@ public class LoginController {
         if (adminDates!=null){
             if (now.before(adminDates.getDatesDebut())){
                 returned = ApplicationTools.getModel("preouverture",null);
+                SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
+                String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
+                returned.addObject("dateDebut", dateDeb);
             } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
                 Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
                 Eleve eleve =eleveRepository.create(numscei,pers);
@@ -207,6 +210,9 @@ public class LoginController {
         Dates adminDates = datesRepository.getByAnnee(annee);
         if (now.before(adminDates.getDatesDebut())){
             returned = ApplicationTools.getModel("preouverture",null);
+            SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
+                String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
+                returned.addObject("dateDebut", dateDeb);
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
             returned = ApplicationTools.getModel("questionnaire", user);
             //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
