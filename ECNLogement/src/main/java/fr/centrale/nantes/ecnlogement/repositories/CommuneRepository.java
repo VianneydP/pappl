@@ -16,7 +16,7 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface CommuneRepository extends JpaRepository<Commune, Integer>, CommuneRepositoryCustom {
 
-    public Collection<Commune> findByCodeCommune(@Param("codeCommune")Integer codeCommune);
+    public Collection<Commune> findByCodeCommune(@Param("codeCommune")String codeCommune);
     public Collection<Commune> findByNomCommune(@Param("nomCommune")String nomCommune);
     public Collection<Commune> findByCodePostal(@Param("codePostal")int codePostal);
     public Collection<Commune> findByLatitude(@Param("latitude")float latitude);

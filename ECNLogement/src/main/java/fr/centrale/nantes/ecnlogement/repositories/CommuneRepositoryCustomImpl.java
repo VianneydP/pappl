@@ -9,6 +9,7 @@ package fr.centrale.nantes.ecnlogement.repositories;
 
 import fr.centrale.nantes.ecnlogement.items.*;
 import static java.lang.Math.*;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Collection;
 
@@ -28,11 +29,13 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
     @Override
     public Commune create(Commune item) {
         if (item != null) {
-            repository.saveAndFlush(item);
-
-            Optional<Commune> result = repository.findById(item.getCodeCommune());
-            if (result.isPresent()) {
-                return result.get();
+            Collection<Commune> result = repository.findByCodeCommune(item.getCodeCommune());
+            if (result.isEmpty()) {
+                repository.saveAndFlush(item);
+                return item;
+            }else{
+                Object[] r=result.toArray();
+                return (Commune) r[0];
             }
         }
         return null;
@@ -60,7 +63,7 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
     }
 
     @Override
-    public Commune update(Integer codeCommune, Commune value) {
+    public Commune update(String codeCommune, Commune value) {
           Commune item = repository.getByCodeCommune(codeCommune);
           if ((item != null) && (value != null)) {
               item.setNomCommune(value.getNomCommune());
@@ -74,23 +77,34 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
     }
 
     @Override
-    public Commune getByCodeCommune(Integer codeCommune) {
+    public Commune getByCodeCommune(String codeCommune) {
           Collection<Commune> result = repository.findByCodeCommune(codeCommune);
           if (result.size() == 1) {
               return result.iterator().next();
           }
           return null;
     }
+    @Override
+    public Commune getByCodePostalNom(Integer codePostal,String nom) {
+          Collection<Commune> result = repository.findByCodePostal(codePostal);
+          for (Commune co:result){
+              if (co.getNomCommune().equalsIgnoreCase(nom)){
+                  return co;
+              }
+          }
+          return null;
+    }
     
-    public int rangCommune(Integer codeCommune){
-        int rg=0;
+    @Override
+    public Double distNantesCommune(String codeCommune){
+        Double rg=0.;
         Commune com=getByCodeCommune(codeCommune);
         if (com!=null){
             if (com.getDansMetropoleNantes()){
-                rg=4;
+                rg=100000.;
             }else{
                 double distance=500;
-                Commune nantes=getByCodeCommune(44109);
+                Commune nantes=getByCodeCommune("44109");
                 double lat_a=nantes.getLatitude();
                 double lon_a=nantes.getLongitude();
                 double lat_b=com.getLatitude();
@@ -100,14 +114,7 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
                 lon_a = PI*lon_a/180;
                 lat_b = PI*lat_b/180;
                 lon_b = PI*lon_b/180;
-                distance = R * (PI/2 - Math.asin( Math.sin(lat_b) * Math.sin(lat_a) + Math.cos(lon_b - lon_a) * Math.cos(lat_b) * Math.cos(lat_a)));
-                if (distance<200){
-                    rg=1;
-                }if (distance<400 && distance >=200){
-                    rg=2;
-                }if (distance>=400){
-                    rg=3;
-                }
+                rg = R * (PI/2 - Math.asin( Math.sin(lat_b) * Math.sin(lat_a) + Math.cos(lon_b - lon_a) * Math.cos(lat_b) * Math.cos(lat_a)));
             }
         }
         return rg;

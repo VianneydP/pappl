@@ -44,7 +44,6 @@ public class ApplicationInitializer implements ServletContextListener {
         // Initialize data
         LDAPManager dummy = new LDAPManager();
         createDefault();
-
         // close
         em.close();
         emf.close();
@@ -64,7 +63,7 @@ public class ApplicationInitializer implements ServletContextListener {
      * Create default values in Database. This is called once, when application
      * starts
      */
-    private void createDefault() {
+    private void createDefault(){
         createDefaultMenus();
         createDefaultRoles();
         createDefaultUsers();

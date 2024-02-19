@@ -26,6 +26,11 @@ import fr.centrale.nantes.ecnlogement.repositories.ConnexionRepository;
 import fr.centrale.nantes.ecnlogement.repositories.CommuneRepository;
 import fr.centrale.nantes.ecnlogement.items.Connexion;
 import fr.centrale.nantes.ecnlogement.items.Commune;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 @Controller
 public class CommuneController {
@@ -63,7 +68,7 @@ public class CommuneController {
             returned = ApplicationTools.getModel( "index", null );
         } else {
             // Retreive item (null if not created)
-            Integer id = ApplicationTools.getIntFromRequest(request,"codeCommune");
+            String id = ApplicationTools.getStringFromRequest(request,"codeCommune");
             Commune item = repository.getByCodeCommune( id );
 
             // Edit item
@@ -98,7 +103,7 @@ public class CommuneController {
             returned = ApplicationTools.getModel( "index", null );
         } else {
             // Retreive item (null if not created)
-            Integer id = ApplicationTools.getIntFromRequest(request,"codeCommune");
+            String id = ApplicationTools.getStringFromRequest(request,"codeCommune");
             Commune item = repository.getByCodeCommune( id );
 
             // Remove item
@@ -119,7 +124,7 @@ public class CommuneController {
         } else {
             // Get item to save request
             // Retreive item (null if not created)
-            Integer id = ApplicationTools.getIntFromRequest(request,"codeCommune");
+            String id = ApplicationTools.getStringFromRequest(request,"codeCommune");
             Commune item = repository.getByCodeCommune( id );
 
             Commune dataToSave = new Commune();
@@ -223,5 +228,38 @@ public class CommuneController {
         if (canDoIt) {
             repository.create(item);
         }
+    }
+    
+        
+    @RequestMapping(value="createDefaultCommune.do", method=RequestMethod.POST)
+    private ModelAndView handlePOSTCreateDefaultCommune(HttpServletRequest request) throws IOException {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user != null) {
+            try{
+                String nomFichier="C:\\Users\\viann\\Documents\\CentraleNantes\\Cours2eAnnée\\PGROU\\ECNLogement\\src\\main\\resources\\fr\\centrale\\nantes\\ecnlogement\\resources\\communes-departement-region.csv";
+                BufferedReader fichier=new BufferedReader(new FileReader(nomFichier));
+                String ligne=fichier.readLine();
+                while ((ligne = fichier.readLine()) != null){
+                    StringTokenizer st = new StringTokenizer(ligne,",");
+                    if (st.countTokens()==5){
+                        Commune item=new Commune();
+                        item.setCodeCommune(st.nextToken());
+                        item.setNomCommune(st.nextToken());
+                        item.setCodePostal(ApplicationTools.getIntFromString(st.nextToken()));
+                        item.setLatitude(ApplicationTools.getFloatFromString(st.nextToken()));
+                        item.setLongitude(ApplicationTools.getFloatFromString(st.nextToken()));
+                        repository.create(item);
+                    }
+                }
+                fichier.close();
+                returned=ApplicationTools.getModel("gestionAdmin", user);
+            }catch(FileNotFoundException ex){
+                returned=ApplicationTools.getModel("accueilAdmin", user);
+            }
+        }else {
+            returned=ApplicationTools.getModel("loginAdmin", null);
+        }
+        return returned;
     }
 }

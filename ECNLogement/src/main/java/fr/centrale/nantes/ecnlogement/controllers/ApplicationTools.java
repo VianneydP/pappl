@@ -1024,7 +1024,7 @@ public class ApplicationTools {
                                 && lineValues.size() > latitudeIndex && lineValues.size() > longitudeIndex && lineValues.size() > nameIndex) {
                             int currentCodePostal = Integer.parseInt(lineValues.get(cpIndex).trim());
                             if (currentCodePostal==codePostal) {
-                                int code = Integer.parseInt(lineValues.get(codeIndex).trim());
+                                String code = lineValues.get(codeIndex).trim();
                                 float latitude = Float.parseFloat(lineValues.get(latitudeIndex).trim());
                                 float longitude = Float.parseFloat(lineValues.get(longitudeIndex).trim());
                                 String name =lineValues.get(nameIndex).trim();
@@ -1084,7 +1084,7 @@ public class ApplicationTools {
                                 && lineValues.size() > latitudeIndex && lineValues.size() > longitudeIndex && lineValues.size() > cpIndex) {
                             String currentCommuneName = lineValues.get(communeIndex).trim();
                             if (currentCommuneName.equalsIgnoreCase(communeName)) {
-                                int code = Integer.parseInt(lineValues.get(codeIndex).trim());
+                                String code = lineValues.get(codeIndex).trim();
                                 float latitude = Float.parseFloat(lineValues.get(latitudeIndex).trim());
                                 float longitude = Float.parseFloat(lineValues.get(longitudeIndex).trim());
                                 int codePostal=Integer.parseInt(lineValues.get(cpIndex).trim());

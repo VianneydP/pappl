@@ -41,13 +41,16 @@ public interface CommuneRepositoryCustom {
      * @param value
      * @return Commune
      */
-    public Commune update(Integer codeCommune, Commune value);
+    public Commune update(String codeCommune, Commune value);
 
     /**
      * Get a Commune
      * @param codeCommune
      * @return codeCommune
      */
-    public Commune getByCodeCommune(Integer codeCommune);
-
+    public Commune getByCodeCommune(String codeCommune);
+    
+    public Double distNantesCommune(String codeCommune);
+    
+    public Commune getByCodePostalNom(Integer codePostal,String nom);
 }

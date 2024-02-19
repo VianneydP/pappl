@@ -25,8 +25,17 @@
     </head>
     <body>
         <%@ include file="header.jspf" %>
-        <h1><fmt:message key="message.titreTropTard" bundle="${ressourcesBundle}"/></h1>
-        <h2 class=""><fmt:message key="message.messageTropTard" bundle="${ressourcesBundle}"/></h2>
+         <div class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center"><fmt:message key="message.titreTropTard" bundle="${ressourcesBundle}"/></h1>
+                        <h2 class="text-center"><fmt:message key="message.messageTropTard" bundle="${ressourcesBundle}"/></h2>
+                        <div class="text-center col-md-7 mx-auto"> <i class="fa fa-bullseye fa-5x mb-4" style="color: #fab600" ></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <%@ include file="footer.jspf" %>
     </body>
 </html>

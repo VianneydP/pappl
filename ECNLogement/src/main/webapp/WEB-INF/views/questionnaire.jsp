@@ -52,9 +52,9 @@
         <%@ include file="header.jspf" %>
         <div class="py-5">
             <div class="container md-10 justify-content-center">
-                <h1>Questionnaire</h1>
+                <h1>Formulaire</h1>
                 <br>
-                <h5>Veuillez remplir les informations ci-dessous pour vous affecter dans un logement. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h5>
+                <h5>Veuillez remplir les informations ci-dessous pour enregistrer votre demande de pré-réservation d'un logement dans la résidence de l'école. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h5>
                 <br>
                     <div class="col-md-12">
                         <form id="c_form-h" class="" action="EleveSave.do" method="POST" enctype="multipart/form-data">
@@ -287,7 +287,7 @@
                                 <div class="form-group row">
                                     <label for="inputcodepostalh" class="col-2 col-form-label d-none d-md-block"><fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
                                         <div class="col-10">
-                                            <input type="int" class="form-control" id="inputcodepostalh" required style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
+                                            <input type="int" class="form-control" id="inputcodepostalh" style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
                                         </div>
                                 </div>
                             </div> 
@@ -306,10 +306,10 @@
                                 <div class="col-10">
                                     <div class="d-block my-3">
                                         <div class="custom-control custom-radio">
-                                            <input id="inputboursiernon" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="non"> <label class="custom-control-label" for="inputboursiernon">Non</label>
+                                            <input id="inputboursiernon" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="false"> <label class="custom-control-label" for="inputboursiernon">Non</label>
                                         </div>
                                         <div class="custom-control custom-radio">
-                                            <input id="inputboursieroui" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="oui"> <label class="custom-control-label" for="inputboursieroui">Oui</label>
+                                            <input id="inputboursieroui" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="true"> <label class="custom-control-label" for="inputboursieroui">Oui</label>
                                         </div>
                                     </div>
                                 </div>
@@ -319,6 +319,7 @@
                                 <div id="scholarshipCertificate" class="col-12" style="display: none;">
                                     <label for="fileInput"><fmt:message key="message.questionnaireNotif" bundle="${ressourcesBundle}"/></label>
                                     <input type="file" id="fileInput" name="eleveFile" accept=".pdf">
+                                    <label for="fileInput"><fmt:message key="message.questionnaireNotif2" bundle="${ressourcesBundle}"/></label>
                                 </div>
                             </div>
 
@@ -344,7 +345,7 @@
 
                             <div class="form-group row"> 
                                 <label for="inputtypeSouhait" class="col-2 col-form-label"><fmt:message key="message.questionnairePreference" bundle="${ressourcesBundle}"/></label>
-                                <div class="col-10">
+                                <div class="col-5">
                                     <div class="d-block my-3">
                                         <div class="custom-control custom-radio">
                                             <input id="choix1" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Seul">
@@ -364,6 +365,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                        <div class="col-5"><fmt:message key="message.questionnaireColoc" bundle="${ressourcesBundle}"/></div>       
                             </div>
                             <div class="form-group row">
                                 <label for="inputinfosuph" class="col-2 col-form-label"><fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/></label>
@@ -397,23 +399,16 @@
                 franceFields.style.display = 'none';
             }
         });
-        
-         document.getElementById('country').addEventListener('change', function () {
-            var franceFields = document.getElementById('franceFields2');
-            if (this.value === 'france') {
-                franceFields.style.display = 'block';
-            } else {
-                franceFields.style.display = 'none';
-            }
-        });
 
         document.getElementById('inputboursieroui').addEventListener('change', function () {
             var scholarshipCertificate = document.getElementById('scholarshipCertificate');
             if (this.checked) {
             //if (this.value==='oui') {
                 scholarshipCertificate.style.display = 'block';
+                document.getElementById('fileInput').setAttribute('required', 'required');
             } else {
                 scholarshipCertificate.style.display = 'none';
+                document.getElementById('fileInput').removeAttribute('required');
             }
         });
         
@@ -421,6 +416,7 @@
             var scholarshipCertificate = document.getElementById('scholarshipCertificate');
             if (this.checked) {
                 scholarshipCertificate.style.display = 'none';
+                document.getElementById('fileInput').removeAttribute('required');
             }
         });
     </script>
