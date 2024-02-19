@@ -70,7 +70,7 @@ public class Commune implements Serializable {
     @NotNull
     @Column(name = "dans_metropole_nantes")
     private boolean dansMetropoleNantes;
-    @OneToMany(mappedBy = "codeCommune")
+    @OneToMany(mappedBy = "commune")
     private Collection<Eleve> eleveCollection;
 
     public Commune() {

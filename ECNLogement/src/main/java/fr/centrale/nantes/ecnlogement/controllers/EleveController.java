@@ -135,7 +135,7 @@ public class EleveController {
             String modelName = "EleveEdit";
             returned = ApplicationTools.getModel(modelName, user);
             returned.addObject("item", item);
-            returned.addObject("codeCommuneList", communeRepository.findAll());
+            returned.addObject("communeList", communeRepository.findAll());
             returned.addObject("logementNumeroList", logementRepository.findAll());
             returned.addObject("personneIdList", personneRepository.findAll());
             returned.addObject("typeSouhaitList", souhaitRepository.findAll());
@@ -233,8 +233,11 @@ public class EleveController {
             //dataToSave.setCodeCommune(new Commune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()).getCodeCommune()));
             
             //On set la commune grâce au nom de la ville
-            dataToSave.setCodeCommune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()));
-            
+            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
+            if (saCommune!=null){
+                dataToSave.setCommune(saCommune);
+            }
+            /*
             //Si l'élève n'a pas renseigné le code postal, on le rajoute
             if(dataToSave.getEleveCodepostal()==-1 || dataToSave.getEleveCodepostal()==0){
                 dataToSave.setEleveCodepostal(dataToSave.getCodeCommune().getCodePostal());
@@ -247,14 +250,15 @@ public class EleveController {
                 if(dataToSave.getCodeCommune()!=null){
                     dataToSave.setEleveVillehab(dataToSave.getCodeCommune().getNomCommune());
                 }
-            }
-            //TODO : si code commune est encore null (n'a été trouvé ni à partir de la ville ni à partir du CP, créer une ALERTE pour la VE)
+            }*/
+             
+            //TODO : si la commune est encore null (n'a été trouvé ni à partir de la ville ni à partir du CP, créer une ALERTE pour la VE)
             //String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
             //dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
 
             // Create if necessary then Update item
             if (item == null) {
-                item = repository.create(dataToSave.getEleveId(), dataToSave.getEleveDateNaissance(), dataToSave.getGenre(), dataToSave.getElevePayshab(), dataToSave.getEleveVillehab(), dataToSave.getEleveCodepostal(), dataToSave.getPersonne(),dataToSave.getCodeCommune());
+                item = repository.create(dataToSave);
             }
             repository.update(item.getEleveId(), dataToSave);
 
@@ -303,8 +307,11 @@ public class EleveController {
             dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             
             //On set la commune grâce au nom de la ville
-            dataToSave.setCodeCommune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()));
-            
+            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
+            if (saCommune!=null){
+                dataToSave.setCommune(saCommune);
+            }
+            /*
             //Si l'élève n'a pas renseigné le code postal, on le rajoute
             if(dataToSave.getEleveCodepostal()==-1 || dataToSave.getEleveCodepostal()==0){
                 dataToSave.setEleveCodepostal(dataToSave.getCodeCommune().getCodePostal());
@@ -317,14 +324,15 @@ public class EleveController {
                 if(dataToSave.getCodeCommune()!=null){
                     dataToSave.setEleveVillehab(dataToSave.getCodeCommune().getNomCommune());
                 }
-            }
-            //TODO : si code commune est encore null (n'a été trouvé ni à partir de la ville ni à partir du CP, créer une ALERTE pour la VE)
+            }*/
+            
+            //TODO : si la commune est encore null (n'a été trouvé ni à partir de la ville ni à partir du CP, créer une ALERTE pour la VE)
             //String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
             //dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
 
             // Create if necessary then Update item
             if (item == null) {
-                item = repository.create(dataToSave.getEleveId(), dataToSave.getEleveDateNaissance(), dataToSave.getGenre(), dataToSave.getElevePayshab(), dataToSave.getEleveVillehab(), dataToSave.getEleveCodepostal(), dataToSave.getPersonne(),dataToSave.getCodeCommune());
+                item = repository.create(dataToSave);
             }
             repository.update(item.getEleveId(), dataToSave);
 

@@ -105,9 +105,9 @@
                       <th scope="col"><fmt:message key="message.codeCommune" bundle="${ressourcesBundle}"/></th>
                       <td>
                         <select name="codeCommune">
-                        <c:forEach var="itemIter" items="${codeCommuneList}">
+                        <c:forEach var="itemIter" items="${communeList}">
                           <c:choose>
-                          <c:when test="${itemIter.codeCommune==item.codeCommune.codeCommune}"><option value="${itemIter.codeCommune}" selected>${itemIter.nomCommune}</option></c:when>
+                          <c:when test="${itemIter.codeCommune==item.commune.codeCommune}"><option value="${itemIter.codeCommune}" selected>${itemIter.nomCommune}</option></c:when>
                           <c:otherwise><option value="${itemIter.codeCommune}">${itemIter.nomCommune}</option></c:otherwise>
                           </c:choose>
                         </c:forEach>

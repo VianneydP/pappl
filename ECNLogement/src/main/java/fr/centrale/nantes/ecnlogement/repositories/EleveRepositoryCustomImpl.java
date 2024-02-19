@@ -80,7 +80,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
         @Override
-    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune codeCommune) {
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune commune) {
         if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
             Eleve item = new Eleve();
             item.setNumscei(numscei);
@@ -90,7 +90,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setEleveVillehab(eleveVillehab);
             item.setEleveCodepostal(eleveCodepostal);
             item.setPersonne(personne);
-            item.setCodeCommune(codeCommune);
+            item.setCommune(commune);
             return create(item);
         }
         return null;
@@ -117,7 +117,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setEleveNumtel(value.getEleveNumtel());
             item.setEleveBoursier(value.getEleveBoursier());
             item.setEleveInfosup(value.getEleveInfosup());
-            item.setCodeCommune(value.getCodeCommune());
+            item.setCommune(value.getCommune());
             item.setLogementNumero(value.getLogementNumero());
             item.setPersonne(value.getPersonne());
             item.setTypeSouhait(value.getTypeSouhait());
