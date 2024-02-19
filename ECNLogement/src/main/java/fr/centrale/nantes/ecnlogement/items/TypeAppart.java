@@ -35,8 +35,9 @@ public class TypeAppart implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public static String APPARTSTUDIO = "Studio";
-    public static String APPARTCOLOC = "Colocation";
+    public static String APPARTSTUDIO = "STUDIO";
+    public static String APPARTCOLOC = "COLOCATION";
+    public static String APPARTPMR = "PMR";
     
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)

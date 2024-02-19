@@ -171,4 +171,8 @@ public class Personne implements Serializable {
         return "fr.centrale.nantes.ecnlogement.items.Personne[ personneId=" + personneId + " ]";
     }
     
+    public boolean isPersonneValid(){
+        return (getPersonneNom() != null) && (!getPersonneNom().isEmpty()&& (getPersonnePrenom() != null) && (!getPersonnePrenom().isEmpty()));
 }
+    }
+    

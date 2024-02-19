@@ -5,6 +5,7 @@
  * Vianney de Ponthaud - Maxence Nicolet
  * ----------------------------------------- */
  
+//-*- coding: utf-8 -*-
 package fr.centrale.nantes.ecnlogement.controllers;
 
 import static fr.centrale.nantes.ecnlogement.controllers.ApplicationTools.getMethod;
@@ -36,13 +37,19 @@ import fr.centrale.nantes.ecnlogement.items.TypeAppart;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 @Controller
@@ -70,7 +77,8 @@ public class LogementController {
     private ModelAndView handleLogementList(Connexion user) {
         String modelName = "LogementList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
-        returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "logementNumero")));
+        Collection<Logement> maListe=repository.findAll(Sort.by(Sort.Direction.ASC, "logementNumero"));
+        returned.addObject("itemList", maListe);
         return returned;
     }
 
@@ -78,28 +86,31 @@ public class LogementController {
     public ModelAndView handlePOSTLogementList(HttpServletRequest request) {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
-        if (user == null) {
-            returned = ApplicationTools.getModel( "loginAdmin", null );
-        } else {
-            returned = ApplicationTools.getModel( "LogementList", user );
-        }
-        File fichierRez=ApplicationTools.getFileFromRequest(request,"RezImport");
-        String filename=fichierRez.getName();
-        //String extension=getFileExtension(filename);
-        String targetDirectory = request.getServletContext().getRealPath("FichierRez");
-        if(fichierRez!=null){
-            try {
-                Path destinationOrigine = Paths.get(targetDirectory);
-                //Path destination = new File(targetDirectory).toPath();
-                String newFileName ="fichierRez.csv";
-                Path destination =destinationOrigine.resolve(newFileName);
-                Files.copy(fichierRez.toPath(), destination);
-                importCsvRez(fichierRez) ;
-            } catch (IOException ex) {
-                Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        String action = ApplicationTools.getStringFromRequest(request, "nomEtape");
+        
+            if (user == null) {
+                returned = ApplicationTools.getModel( "loginAdmin", null );
+            } else {
+                returned = handleLogementList(user);
             }
+        if ("importLogement".equals(action)) {
+            File fichierRez=ApplicationTools.getFileFromRequest(request,"RezImport");
+            String filename=fichierRez.getName();
+            //String extension=getFileExtension(filename);
+            String targetDirectory = request.getServletContext().getRealPath("FichierRez");
+            if(fichierRez!=null){
+                try {
+                    Path destinationOrigine = Paths.get(targetDirectory);
+                    //Path destination = new File(targetDirectory).toPath();
+                    String newFileName ="fichierRez.csv";
+                    Path destination =destinationOrigine.resolve(newFileName);
+                    Files.copy(fichierRez.toPath(), destination);
+                    importCsvRez(fichierRez) ;
+                } catch (IOException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
         }
-            
+        }   
         return returned;
     }
 
@@ -193,11 +204,13 @@ public class LogementController {
     }
     
      /**
-     * Create an item form attribute lists
+     * Cree un logement et son habitant s'il y en a d√©j√† un √† partir d'une 
+     * Liste de valeurs
      *
      * @param header
      * @param values
      */
+    
     public void createItem(List<String> header, List<String> values) {
         
         Logement item = new Logement();
@@ -207,60 +220,82 @@ public class LogementController {
         Eleve eleve = new Eleve();   
         Personne personne = new Personne();
         personne.setRoleId(roleRepository.getByRoleId(Role.ROLEELEVE));
+        
 
         boolean canDoIt = true;
         Iterator<String> valueIterator = values.iterator();
         for (String name : header) {
             
+            
             if (valueIterator.hasNext()) {
                 String value = valueIterator.next().trim();
+                
                 switch (name) {
-                    case "Chambre":
-                        item.setLogementNumero(value.substring(0, 5));
+                    case "COLOCATION" :
+                        
+                        if (!value.equals("")){
+                            item.setLogementPlacesDispo(ApplicationTools.getIntFromString(value));
+                            if (item.getTypeAppartNom()==null){
+                                typeAppart = typeAppartRepository.getByTypeAppartNom(TypeAppart.APPARTCOLOC);
+                            }else{
+                                typeAppart=item.getTypeAppartNom();
+                            }
+                            
+                        }
+                        else{
+                            item.setLogementPlacesDispo(1);
+                            if (item.getTypeAppartNom()==null){
+                                typeAppart = typeAppartRepository.getByTypeAppartNom(TypeAppart.APPARTSTUDIO);
+                            }else{
+                                typeAppart=item.getTypeAppartNom();
+                            }      
+                        }
+                        item.setTypeAppartNom(typeAppart);
                         break;
-                    case "CivilitÈ":
+                    case "CHAMBRE":
+                        item.setLogementNumero(value.substring(0, 5));
+                        
+                        break;
+                    case "CIVILITE":
                         switch (value){
-                            case "Mme":
+                            case "MME":
                                 item.setLogementGenreRequis("F");
                                 eleve.setGenre("F");
                                 break;
-                            case "Mr":
+                            case "MR":
                                 item.setLogementGenreRequis("M");
                                 eleve.setGenre("M");
                                 break;
                             default :
                                 item.setLogementGenreRequis("");
+                                break;
                     }
                         break;
-                    case "Colocation":
+                    
+                    case "PRENOM":
                         if (!value.equals("")){
-                            item.setLogementPlacesDispo(ApplicationTools.getIntFromString(value));
-                            typeAppart = typeAppartRepository.getByTypeAppartNom(TypeAppart.APPARTCOLOC);
-                            item.setTypeAppartNom(typeAppart);
-                        }
-                        else{
-                            item.setLogementPlacesDispo(1);
-                            typeAppart = typeAppartRepository.getByTypeAppartNom(TypeAppart.APPARTSTUDIO);
-                            item.setTypeAppartNom(typeAppart);
-                        }
-                    case "PrÈnom":
-                        if (!value.equals("")){
-                            personne.setPersonnePrenom(value);
+                            if (value.equals("LOGEMENT PMR AU BESOIN")){
+                                typeAppart = typeAppartRepository.getByTypeAppartNom(TypeAppart.APPARTPMR);
+                                item.setTypeAppartNom(typeAppart);     
+                            }else{
+                                personne.setPersonnePrenom(value);
+                            }
+                            
                         }
                         break;
-                    case "Nom":
+                    case "NOM":
                         if (!value.equals("")){
                             personne.setPersonneNom(value);
                         }
                         break;
-                    case "Pays d'origine":
+                    case "PAYS D ORIGINE":
                         if (!value.equals("")){
                             eleve.setElevePayshab(value);
                         }
                         break;
-                    case "Mail":
+                    case "MAIL":
                         if (!value.equals("")){
-                            eleve.setElevePayshab(value);
+                            eleve.setEleveMail(value );
                         }
                         break;
                     default:
@@ -272,16 +307,15 @@ public class LogementController {
             }
         }
 
-        //if (canDoIt) {
-            Eleve temp = null;
-            if (((personne.getPersonneNom() != null) && (!personne.getPersonneNom().isEmpty()) )
-                    && ((personne.getPersonnePrenom() != null) && (!personne.getPersonnePrenom().isEmpty()))) {
+            Eleve temp = null; 
+            if (personne.isPersonneValid() ) {
                 temp = eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
                 if (temp == null) {
                     Personne tempP = personneRepository.create(personne.getPersonneNom(), personne.getPersonnePrenom(), personne.getRoleId());
+                    
+                    eleveRepository.setPersonne(eleve, tempP, personneRepository);
                     temp = eleveRepository.create(-1, eleve.getEleveMail(), 
                             eleve.getGenre(), eleve.getElevePayshab(), tempP);
-                    eleveRepository.setPersonne(eleve, tempP, personneRepository);
                     item.setLogementPlacesDispo(item.getLogementPlacesDispo()-1);
                 }
             }
@@ -289,53 +323,75 @@ public class LogementController {
             if (((item.getLogementNumero() != null) && (!item.getLogementNumero().isEmpty()) )) {
                 tempLog = repository.getByLogementNumero(item.getLogementNumero());
                 if (tempLog == null) {
-                    tempLog = repository.create(item);
+                    handleNewLogement(item,personne,temp);
                 }
-                else{
-                    if (((personne.getPersonneNom()== null) )
-                    && ((personne.getPersonnePrenom()== null) )) {
-                        repository.update(item.getLogementNumero(), item,tempLog.getLogementPlacesDispo(),tempLog.getTypeAppartNom() );
-                    }
-                    else{
-                        repository.update(item.getLogementNumero(), item,tempLog.getLogementPlacesDispo()-1,tempLog.getTypeAppartNom() );
-                    }
+                else{ 
+                    handleExistingLogement(item, personne, tempLog,temp);
                     
                 }
-            
             }
-            
-            
-            
-            
-        //}
     }
     
+    public void handleNewLogement(Logement item, Personne personne, Eleve eleve) {
+
+ 
+        Logement tempLog = repository.create(item);
+            if (personne.isPersonneValid()) {
+                eleve.setLogementNumero(tempLog);
+                //temp = eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
+                int id =eleve.getEleveId();
+                eleveRepository.update(id, eleve);
+            }
+    }
+
+    /**
+     *
+     * @param item Logement lu dans le fichier csv
+     * @param personne
+     * @param tempLog Logement r√©cup√©r√© dans la base de donn√©es 
+     * @param eleve
+     */
+    public void handleExistingLogement(Logement item, Personne personne, Logement tempLog,Eleve eleve) {
+        Eleve tempE= null;
+        if (personne.isPersonneValid()) {
+            repository.update(item.getLogementNumero(), item, tempLog.getLogementPlacesDispo() - 1, tempLog.getTypeAppartNom());
+            eleve.setLogementNumero(tempLog);
+            //tempE = eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
+            int id =eleve.getEleveId();
+            eleveRepository.update(id, eleve);
+        } 
+    }
+    
+        
     public void importCsvRez(File importFile) {
         // Build creation method
         // Read file
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(importFile));
+            
+            FileInputStream fis = new FileInputStream(importFile);
+            InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(isr);
 
             String line = reader.readLine();
             if (line != null) {
                 // Get header
                 List<String> header = new LinkedList<>();
                 StringTokenizer st = new StringTokenizer(line, ";");
-                while (st.hasMoreElements()) {
+                while ((st.hasMoreElements())&&header.size()<14) {
                     String name = st.nextToken().trim();
-                    header.add(name);
+                    header.add(ApplicationTools.removeAccentsAndSpecialCharacters(name.replaceAll("\\p{C}", "")));
                 }
                 // Get lines
                 line = reader.readLine();
                 while (line != null) {
-                    //Pourquoi pas StringTokenizer ? Parce qu'il se dÈbarrasse des ÈlÈments vides
-                    // => problËmes d'indexation des informations... Essaie ! Tu verras
+                    //Pourquoi pas StringTokenizer ? Parce qu'il se dÔøΩbarrasse des ÔøΩlÔøΩments vides
+                    // => problÔøΩmes d'indexation des informations... Essaie ! Tu verras
                     List<String> lineValues = new LinkedList<>();
                     int i = 0;
                     String elem = "";
-                    while (i < line.length()) {
+                    while ((i < line.length())&&(lineValues.size()<14)) {
                         if (line.substring(i, i + 1).equals(";")) {
-                            lineValues.add(elem);
+                            lineValues.add(ApplicationTools.removeAccentsAndSpecialCharacters(elem.replaceAll("\\p{C}", "")));
                             elem = "";
                         } else {
                             if (line.substring(i, i + 1).equals(",")) {
