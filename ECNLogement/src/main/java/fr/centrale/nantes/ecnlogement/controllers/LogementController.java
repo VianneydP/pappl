@@ -218,7 +218,7 @@ public class LogementController {
                     case "Chambre":
                         item.setLogementNumero(value.substring(0, 5));
                         break;
-                    case "Civilité":
+                    case "CivilitÃ©":
                         switch (value){
                             case "Mme":
                                 item.setLogementGenreRequis("F");
@@ -243,7 +243,7 @@ public class LogementController {
                             typeAppart = typeAppartRepository.getByTypeAppartNom(TypeAppart.APPARTSTUDIO);
                             item.setTypeAppartNom(typeAppart);
                         }
-                    case "Prénom":
+                    case "PrÃ©nom":
                         if (!value.equals("")){
                             personne.setPersonnePrenom(value);
                         }
@@ -328,8 +328,8 @@ public class LogementController {
                 // Get lines
                 line = reader.readLine();
                 while (line != null) {
-                    //Pourquoi pas StringTokenizer ? Parce qu'il se débarrasse des éléments vides
-                    // => problèmes d'indexation des informations... Essaie ! Tu verras
+                    //Pourquoi pas StringTokenizer ? Parce qu'il se dï¿½barrasse des ï¿½lï¿½ments vides
+                    // => problï¿½mes d'indexation des informations... Essaie ! Tu verras
                     List<String> lineValues = new LinkedList<>();
                     int i = 0;
                     String elem = "";

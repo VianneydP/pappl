@@ -19,7 +19,7 @@ import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
 import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
 import fr.centrale.nantes.ecnlogement.items.Connexion;
 import fr.centrale.nantes.ecnlogement.items.Eleve;
-
+import fr.centrale.nantes.ecnlogement.items.Commune;
 import fr.centrale.nantes.ecnlogement.items.Personne;
 import fr.centrale.nantes.ecnlogement.items.Role;
 import fr.centrale.nantes.ecnlogement.items.Dates;
@@ -27,6 +27,7 @@ import fr.centrale.nantes.ecnlogement.items.Dates;
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
+import fr.centrale.nantes.ecnlogement.repositories.CommuneRepository;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
+import org.springframework.data.domain.Sort;
 
 @Controller
 public class LoginController {
@@ -55,6 +57,9 @@ public class LoginController {
     
     @Autowired
     private DatesRepository datesRepository;
+    
+    @Autowired
+    private CommuneRepository communeRepository;
     
     @RequestMapping(value = "admin.do")
     public ModelAndView handleAdmin(HttpServletRequest request) {
@@ -216,6 +221,8 @@ public class LoginController {
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
             returned = ApplicationTools.getModel("questionnaire", user);
             //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
+            Collection<Commune> maListe=communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune"));
+            returned.addObject("communeListe", maListe);
             returned.addObject("eleve", eleve);
             returned.addObject("personne", pers);
         } if (now.after(adminDates.getDatesFin()) && now.before(adminDates.getDatesResultats())){

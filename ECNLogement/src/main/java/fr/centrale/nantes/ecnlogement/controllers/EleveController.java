@@ -36,8 +36,10 @@ import fr.centrale.nantes.ecnlogement.items.Role;
 import fr.centrale.nantes.ecnlogement.items.Souhait;
 import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.io.InputStream;
@@ -203,12 +205,22 @@ public class EleveController {
             String filename=notif.getName();
             //String extension=getFileExtension(filename);
             String targetDirectory = request.getServletContext().getRealPath("televersements");
-            if(notif!=null){
-            Path destination = Paths.get(targetDirectory);
-            //Path destination = new File(targetDirectory).toPath();
-            String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
-            Path destinationWithUniqueName =destination.resolve(newFileName);
-            Files.copy(notif.toPath(), destinationWithUniqueName);
+            Path path = Paths.get(targetDirectory);
+            // TODO Coucou Elsa ! Prends la ligne du dessus et la boucle if du dessous pour créer ton dossier
+            // Vérifier si le répertoire existe
+            if (!Files.exists(path)) {
+                // Créer le répertoire s'il n'existe pas
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException e) {
+                }
+            }
+            if(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier")){
+                Path destination = Paths.get(targetDirectory);
+                //Path destination = new File(targetDirectory).toPath();
+                String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
+                Path destinationWithUniqueName =destination.resolve(newFileName);
+                Files.copy(notif.toPath(), destinationWithUniqueName);
             }
             dataToSave.setNumscei(item.getNumscei());
             dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
@@ -518,10 +530,15 @@ public class EleveController {
                     }
                 }
             }
-            trierElevesDistance(autres);
-            returned.addObject("boursiers",boursiers);
-            returned.addObject("internat",internat);
-            returned.addObject("autres",autres);
+            ArrayList<Eleve>retAutres=trierElevesDistance(autres);
+            ArrayList<Eleve> retBours=trierElevesDistance(boursiers);
+            ArrayList<Eleve> retInter=trierElevesDistance(internat);
+            System.out.println(autres.size());
+            System.out.println(retAutres.size());
+            returned.addObject("boursiers",retBours);
+            returned.addObject("internat",retInter);
+            returned.addObject("autres",retAutres);
+            ecritureCSVTri(request,retInter,retBours,retAutres);
         }else{
             returned=ApplicationTools.getModel("loginAdmin", null);
         }
@@ -540,7 +557,7 @@ public class EleveController {
                 distances.add(dist);
             }else{
                 int i=0;
-                while(dist<distances.get(i)){
+                while(i<distances.size() && dist<distances.get(i)){
                     i+=1;
                 }
                 distances.add(i, dist);
@@ -548,6 +565,56 @@ public class EleveController {
             }
         }
         return returned;
+    }
+    
+    public void ecritureCSVTri(HttpServletRequest request,ArrayList<Eleve> inter,ArrayList<Eleve> bours,ArrayList<Eleve> autres){
+        //String extension=getFileExtension(filename);
+        String targetDirectory = request.getServletContext().getRealPath("tri_eleves");
+        Path path = Paths.get(targetDirectory);
+        if (!Files.exists(path)) {
+            // Créer le répertoire s'il n'existe pas
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+            }
+        }
+        String nomFichier = request.getServletContext().getRealPath("tri_eleves\\eleves_tries");
+        boolean Flag=false;
+        int i=1;
+        String newNomFichier=nomFichier;
+        while (Flag==false){
+            File fichier=new File(newNomFichier+".csv");
+            if (fichier.exists()){
+                newNomFichier=nomFichier+i;
+                i+=1;
+            }else{
+                Flag=true;
+            }
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newNomFichier+".csv"))) {
+            
+            // Écrire les lignes de données
+            writer.write("$$ INTERNATIONAUX");
+            writer.newLine();
+            for (Eleve item:inter){
+                writer.write(item.getEleveId()+";"+item.getPersonne().getPersonneNom()+";"+item.getPersonne().getPersonnePrenom()+";"+item.getNumscei().toString());
+                writer.newLine();
+            }
+            writer.write("$$ BOURSIERS");
+            writer.newLine();
+            for (Eleve item:bours){
+                writer.write(item.getEleveId()+";"+item.getPersonne().getPersonneNom()+";"+item.getPersonne().getPersonnePrenom()+";"+item.getNumscei().toString());
+                writer.newLine();
+            }
+            writer.write("$$ AUTRES");
+            writer.newLine();
+            for (Eleve item:autres){
+                writer.write(item.getEleveId()+";"+item.getPersonne().getPersonneNom()+";"+item.getPersonne().getPersonnePrenom()+";"+item.getNumscei().toString());
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+        }
     }
 
 }
