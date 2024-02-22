@@ -82,7 +82,7 @@ CREATE TABLE public.eleve (
                 eleve_numtel VARCHAR,
                 eleve_confirm BOOLEAN NOT NULL,
                 eleve_boursier BOOLEAN,
-                eleve_PMR BOOLEAN,
+                eleve_pmr BOOLEAN,
                 eleve_infosup VARCHAR,
                 eleve_infosup_ve VARCHAR,
                 type_souhait VARCHAR,
