@@ -189,9 +189,10 @@ public class LoginController {
             Personne pers = personneRepository.getByPersonneLogin(identifiant);
             if (pers != null && checkPassword(mdp, pers.getPersonnePassword())) {
                 user = connexionRepository.create(pers);
-                Eleve eleve=eleveRepository.getByEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
+                //Eleve eleve=eleveRepository.getByEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
+                Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
                 returned = choixVueReconnexion(user, eleve, pers);
-                //Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
+                
                 
             }
         }else{

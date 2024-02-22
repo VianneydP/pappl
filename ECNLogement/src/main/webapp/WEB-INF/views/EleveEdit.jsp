@@ -102,6 +102,14 @@
                       </td>
                     </tr>
                     <tr>
+                      <th scope="col"><fmt:message key="message.infoVe" bundle="${ressourcesBundle}"/></th>
+                      <td>
+                        <textarea class="form-control" name="eleveInfosupVE">
+                        ${item.eleveInfosupVe}
+                        </textarea>
+                      </td>
+                    </tr>
+                    <tr>
                       <th scope="col"><fmt:message key="message.codeCommune" bundle="${ressourcesBundle}"/></th>
                       <td>
                         <select name="codeCommune">

@@ -68,7 +68,7 @@
                     <th scope="col" class="col-md-1"><fmt:message key="message.eleveVillehab" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-1"><fmt:message key="message.eleveCodepostal" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-1"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
-                    <th scope="col" class="col-md-1"><fmt:message key="message.roleId" bundle="${ressourcesBundle}"/></th>
+                    <th scope="col" class="col-md-1"><fmt:message key="message.infoVe" bundle="${ressourcesBundle}"/></th>
                   </tr>
                 </thead>
                 <tbody class="bodyTable">
@@ -82,7 +82,7 @@
                     <td class="text-left">${item.eleveVillehab}</td>
                     <td class="text-left">${item.eleveCodepostal}</td>
                     <td class="text-left"><fmt:formatDate value="${item.eleveDateNaissance}" pattern="dd/MM/yyyy" /></td>
-                    <td class="text-left">${item.personne.roleId}</td>
+                    <td class="text-left">${item.eleveInfosupVe}</td>
                     <td class="text-center">
                       <form action="#" method="POST">
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
@@ -104,7 +104,7 @@
                     <th id="seleveVillehab"><fmt:message key="message.eleveVillehab" bundle="${ressourcesBundle}"/></th>
                     <th id="seleveCodepostal"><fmt:message key="message.eleveCodepostal" bundle="${ressourcesBundle}"/></th>
                     <th id="seleveDateNaissance"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
-                    <th id="sroleId"><fmt:message key="message.roleId" bundle="${ressourcesBundle}"/></th>
+                    <th id="seleveInfosupVe"><fmt:message key="message.infoVe" bundle="${ressourcesBundle}"/></th>
                   </tr>
                 </tfoot>
               </table>

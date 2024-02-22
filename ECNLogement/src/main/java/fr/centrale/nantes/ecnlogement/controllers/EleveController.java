@@ -300,6 +300,7 @@ public class EleveController {
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
+            dataToSave.setEleveInfosupVe(ApplicationTools.getStringFromRequest(request, "eleveInfosupVE"));
             dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
             //Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
             //dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));

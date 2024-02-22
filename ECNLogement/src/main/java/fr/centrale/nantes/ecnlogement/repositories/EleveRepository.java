@@ -11,6 +11,7 @@ import fr.centrale.nantes.ecnlogement.items.*;
 import java.util.Date;
 import java.util.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
 
@@ -28,5 +29,15 @@ public interface EleveRepository extends JpaRepository<Eleve, Integer>, EleveRep
     public Collection<Eleve> findByEleveBoursier(@Param("eleveBoursier")Boolean eleveBoursier);
     public Collection<Eleve> findByEleveInfosup(@Param("eleveInfosup")String eleveInfosup);
     public Collection<Eleve> findByPersonneId(@Param("personne")Personne personne);
+
+
+
+    ///**
+    // * find personne
+    // * @param personne
+    // * @return 
+    // */
+    //@Query("SELECT e FROM ELEVE e WHERE e.personne = :personne")
+    //public Collection<Eleve> findByPersonId(@Param("personne")Personne personne);
 
 }

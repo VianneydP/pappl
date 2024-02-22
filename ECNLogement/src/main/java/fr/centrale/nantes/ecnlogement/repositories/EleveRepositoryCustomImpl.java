@@ -80,7 +80,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
         @Override
-    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune codecommune) {
+    public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune commune) {
         if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
             Eleve item = new Eleve();
             item.setNumscei(numscei);
@@ -90,7 +90,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setEleveVillehab(eleveVillehab);
             item.setEleveCodepostal(eleveCodepostal);
             item.setPersonne(personne);
-            item.setCodeCommune(codecommune);
+            item.setCommune(commune);
             return create(item);
         }
         return null;
@@ -117,6 +117,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setEleveNumtel(value.getEleveNumtel());
             item.setEleveBoursier(value.getEleveBoursier());
             item.setEleveInfosup(value.getEleveInfosup());
+            item.setEleveInfosupVe(value.getEleveInfosupVe());
             item.setCommune(value.getCommune());
             item.setLogementNumero(value.getLogementNumero());
             item.setPersonne(value.getPersonne());
@@ -202,7 +203,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
   //Ajoute par moi  
-  
+/**
     @Override
     public Eleve getByPersonneId(int personneId){
         Personne pers=personneRepository.getByPersonneId(personneId);
@@ -216,6 +217,21 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
                 }
             }
         }
+        return null;
+    }
+  **/
+    @Override
+    public Eleve getByPersonneId(int personneId){
+        Personne pers=personneRepository.getByPersonneId(personneId);
+        if ((personneId != -1) && (pers != null) && (pers.getRoleId().getRoleId()==2)) {
+            Collection<Eleve> list2 = repository.findByPersonneId(pers);
+                for (Eleve e : list2) {
+                    if (e.getPersonne().getPersonneId()==personneId) {
+                        return e;
+                    }
+                }
+            }
+        
         return null;
     }
     /**
