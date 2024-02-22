@@ -79,7 +79,7 @@
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                         <input type="hidden" name="personneId" value="${item.personneId}">
                         <button class="btn btn-xs" formaction="AssistEdit.do"><img src="img/edit.png" alt="edit" class="localButton" /></button>
-                        <button class="btn btn-xs" formaction="PersonneRemove.do"><img src="img/delete.png" alt="delete" class="localButton" /></button>
+                        <button class="btn btn-xs" formaction="PersonneRemove.do"><img src="img/delete.png" alt="delete" class="localButton" onclick="return confirm('Voulez-vous vraiment supprimer ? L\'opération est irréversible');" /></button>
                       </form>
                     </td>
                    </tr>

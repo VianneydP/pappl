@@ -109,18 +109,20 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         if ((item != null) && (value != null)) {
             item.setEleveDateNaissance(value.getEleveDateNaissance());
             item.setGenre(value.getGenre());
-            item.setNumscei(value.getNumscei());
             item.setElevePayshab(value.getElevePayshab());
             item.setEleveVillehab(value.getEleveVillehab());
             item.setEleveCodepostal(value.getEleveCodepostal());
             item.setEleveMail(value.getEleveMail());
             item.setEleveNumtel(value.getEleveNumtel());
             item.setEleveBoursier(value.getEleveBoursier());
+            item.setElevePMR(value.getElevePMR());
             item.setEleveInfosup(value.getEleveInfosup());
+            item.setEleveInfosupVe(value.getEleveInfosupVe());
             item.setCommune(value.getCommune());
             item.setLogementNumero(value.getLogementNumero());
             item.setPersonne(value.getPersonne());
             item.setTypeSouhait(value.getTypeSouhait());
+            item.setEleveConfirm(value.getEleveConfirm());
             repository.saveAndFlush(item);
         }
         return item;
@@ -201,23 +203,21 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
     }
     
-  //Ajoute par moi  
-  /**  
     @Override
     public Eleve getByPersonneId(int personneId){
-        Personne pers=personneRepository.getByPersonneId(personneId);
-        if ((personneId != -1) && (pers != null) && (pers.getRoleId().getRoleId()==2)) {
-            Collection<Personne> list = personneRepository.findByPersonneId(personneId);
-            for (Personne p : list) {
-                for (Eleve e : p.getEleveCollection()) {
-                    if (e.getPersonne().getPersonneId()==personneId) {
-                        return e;
-                    }
+        Personne personne = personneRepository.getByPersonneId(personneId);
+        if ((personneId != -1) && (personne.getRoleId().getRoleId()==Role.ROLEELEVE)) {
+            Collection<Eleve> list = repository.findAll();
+            for (Eleve el : list) {
+                if (el.getPersonne().getPersonneId()==personneId) {
+                    return el;
                 }
             }
         }
         return null;
     }
+    
+    /*
     @Override
 public Eleve getByPersonneId(int personneId) {
     Personne personne = personneRepository.getByPersonneId(personneId);
@@ -231,5 +231,5 @@ public Eleve getByPersonneId(int personneId) {
     }
 
     return null;
-}**/
+}*/
 }

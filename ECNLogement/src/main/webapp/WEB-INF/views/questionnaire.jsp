@@ -303,11 +303,12 @@
                                 </div>
                             </div> 
                             <br>
-
-                            <div class="form-group row">
-                                <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
-                                <div class="col-10">
-                                    <input type="text" class="form-control" id="inputvilleh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ-]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                            <div id="nofranceFields" style="display: none;">
+                                <div class="form-group row">
+                                    <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
+                                    <div class="col-10">
+                                        <input type="text" class="form-control" id="inputvilleh" pattern="[A-Z]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                                    </div>
                                 </div>
                             </div>
 
@@ -404,10 +405,13 @@
         <script>
         document.getElementById('country').addEventListener('change', function () {
             var franceFields = document.getElementById('franceFields');
+            var nofranceFields = document.getElementById('nofranceFields');
             if (this.value === 'france') {
                 franceFields.style.display = 'block';
+                nofranceFields.style.display = 'none';
             } else {
                 franceFields.style.display = 'none';
+                nofranceFields.style.display = 'block';
             }
         });
 

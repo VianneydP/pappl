@@ -124,6 +124,25 @@ public class EleveController {
         }
         return returned;
     }
+    
+    @RequestMapping(value = "EleveShow.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTEleveShow(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel("index", null);
+        } else {
+            // Retreive item (null if not created)
+            Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
+            Eleve item = repository.getByEleveId(id);
+
+            // Edit item
+            String modelName = "EleveShow";
+            returned = ApplicationTools.getModel(modelName, user);
+            returned.addObject("item", item);
+        }
+        return returned;
+    }
 
     @RequestMapping(value = "EleveCreate.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveCreate(HttpServletRequest request) {
@@ -137,8 +156,7 @@ public class EleveController {
             String modelName = "EleveEdit";
             returned = ApplicationTools.getModel(modelName, user);
             returned.addObject("item", item);
-            returned.addObject("communeList", communeRepository.findAll());
-            returned.addObject("logementNumeroList", logementRepository.findAll());
+            returned.addObject("communeList", communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune")));
             returned.addObject("personneIdList", personneRepository.findAll());
             returned.addObject("typeSouhaitList", souhaitRepository.findAll());
         }
@@ -245,9 +263,11 @@ public class EleveController {
             //dataToSave.setCodeCommune(new Commune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()).getCodeCommune()));
             
             //On set la commune grâce au nom de la ville
-            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
-            if (saCommune!=null){
-                dataToSave.setCommune(saCommune);
+            if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
+                Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
+                if (saCommune!=null){
+                    dataToSave.setCommune(saCommune);
+                }
             }
             /*
             //Si l'élève n'a pas renseigné le code postal, on le rajoute
@@ -293,14 +313,12 @@ public class EleveController {
             // Retreive item (null if not created)
             Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
             Eleve item = repository.getByEleveId(id);
-            Integer id2=item.getPersonne().getPersonneId();
-            Personne pers=personneRepository.getByPersonneId(id2);
+            Personne pers=item.getPersonne();
       
             Eleve dataToSave = new Eleve();
             
             dataToSave.setPersonne(pers);
             dataToSave.setNumscei(item.getNumscei());
-            dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
@@ -311,17 +329,20 @@ public class EleveController {
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
+            dataToSave.setElevePMR(ApplicationTools.getBooleanFromRequest(request, "elevePMR"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
+            dataToSave.setEleveInfosupVe(ApplicationTools.getStringFromRequest(request, "eleveInfosupVe"));
             dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
+            dataToSave.setEleveConfirm(ApplicationTools.getBooleanFromRequest(request, "eleveConfirm"));
             //Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
             //dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
-            String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
-            dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             
             //On set la commune grâce au nom de la ville
-            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
-            if (saCommune!=null){
-                dataToSave.setCommune(saCommune);
+            if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
+                Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
+                if (saCommune!=null){
+                    dataToSave.setCommune(saCommune);
+                }
             }
             /*
             //Si l'élève n'a pas renseigné le code postal, on le rajoute
@@ -349,8 +370,7 @@ public class EleveController {
             repository.update(item.getEleveId(), dataToSave);
 
             // Return to the list
-            //returned = handleEleveList(user);
-            returned=ApplicationTools.getModel("accueilAdmin", user);
+            returned = handleEleveList(user);
         }
         return returned;
     }
