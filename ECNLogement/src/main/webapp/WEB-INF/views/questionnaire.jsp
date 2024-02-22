@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <fmt:setBundle basename="fr.centrale.nantes.ecnlogement.resources.messages_fr" var="ressourcesBundle" />
 <!DOCTYPE html>
 <html>
@@ -287,16 +288,27 @@
                                 <div class="form-group row">
                                     <label for="inputcodepostalh" class="col-2 col-form-label d-none d-md-block"><fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
                                         <div class="col-10">
-                                            <input type="int" class="form-control" id="inputcodepostalh" style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
+                                            <input type="number" class="form-control" id="inputcodepostalh" style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
                                         </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
+                                    <div class="col-10">
+                                        <select id="inputvilleh" name="eleveVillehab" required style="width: 200px;">
+                                            <c:forEach var="item" items="${communeListe}">
+                                                <option value="${item.nomCommune}">${item.nomCommune}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
                                 </div>
                             </div> 
                             <br>
-
-                            <div class="form-group row">
-                                <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
-                                <div class="col-10">
-                                    <input type="text" class="form-control" id="inputvilleh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ-]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                            <div id="nofranceFields" style="display: none;">
+                                <div class="form-group row">
+                                    <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
+                                    <div class="col-10">
+                                        <input type="text" class="form-control" id="inputvilleh" pattern="[A-Z]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                                    </div>
                                 </div>
                             </div>
 
@@ -393,10 +405,13 @@
         <script>
         document.getElementById('country').addEventListener('change', function () {
             var franceFields = document.getElementById('franceFields');
+            var nofranceFields = document.getElementById('nofranceFields');
             if (this.value === 'france') {
                 franceFields.style.display = 'block';
+                nofranceFields.style.display = 'none';
             } else {
                 franceFields.style.display = 'none';
+                nofranceFields.style.display = 'block';
             }
         });
 

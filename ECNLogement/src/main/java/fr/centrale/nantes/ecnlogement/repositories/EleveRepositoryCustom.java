@@ -41,15 +41,16 @@ public interface EleveRepositoryCustom {
     public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne);
     
      /**
-     * Create new Eleve
+     * Create new Eleve à partir du fichier des logements
      * @param numscei 
      * @param mail
      * @param genre
      * @param elevePayshab
      * @param personne
+     * @param eleveConfirm
      * @return Eleve
      */
-    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne) ;
+    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne,boolean eleveConfirm) ;
     
         /**
      * Create new Eleve
@@ -78,6 +79,15 @@ public interface EleveRepositoryCustom {
      * @return Eleve
      */
     public Eleve update(Integer eleveId, Eleve value);
+    
+    /**
+     * Update a Eleve
+     * @param eleveId
+     * @param value
+     * @return Eleve
+     */
+    public Eleve updateRez(Integer eleveId, Eleve value);
+
 
     /**
      * Get a Eleve

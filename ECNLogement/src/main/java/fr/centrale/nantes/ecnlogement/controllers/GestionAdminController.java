@@ -25,6 +25,7 @@ import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
 import fr.centrale.nantes.ecnlogement.repositories.EleveRepository;
 import fr.centrale.nantes.ecnlogement.repositories.LogementRepository;
+import fr.centrale.nantes.ecnlogement.repositories.TypeAppartRepository;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,6 +54,9 @@ public class GestionAdminController {
     
     @Autowired
     private LogementRepository logementRepository;
+    
+    @Autowired
+    private TypeAppartRepository typeAppartRepository;
     
     @RequestMapping(value = "afficheDates.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTGestionAdmin(HttpServletRequest request) {
@@ -164,9 +168,10 @@ public class GestionAdminController {
                 Personne moi=user.getPersonne();
                 //Suppression des donnees
                 connexionRepository.deleteAll();
-                logementRepository.deleteAll();
-                personneRepository.deleteAll();
+                
                 eleveRepository.deleteAll();
+                personneRepository.deleteAll();
+                logementRepository.deleteAll();
                 //Remise de la connexion de l'admin et de sa personne
                 Connexion user1 = connexionRepository.create(user);
                 returned=ApplicationTools.getModel("suppressionBDD", user1);

@@ -45,6 +45,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Eleve.findByPersonneId", query = "SELECT e FROM Eleve e WHERE e.personne = :personne")})
 public class Eleve implements Serializable {
 
+    @Column(name = "eleve_pmr")
+    private Boolean elevePMR;
+
     @Column(name = "eleve_codepostal")
     private Integer eleveCodepostal;
     @Basic(optional = false)
@@ -284,6 +287,14 @@ public class Eleve implements Serializable {
 
     public void setEleveInfosupVe(String eleveInfosupVe) {
         this.eleveInfosupVe = eleveInfosupVe;
+    }
+
+    public Boolean getElevePMR() {
+        return elevePMR;
+    }
+
+    public void setElevePMR(Boolean elevePMR) {
+        this.elevePMR = elevePMR;
     }
     
 }

@@ -27,7 +27,7 @@
     <div class="py-5">
       <div class="container">
         <div class="row">
-          <div class="col-md-12"><h3><fmt:message key="message.Eleve" bundle="${ressourcesBundle}"/></h3></div>
+          <div class="col-md-12"><h3><fmt:message key="message.EleveInfo" bundle="${ressourcesBundle}"/></h3></div>
         </div>
         <div class="row">
           <div class="col-md-12">

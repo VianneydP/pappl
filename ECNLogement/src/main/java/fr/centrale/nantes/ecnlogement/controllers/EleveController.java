@@ -36,8 +36,10 @@ import fr.centrale.nantes.ecnlogement.items.Role;
 import fr.centrale.nantes.ecnlogement.items.Souhait;
 import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.io.InputStream;
@@ -122,6 +124,25 @@ public class EleveController {
         }
         return returned;
     }
+    
+    @RequestMapping(value = "EleveShow.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTEleveShow(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel("index", null);
+        } else {
+            // Retreive item (null if not created)
+            Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
+            Eleve item = repository.getByEleveId(id);
+
+            // Edit item
+            String modelName = "EleveShow";
+            returned = ApplicationTools.getModel(modelName, user);
+            returned.addObject("item", item);
+        }
+        return returned;
+    }
 
     @RequestMapping(value = "EleveCreate.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveCreate(HttpServletRequest request) {
@@ -135,8 +156,7 @@ public class EleveController {
             String modelName = "EleveEdit";
             returned = ApplicationTools.getModel(modelName, user);
             returned.addObject("item", item);
-            returned.addObject("communeList", communeRepository.findAll());
-            returned.addObject("logementNumeroList", logementRepository.findAll());
+            returned.addObject("communeList", communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune")));
             returned.addObject("personneIdList", personneRepository.findAll());
             returned.addObject("typeSouhaitList", souhaitRepository.findAll());
         }
@@ -203,12 +223,22 @@ public class EleveController {
             String filename=notif.getName();
             //String extension=getFileExtension(filename);
             String targetDirectory = request.getServletContext().getRealPath("televersements");
-            if(notif!=null){
-            Path destination = Paths.get(targetDirectory);
-            //Path destination = new File(targetDirectory).toPath();
-            String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
-            Path destinationWithUniqueName =destination.resolve(newFileName);
-            Files.copy(notif.toPath(), destinationWithUniqueName);
+            Path path = Paths.get(targetDirectory);
+            // TODO Coucou Elsa ! Prends la ligne du dessus et la boucle if du dessous pour créer ton dossier
+            // Vérifier si le répertoire existe
+            if (!Files.exists(path)) {
+                // Créer le répertoire s'il n'existe pas
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException e) {
+                }
+            }
+            if(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier")){
+                Path destination = Paths.get(targetDirectory);
+                //Path destination = new File(targetDirectory).toPath();
+                String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
+                Path destinationWithUniqueName =destination.resolve(newFileName);
+                Files.copy(notif.toPath(), destinationWithUniqueName);
             }
             dataToSave.setNumscei(item.getNumscei());
             dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
@@ -233,9 +263,11 @@ public class EleveController {
             //dataToSave.setCodeCommune(new Commune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()).getCodeCommune()));
             
             //On set la commune grâce au nom de la ville
-            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
-            if (saCommune!=null){
-                dataToSave.setCommune(saCommune);
+            if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
+                Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
+                if (saCommune!=null){
+                    dataToSave.setCommune(saCommune);
+                }
             }
             /*
             //Si l'élève n'a pas renseigné le code postal, on le rajoute
@@ -281,14 +313,12 @@ public class EleveController {
             // Retreive item (null if not created)
             Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
             Eleve item = repository.getByEleveId(id);
-            Integer id2=item.getPersonne().getPersonneId();
-            Personne pers=personneRepository.getByPersonneId(id2);
+            Personne pers=item.getPersonne();
       
             Eleve dataToSave = new Eleve();
             
             dataToSave.setPersonne(pers);
             dataToSave.setNumscei(item.getNumscei());
-            dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
@@ -299,18 +329,20 @@ public class EleveController {
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
+            dataToSave.setElevePMR(ApplicationTools.getBooleanFromRequest(request, "elevePMR"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
             dataToSave.setEleveInfosupVe(ApplicationTools.getStringFromRequest(request, "eleveInfosupVE"));
             dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
+            dataToSave.setEleveConfirm(ApplicationTools.getBooleanFromRequest(request, "eleveConfirm"));
             //Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
             //dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
-            String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
-            dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             
             //On set la commune grâce au nom de la ville
-            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
-            if (saCommune!=null){
-                dataToSave.setCommune(saCommune);
+            if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
+                Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
+                if (saCommune!=null){
+                    dataToSave.setCommune(saCommune);
+                }
             }
             /*
             //Si l'élève n'a pas renseigné le code postal, on le rajoute
@@ -338,8 +370,7 @@ public class EleveController {
             repository.update(item.getEleveId(), dataToSave);
 
             // Return to the list
-            //returned = handleEleveList(user);
-            returned=ApplicationTools.getModel("accueilAdmin", user);
+            returned = handleEleveList(user);
         }
         return returned;
     }
@@ -519,10 +550,15 @@ public class EleveController {
                     }
                 }
             }
-            trierElevesDistance(autres);
-            returned.addObject("boursiers",boursiers);
-            returned.addObject("internat",internat);
-            returned.addObject("autres",autres);
+            ArrayList<Eleve>retAutres=trierElevesDistance(autres);
+            ArrayList<Eleve> retBours=trierElevesDistance(boursiers);
+            ArrayList<Eleve> retInter=trierElevesDistance(internat);
+            System.out.println(autres.size());
+            System.out.println(retAutres.size());
+            returned.addObject("boursiers",retBours);
+            returned.addObject("internat",retInter);
+            returned.addObject("autres",retAutres);
+            ecritureCSVTri(request,retInter,retBours,retAutres);
         }else{
             returned=ApplicationTools.getModel("loginAdmin", null);
         }
@@ -541,7 +577,7 @@ public class EleveController {
                 distances.add(dist);
             }else{
                 int i=0;
-                while(dist<distances.get(i)){
+                while(i<distances.size() && dist<distances.get(i)){
                     i+=1;
                 }
                 distances.add(i, dist);
@@ -549,6 +585,113 @@ public class EleveController {
             }
         }
         return returned;
+    }
+    
+    public void ecritureCSVTri(HttpServletRequest request,ArrayList<Eleve> inter,ArrayList<Eleve> bours,ArrayList<Eleve> autres){
+        //String extension=getFileExtension(filename);
+        String targetDirectory = request.getServletContext().getRealPath("tri_eleves");
+        Path path = Paths.get(targetDirectory);
+        if (!Files.exists(path)) {
+            // Créer le répertoire s'il n'existe pas
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+            }
+        }
+        String nomFichier = request.getServletContext().getRealPath("tri_eleves\\eleves_tries");
+        boolean Flag=false;
+        int i=1;
+        String newNomFichier=nomFichier;
+        while (Flag==false){
+            File fichier=new File(newNomFichier+".csv");
+            if (fichier.exists()){
+                newNomFichier=nomFichier+i;
+                i+=1;
+            }else{
+                Flag=true;
+            }
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newNomFichier+".csv"))) {
+            
+            // Écrire les lignes de données
+            writer.write("$$ INTERNATIONAUX");
+            writer.newLine();
+            for (Eleve item:inter){
+                writer.write(item.getEleveId()+";"+item.getPersonne().getPersonneNom()+";"+item.getPersonne().getPersonnePrenom()+";"+item.getNumscei().toString());
+                writer.newLine();
+            }
+            writer.write("$$ BOURSIERS");
+            writer.newLine();
+            for (Eleve item:bours){
+                writer.write(item.getEleveId()+";"+item.getPersonne().getPersonneNom()+";"+item.getPersonne().getPersonnePrenom()+";"+item.getNumscei().toString());
+                writer.newLine();
+            }
+            writer.write("$$ AUTRES");
+            writer.newLine();
+            for (Eleve item:autres){
+                writer.write(item.getEleveId()+";"+item.getPersonne().getPersonneNom()+";"+item.getPersonne().getPersonnePrenom()+";"+item.getNumscei().toString());
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+        }
+    }
+    
+    
+    public void importCsvScei(File importFile) {
+        // Build creation method
+        // Read file
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(importFile));
+
+            String line = reader.readLine();
+            if (line != null) {
+                // Get header
+                List<String> header = new LinkedList<>();
+                StringTokenizer st = new StringTokenizer(line, ";");
+                while (st.hasMoreElements()) {
+                    String name = st.nextToken().trim();
+                    header.add(name);
+                }
+                // Get lines
+                line = reader.readLine();
+                while (line != null) {
+                    //Pourquoi pas StringTokenizer ? Parce qu'il se d�barrasse des �l�ments vides
+                    // => probl�mes d'indexation des informations... Essaie ! Tu verras
+                    List<String> lineValues = new LinkedList<>();
+                    int i = 0;
+                    String elem = "";
+                    while (i < line.length()) {
+                        if (line.substring(i, i + 1).equals(";")) {
+                            lineValues.add(elem);
+                            elem = "";
+                        } else {
+                            if (line.substring(i, i + 1).equals(",")) {
+                                elem += ".";
+                            } else {
+                                elem += line.substring(i, i + 1);
+                            }
+                        }
+                        i++;
+                        
+                    }
+                    // Create item with values
+                    createItem(header, lineValues);
+                    // Next line
+                    line = reader.readLine();
+                    }
+
+
+
+                }
+
+            reader.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ApplicationTools.class.getName()).log(Level.SEVERE, "No file found", ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ApplicationTools.class.getName()).log(Level.SEVERE, "Error while reading file", ex);
+        }
+        
     }
 
 }

@@ -224,6 +224,7 @@ public class ApplicationInitializer implements ServletContextListener {
         // createTypeAppart("Sous les ponts");
         createTypeAppart(TypeAppart.APPARTSTUDIO);
         createTypeAppart(TypeAppart.APPARTCOLOC);
+        createTypeAppart(TypeAppart.APPARTPMR);
         transaction.commit();
     }
 

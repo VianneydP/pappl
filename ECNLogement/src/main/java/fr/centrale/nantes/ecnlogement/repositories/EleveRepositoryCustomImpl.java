@@ -66,7 +66,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
     @Override
-    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne) {
+    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne, boolean eleveConfirm) {
         if ((mail != null) && (genre != null) && (elevePayshab != null)  && (personne != null)) {
             Eleve item = new Eleve();
             item.setNumscei(numscei);
@@ -74,12 +74,13 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setGenre(genre);
             item.setElevePayshab(elevePayshab);
             item.setPersonne(personne);
+            item.setEleveConfirm(eleveConfirm);
             return create(item);
         }
         return null;
     }
     
-        @Override
+    @Override
     public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune commune) {
         if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
             Eleve item = new Eleve();
@@ -109,19 +110,36 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         if ((item != null) && (value != null)) {
             item.setEleveDateNaissance(value.getEleveDateNaissance());
             item.setGenre(value.getGenre());
-            item.setNumscei(value.getNumscei());
             item.setElevePayshab(value.getElevePayshab());
             item.setEleveVillehab(value.getEleveVillehab());
             item.setEleveCodepostal(value.getEleveCodepostal());
             item.setEleveMail(value.getEleveMail());
             item.setEleveNumtel(value.getEleveNumtel());
             item.setEleveBoursier(value.getEleveBoursier());
+            item.setElevePMR(value.getElevePMR());
             item.setEleveInfosup(value.getEleveInfosup());
             item.setEleveInfosupVe(value.getEleveInfosupVe());
             item.setCommune(value.getCommune());
             item.setLogementNumero(value.getLogementNumero());
             item.setPersonne(value.getPersonne());
             item.setTypeSouhait(value.getTypeSouhait());
+            item.setEleveConfirm(value.getEleveConfirm());
+            repository.saveAndFlush(item);
+        }
+        return item;
+    }
+    
+    @Override
+    public Eleve updateRez(Integer eleveId, Eleve value) {
+        Eleve item = repository.getByEleveId(eleveId);
+        if ((item != null) && (value != null)) {
+            
+            item.setGenre(value.getGenre());
+            item.setNumscei(value.getNumscei());
+            item.setElevePayshab(value.getElevePayshab());
+            item.setEleveMail(value.getEleveMail());
+            item.setLogementNumero(value.getLogementNumero());
+            item.setPersonne(value.getPersonne());
             repository.saveAndFlush(item);
         }
         return item;
@@ -202,39 +220,21 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
         }
     }
     
-  //Ajoute par moi  
-/**
     @Override
     public Eleve getByPersonneId(int personneId){
-        Personne pers=personneRepository.getByPersonneId(personneId);
-        if ((personneId != -1) && (pers != null) && (pers.getRoleId().getRoleId()==2)) {
-            Collection<Personne> list = personneRepository.findByPersonneId(personneId);
-            for (Personne p : list) {
-                for (Eleve e : p.getEleveCollection()) {
-                    if (e.getPersonne().getPersonneId()==personneId) {
-                        return e;
-                    }
+        Personne personne = personneRepository.getByPersonneId(personneId);
+        if ((personneId != -1) && (personne.getRoleId().getRoleId()==Role.ROLEELEVE)) {
+            Collection<Eleve> list = repository.findAll();
+            for (Eleve el : list) {
+                if (el.getPersonne().getPersonneId()==personneId) {
+                    return el;
                 }
             }
         }
         return null;
     }
-  **/
-    @Override
-    public Eleve getByPersonneId(int personneId){
-        Personne pers=personneRepository.getByPersonneId(personneId);
-        if ((personneId != -1) && (pers != null) && (pers.getRoleId().getRoleId()==2)) {
-            Collection<Eleve> list2 = repository.findByPersonneId(pers);
-                for (Eleve e : list2) {
-                    if (e.getPersonne().getPersonneId()==personneId) {
-                        return e;
-                    }
-                }
-            }
-        
-        return null;
-    }
-    /**
+    
+    /*
     @Override
 public Eleve getByPersonneId(int personneId) {
     Personne personne = personneRepository.getByPersonneId(personneId);
@@ -248,5 +248,5 @@ public Eleve getByPersonneId(int personneId) {
     }
 
     return null;
-}**/
+}*/
 }
