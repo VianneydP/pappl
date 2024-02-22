@@ -616,5 +616,62 @@ public class EleveController {
         } catch (IOException e) {
         }
     }
+    
+    
+    public void importCsvScei(File importFile) {
+        // Build creation method
+        // Read file
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(importFile));
+
+            String line = reader.readLine();
+            if (line != null) {
+                // Get header
+                List<String> header = new LinkedList<>();
+                StringTokenizer st = new StringTokenizer(line, ";");
+                while (st.hasMoreElements()) {
+                    String name = st.nextToken().trim();
+                    header.add(name);
+                }
+                // Get lines
+                line = reader.readLine();
+                while (line != null) {
+                    //Pourquoi pas StringTokenizer ? Parce qu'il se d�barrasse des �l�ments vides
+                    // => probl�mes d'indexation des informations... Essaie ! Tu verras
+                    List<String> lineValues = new LinkedList<>();
+                    int i = 0;
+                    String elem = "";
+                    while (i < line.length()) {
+                        if (line.substring(i, i + 1).equals(";")) {
+                            lineValues.add(elem);
+                            elem = "";
+                        } else {
+                            if (line.substring(i, i + 1).equals(",")) {
+                                elem += ".";
+                            } else {
+                                elem += line.substring(i, i + 1);
+                            }
+                        }
+                        i++;
+                        
+                    }
+                    // Create item with values
+                    createItem(header, lineValues);
+                    // Next line
+                    line = reader.readLine();
+                    }
+
+
+
+                }
+
+            reader.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ApplicationTools.class.getName()).log(Level.SEVERE, "No file found", ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ApplicationTools.class.getName()).log(Level.SEVERE, "Error while reading file", ex);
+        }
+        
+    }
 
 }
