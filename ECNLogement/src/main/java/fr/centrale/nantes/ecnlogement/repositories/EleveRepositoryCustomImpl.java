@@ -66,7 +66,7 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
     }
     
     @Override
-    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne) {
+    public Eleve create(int numscei, String mail, String genre, String elevePayshab, Personne personne, boolean eleveConfirm) {
         if ((mail != null) && (genre != null) && (elevePayshab != null)  && (personne != null)) {
             Eleve item = new Eleve();
             item.setNumscei(numscei);
@@ -74,12 +74,13 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setGenre(genre);
             item.setElevePayshab(elevePayshab);
             item.setPersonne(personne);
+            item.setEleveConfirm(eleveConfirm);
             return create(item);
         }
         return null;
     }
     
-        @Override
+    @Override
     public Eleve create(int numscei, Date eleveDateNaissance, String genre, String elevePayshab, String eleveVillehab, int eleveCodepostal, Personne personne,Commune commune) {
         if ((eleveDateNaissance != null) && (genre != null) && (elevePayshab != null) && (eleveVillehab != null) && (personne != null)) {
             Eleve item = new Eleve();
@@ -121,6 +122,22 @@ public class EleveRepositoryCustomImpl implements EleveRepositoryCustom {
             item.setLogementNumero(value.getLogementNumero());
             item.setPersonne(value.getPersonne());
             item.setTypeSouhait(value.getTypeSouhait());
+            repository.saveAndFlush(item);
+        }
+        return item;
+    }
+    
+    @Override
+    public Eleve updateRez(Integer eleveId, Eleve value) {
+        Eleve item = repository.getByEleveId(eleveId);
+        if ((item != null) && (value != null)) {
+            
+            item.setGenre(value.getGenre());
+            item.setNumscei(value.getNumscei());
+            item.setElevePayshab(value.getElevePayshab());
+            item.setEleveMail(value.getEleveMail());
+            item.setLogementNumero(value.getLogementNumero());
+            item.setPersonne(value.getPersonne());
             repository.saveAndFlush(item);
         }
         return item;

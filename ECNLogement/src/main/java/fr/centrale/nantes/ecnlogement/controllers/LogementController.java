@@ -96,14 +96,22 @@ public class LogementController {
         if ("importLogement".equals(action)) {
             File fichierRez=ApplicationTools.getFileFromRequest(request,"RezImport");
             String filename=fichierRez.getName();
-            //String extension=getFileExtension(filename);
+            
             String targetDirectory = request.getServletContext().getRealPath("FichierRez");
+            
+            
             if(fichierRez!=null){
                 try {
-                    Path destinationOrigine = Paths.get(targetDirectory);
+                    Path path = Paths.get(targetDirectory);
+                    if (!Files.exists(path)) {
+                        try {
+                            Files.createDirectories(path);
+                        } catch (IOException e) {
+                        }
+                    }
                     //Path destination = new File(targetDirectory).toPath();
                     String newFileName ="fichierRez.csv";
-                    Path destination =destinationOrigine.resolve(newFileName);
+                    Path destination =path.resolve(newFileName);
                     Files.copy(fichierRez.toPath(), destination);
                     importCsvRez(fichierRez) ;
                 } catch (IOException ex) {
@@ -312,10 +320,10 @@ public class LogementController {
                 temp = eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
                 if (temp == null) {
                     Personne tempP = personneRepository.create(personne.getPersonneNom(), personne.getPersonnePrenom(), personne.getRoleId());
-                    
+                    eleve.setEleveConfirm(true);
+                    eleve.setNumscei(-1);
                     eleveRepository.setPersonne(eleve, tempP, personneRepository);
-                    temp = eleveRepository.create(-1, eleve.getEleveMail(), 
-                            eleve.getGenre(), eleve.getElevePayshab(), tempP);
+                    temp=eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
                     item.setLogementPlacesDispo(item.getLogementPlacesDispo()-1);
                 }
             }
@@ -323,42 +331,36 @@ public class LogementController {
             if (((item.getLogementNumero() != null) && (!item.getLogementNumero().isEmpty()) )) {
                 tempLog = repository.getByLogementNumero(item.getLogementNumero());
                 if (tempLog == null) {
-                    handleNewLogement(item,personne,temp);
+                    handleNewLogement(item,temp);
                 }
                 else{ 
-                    handleExistingLogement(item, personne, tempLog,temp);
+                    handleExistingLogement(item, tempLog,temp);
                     
                 }
             }
     }
     
-    public void handleNewLogement(Logement item, Personne personne, Eleve eleve) {
-
- 
+    public void handleNewLogement(Logement item, Eleve eleve) {  
         Logement tempLog = repository.create(item);
-            if (personne.isPersonneValid()) {
+            if (eleve!=null) {
                 eleve.setLogementNumero(tempLog);
-                //temp = eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
                 int id =eleve.getEleveId();
-                eleveRepository.update(id, eleve);
+                eleveRepository.updateRez(id, eleve);
             }
     }
 
     /**
      *
      * @param item Logement lu dans le fichier csv
-     * @param personne
      * @param tempLog Logement récupéré dans la base de données 
      * @param eleve
      */
-    public void handleExistingLogement(Logement item, Personne personne, Logement tempLog,Eleve eleve) {
-        Eleve tempE= null;
-        if (personne.isPersonneValid()) {
+    public void handleExistingLogement(Logement item, Logement tempLog,Eleve eleve) {
+        if (eleve!=null) {
             repository.update(item.getLogementNumero(), item, tempLog.getLogementPlacesDispo() - 1, tempLog.getTypeAppartNom());
             eleve.setLogementNumero(tempLog);
-            //tempE = eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
             int id =eleve.getEleveId();
-            eleveRepository.update(id, eleve);
+            eleveRepository.updateRez(id, eleve);
         } 
     }
     
