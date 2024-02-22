@@ -168,8 +168,9 @@ public class GestionAdminController {
                 Personne moi=user.getPersonne();
                 //Suppression des donnees
                 connexionRepository.deleteAll();
-                personneRepository.deleteAll();
+                
                 eleveRepository.deleteAll();
+                personneRepository.deleteAll();
                 logementRepository.deleteAll();
                 //Remise de la connexion de l'admin et de sa personne
                 Connexion user1 = connexionRepository.create(user);
