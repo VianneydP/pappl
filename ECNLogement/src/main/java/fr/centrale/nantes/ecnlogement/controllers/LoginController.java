@@ -196,6 +196,9 @@ public class LoginController {
                 user = connexionRepository.create(pers);
                 Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
                 returned = choixVueReconnexion(user, eleve, pers);
+            }else{
+                returned=ApplicationTools.getModel("relogin", null);
+                returned.addObject("mdpErrone", true);
             }
         }else{
             returned=ApplicationTools.getModel("reconnect", null);
