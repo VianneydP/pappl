@@ -205,27 +205,19 @@ public class EleveController {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user == null) {
-            returned = ApplicationTools.getModel("index", null);
+            returned = ApplicationTools.getModel("reconnect", null);
         } else {
-            // Get item to save request
-            // Retreive item (null if not created)
+            // Récupération de l'élève qui a rempli le formulaire
             Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
             Eleve item = repository.getByEleveId(id);
-            //Ajoute par moi
-            Integer id2 = ApplicationTools.getIntFromRequest(request,"personneId");
-            Personne pers = personneRepository.getByPersonneId( id2 );
-            //Eleve item=repository.getByPersonneId(id2);
-            //Eleve item=repository.getByPersonNomPrenomNumscei(pers.getPersonneNom(),pers.getPersonnePrenom(),ApplicationTools.getIntFromRequest(request, "login"));
-
             Eleve dataToSave = new Eleve();
-            //Ajoute par moi
+            
+            //Vérification (création si besoin) du dossier pour les notifs de bourse
+            //Exportation des fichiers
             File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
             String filename=notif.getName();
-            //String extension=getFileExtension(filename);
             String targetDirectory = request.getServletContext().getRealPath("televersements");
             Path path = Paths.get(targetDirectory);
-            // TODO Coucou Elsa ! Prends la ligne du dessus et la boucle if du dessous pour créer ton dossier
-            // Vérifier si le répertoire existe
             if (!Files.exists(path)) {
                 // Créer le répertoire s'il n'existe pas
                 try {
@@ -236,17 +228,27 @@ public class EleveController {
             if(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier")){
                 Path destination = Paths.get(targetDirectory);
                 //Path destination = new File(targetDirectory).toPath();
-                String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
+                String newFileName = item.getPersonne().getPersonneNom()+"_"+item.getPersonne().getPersonnePrenom()+"_bourse_"+generateUniqueFileName(destination)+".pdf";
                 Path destinationWithUniqueName =destination.resolve(newFileName);
                 Files.copy(notif.toPath(), destinationWithUniqueName);
             }
+            String infosupVE=dataToSave.getEleveInfosupVe();
             dataToSave.setNumscei(item.getNumscei());
-            dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
+            //Comparaison des données SCEI
+            if (!dataToSave.getEleveDateNaissance().equals(item.getEleveDateNaissance())){
+                infosupVE+="\n## DateNaissProb: SCEI="+item.getEleveDateNaissance()+" vs Form="+dataToSave.getEleveDateNaissance();
+            }
             dataToSave.setGenre(ApplicationTools.getStringFromRequest(request, "genre"));
+            if (!dataToSave.getGenre().equals(item.getGenre())){
+                infosupVE+="\n## GenreProb: SCEI="+item.getGenre()+" vs Form="+dataToSave.getGenre();
+            }
             dataToSave.setElevePayshab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
+            if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
+                
+            }
             dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
             dataToSave.setEleveCodepostal(ApplicationTools.getIntFromRequest(request, "eleveCodepostal"));
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));

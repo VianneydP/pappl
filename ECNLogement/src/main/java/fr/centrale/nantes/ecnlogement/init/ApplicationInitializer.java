@@ -137,7 +137,7 @@ public class ApplicationInitializer implements ServletContextListener {
         return (Souhait) getItemFromString(name, "Souhait.findBySouhaitNom", Souhait.class, "type_souhait");
     }
     
-    private Souhait createSouhait( String name) {
+    private Souhait createSouhait(String name) {
         Souhait item = getSouhait(name);
         if (item == null) {
             // Does not exist
@@ -159,7 +159,7 @@ public class ApplicationInitializer implements ServletContextListener {
         createSouhait("Seul");
         createSouhait("SeulOuColoc");
         createSouhait("Coloc");
-        createSouhait("Indifférent");
+        createSouhait("Indifferent");
         transaction.commit();
     }
 

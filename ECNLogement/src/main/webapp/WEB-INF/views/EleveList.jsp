@@ -62,6 +62,7 @@
                 </thead>
                 <tbody class="bodyTable">
                 <c:forEach var="item" items="${itemList}" varStatus="count">
+                  <c:if test="${item.numscei!=-1}">
                     <tr>
                     <td class="text-left">${item.personne.personneNom}</td>
                     <%--<td class="text-left">${item.personne.personnePrenom}</td>--%>
@@ -105,6 +106,7 @@
                       </form>
                     </td>
                    </tr>
+                  </c:if>
                 </c:forEach>
                 </tbody>
                 <%--<tfoot>

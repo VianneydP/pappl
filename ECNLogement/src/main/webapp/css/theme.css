@@ -1202,9 +1202,11 @@ pre {
   .table tbody + tbody {
     border-top: 2px solid #dee2e6; }
 
-.table-sm th,
+.table-sm th {
+    width: 4rem; }
 .table-sm td {
-  padding: 0.3rem; }
+    padding: 0.3rem; 
+    width: 8rem; }
 
 .table-bordered {
   border: 1px solid #dee2e6; }

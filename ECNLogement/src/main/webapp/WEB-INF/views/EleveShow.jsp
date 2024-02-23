@@ -25,7 +25,7 @@
   <body>
     <%@ include file="headerAdmin.jspf" %>
     <div class="py-5">
-      <div class="container">
+      <div class="container col-md-9">
         <div class="row">
           <div class="col-md-12"><h3><fmt:message key="message.EleveInfo" bundle="${ressourcesBundle}"/></h3></div>
         </div>
@@ -40,111 +40,76 @@
                   <tbody>
                     <tr>
                       <th scope="col"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="text" class="form-control" name="personneNom" value="${item.personne.personneNom}" />
-                      </td>
+                      <td>${item.personne.personneNom}</td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.personnePrenom" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="text" class="form-control" name="personnePreom" value="${item.personne.personnePrenom}" />
-                      </td>
+                      <td>${item.personne.personnePrenom}</td>
                     </tr> 
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveDateNaissance" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="date" class="form-control" name="eleveDateNaissance" value="${dateNaissance}" />
-                      </td>
+                      <td><fmt:formatDate value="${item.eleveDateNaissance}" pattern="dd/MM/yyyy" /></td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.genre" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="text" class="form-control" name="genre" value="${item.genre}">
-                      </td>
+                      <td>${item.genre}</td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.elevePayshab" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="text" class="form-control" name="elevePayshab" value="${item.elevePayshab}">
-                      </td>
+                      <td>${item.elevePayshab}</td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveCodepostal" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="int" class="form-control" name="eleveCodepostal" value="${item.eleveCodepostal}" />
-                      </td>
+                      <td>${item.eleveCodepostal}</td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveVillehab" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="text" class="form-control" name="eleveVillehab" value="${item.eleveVillehab}">
-                      </td>
+                      <td>${item.eleveVillehab}</td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveMail" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="text" class="form-control" name="eleveMail" value="${item.eleveMail}">
-                      </td>
+                      <td>${item.eleveMail}</td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveNumtel" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <input type="int" class="form-control" name="eleveNumtel" value="${item.eleveNumtel}">
-                      </td>
+                      <td>${item.eleveNumtel}</td>
                     </tr>
                     <tr>
                         <th scope="col"><fmt:message key="message.eleveBoursier" bundle="${ressourcesBundle}"/></th>
                         <td>
-                            <label>
-                              <input type="radio" name="eleveBoursier" value="true" <c:if test="${item.eleveBoursier eq 'true'}">checked</c:if>> Oui
-                            </label>
-                            <label>
-                              <input type="radio" name="eleveBoursier" value="false" <c:if test="${item.eleveBoursier eq 'false'}">checked</c:if>> Non
-                            </label>
+                            <c:if test="${item.eleveBoursier eq 'true'}">OUI</c:if>
+                            <c:if test="${item.eleveBoursier eq 'false'}">NON</c:if>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col"><fmt:message key="message.elevePMR" bundle="${ressourcesBundle}"/></th>
                         <td>
-                            <label>
-                              <input type="radio" name="elevePMR" value="true" <c:if test="${item.elevePMR eq 'true'}">checked</c:if>> Oui
-                            </label>
-                            <label>
-                              <input type="radio" name="elevePMR" value="false" <c:if test="${item.elevePMR eq 'false'}">checked</c:if>> Non
-                            </label>
+                            <c:if test="${item.elevePMR eq 'true'}">OUI</c:if>
+                            <c:if test="${item.elevePMR eq 'false'}">NON</c:if>
                         </td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveInfosup" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <textarea class="form-control" name="eleveInfosup">${item.eleveInfosup}</textarea>
-                      </td>
+                      <td>${item.eleveInfosup}</td>
                     </tr>
                     <tr>
                       <th scope="col"><fmt:message key="message.eleveInfosupVE" bundle="${ressourcesBundle}"/></th>
-                      <td>
-                        <textarea class="form-control" name="eleveInfosupVe">${item.eleveInfosupVe}</textarea>
-                      </td>
+                      <td>${item.eleveInfosupVe}</td>
                     </tr>
                      <tr>
                         <th scope="col"><fmt:message key="message.typeSouhait" bundle="${ressourcesBundle}"/></th>
                         <td>
-                          <select name="typeSouhait">
-                            <c:forEach var="itemIter" items="${typeSouhaitList}">
-                              <option value="${itemIter.typeSouhait}" <c:if test="${itemIter.typeSouhait eq item.typeSouhait}">selected</c:if>>${itemIter.typeSouhait}</option>
-                            </c:forEach>
-                          </select>
+                            <c:if test="${item.typeSouhait.typeSouhait=='Seul'}"><fmt:message key="message.questionnaireChoix1" bundle="${ressourcesBundle}"/></c:if>
+                            <c:if test="${item.typeSouhait.typeSouhait=='SeulOuColoc'}"><fmt:message key="message.questionnaireChoix2" bundle="${ressourcesBundle}"/></c:if>
+                            <c:if test="${item.typeSouhait.typeSouhait=='Coloc'}"><fmt:message key="message.questionnaireChoix3" bundle="${ressourcesBundle}"/></c:if>
+                            <c:if test="${item.typeSouhait.typeSouhait=='Indifferent'}"><fmt:message key="message.questionnaireChoix4" bundle="${ressourcesBundle}"/></c:if>
                         </td>
                       </tr>
                     <tr>
                         <th scope="col" style="color:red"><strong><fmt:message key="message.eleveConfirm" bundle="${ressourcesBundle}"/></strong></th>
                         <td>
-                            <label>
-                                <input type="radio" name="eleveConfirm" value="true" <c:if test="${item.eleveConfirm eq 'true'}">checked</c:if>/> Oui
-                            </label>
-                            <label>
-                                <input type="radio" name="eleveConfirm" value="false" <c:if test="${item.eleveConfirm eq 'false'}">checked</c:if>/> Non
-                            </label>
+                            <c:if test="${item.eleveConfirm eq 'true'}">OUI</c:if>
+                            <c:if test="${item.eleveConfirm eq 'false'}">NON</c:if>
                         </td>
                     </tr>
 
@@ -154,8 +119,7 @@
                     <tr id="save">
                       <th scope="col"></th>
                       <td class="text-center">
-                        <button class="btn btn-warning" formaction="EleveList.do"><img src="img/cancel.png" alt="save" class="icon" /><fmt:message key="button.cancel" bundle="${ressourcesBundle}"/></button>
-                        <button class="btn btn-success" formaction="EleveSaveAdmin.do"><img src="img/save.png" alt="save" class="icon" /><fmt:message key="button.save" bundle="${ressourcesBundle}"/></button>
+                        <button type="submit" formaction="EleveEdit.do" class="btn btn-xs"><img src="img/edit.png" alt="edit" class="localButton" /></button>
                       </td>
                     </tr>
                   </tfoot>
@@ -166,5 +130,6 @@
         </div>
       </div>
     </div>
+    <%@ include file="footer.jspf" %>
   </body>
 </html>
