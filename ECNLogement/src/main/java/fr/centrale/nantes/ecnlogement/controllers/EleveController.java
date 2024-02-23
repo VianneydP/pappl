@@ -298,7 +298,7 @@ public class EleveController {
 
             // Return to the list
             //returned = handleEleveList(user);
-            returned=ApplicationTools.getModel("questionnaire", user);
+            returned=ApplicationTools.getModel("confirmation", user);
         }
         return returned;
     }
@@ -333,7 +333,7 @@ public class EleveController {
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
             dataToSave.setElevePMR(ApplicationTools.getBooleanFromRequest(request, "elevePMR"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
-            dataToSave.setEleveInfosupVe(ApplicationTools.getStringFromRequest(request, "eleveInfosupVe"));
+            dataToSave.setEleveInfosupVe(ApplicationTools.getStringFromRequest(request, "eleveInfosupVE"));
             dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
             dataToSave.setEleveConfirm(ApplicationTools.getBooleanFromRequest(request, "eleveConfirm"));
             //Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");

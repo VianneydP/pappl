@@ -37,7 +37,7 @@
         <%@ include file="header.jspf" %>
         <div class="py-5">
             <div class="container">
-                <h1>Créez un compte</h1>
+                <h1>Créer un compte</h1>
                 <br>
                 <h5> Voici votre identifiant. Notez-le bien, à partir de maintenant il sera nécessaire pour vous connecter.</h5>  
                 <br>
