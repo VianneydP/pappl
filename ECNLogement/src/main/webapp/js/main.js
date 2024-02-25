@@ -97,7 +97,8 @@ function ajaxCall(action, data, applySuccess) {
             if (result.ok === 1) {
                 applySuccess(result, data);
             } else {
-                console.log("refused call " + action);
+                    console.log("refused call " + action);
+   
             }
         },
         error: function (resultat, statut, erreur) {

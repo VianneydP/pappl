@@ -964,8 +964,9 @@ public class ApplicationTools {
             .replace(">", " ")
             .replace("?", "")
             .replace("Saint", "St");
+            
 
-        result =result.toUpperCase();
+        result =result.replaceAll("\\p{C}", "").toUpperCase();
         return result;
     }
     

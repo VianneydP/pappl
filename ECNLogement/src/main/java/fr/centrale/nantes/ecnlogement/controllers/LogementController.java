@@ -5,7 +5,7 @@
  * Vianney de Ponthaud - Maxence Nicolet
  * ----------------------------------------- */
  
-//-*- coding: utf-8 -*-
+//-*- coding: utf-8 
 package fr.centrale.nantes.ecnlogement.controllers;
 
 import static fr.centrale.nantes.ecnlogement.controllers.ApplicationTools.getMethod;
@@ -112,8 +112,17 @@ public class LogementController {
                     //Path destination = new File(targetDirectory).toPath();
                     String newFileName ="fichierRez.csv";
                     Path destination =path.resolve(newFileName);
-                    Files.copy(fichierRez.toPath(), destination);
-                    importCsvRez(fichierRez) ;
+                    if (Files.exists(destination)) {
+                        //essai pop up
+                        String alertMessage = "Le fichier existe déjà dans le dossier.";
+                        returned.addObject("message", "FileExists");
+                        returned.addObject("alertMessage", alertMessage);
+                        //fin essai
+                    }else {
+                        Files.copy(fichierRez.toPath(), destination);
+                        importCsvRez(fichierRez) ;
+                    }
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -379,9 +388,9 @@ public class LogementController {
                 // Get header
                 List<String> header = new LinkedList<>();
                 StringTokenizer st = new StringTokenizer(line, ";");
-                while ((st.hasMoreElements())&&header.size()<14) {
+                while ((st.hasMoreElements())&& (header.size()<14)) {
                     String name = st.nextToken().trim();
-                    header.add(ApplicationTools.removeAccentsAndSpecialCharacters(name.replaceAll("\\p{C}", "")));
+                    header.add(ApplicationTools.removeAccentsAndSpecialCharacters(name));
                 }
                 // Get lines
                 line = reader.readLine();
@@ -393,7 +402,7 @@ public class LogementController {
                     String elem = "";
                     while ((i < line.length())&&(lineValues.size()<14)) {
                         if (line.substring(i, i + 1).equals(";")) {
-                            lineValues.add(ApplicationTools.removeAccentsAndSpecialCharacters(elem.replaceAll("\\p{C}", "")));
+                            lineValues.add(ApplicationTools.removeAccentsAndSpecialCharacters(elem));
                             elem = "";
                         } else {
                             if (line.substring(i, i + 1).equals(",")) {
