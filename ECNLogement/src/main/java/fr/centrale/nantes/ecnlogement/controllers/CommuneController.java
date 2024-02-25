@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.StringTokenizer;
 
 @Controller
@@ -237,7 +239,7 @@ public class CommuneController {
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user != null) {
             try{
-                String nomFichier="C:\\Users\\viann\\Documents\\CentraleNantes\\Cours2eAnnée\\PGROU\\ECNLogement\\src\\main\\resources\\fr\\centrale\\nantes\\ecnlogement\\resources\\communes-departement-region.csv";
+                String nomFichier = request.getServletContext().getRealPath("WEB-INF\\classes\\fr\\centrale\\nantes\\ecnlogement\\resources\\communes-departement-region.csv");
                 BufferedReader fichier=new BufferedReader(new FileReader(nomFichier));
                 String ligne=fichier.readLine();
                 while ((ligne = fichier.readLine()) != null){

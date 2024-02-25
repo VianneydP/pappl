@@ -136,6 +136,6 @@ public interface EleveRepositoryCustom {
      * Get a Eleve
      * @param personneId
      * @return 
-     */ /**
-    public Eleve getByPersonneId(int personneId);**/
+     */ 
+    public Eleve getByPersonneId(int personneId);
 }

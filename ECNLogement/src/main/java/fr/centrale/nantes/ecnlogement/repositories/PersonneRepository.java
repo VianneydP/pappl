@@ -31,4 +31,5 @@ public interface PersonneRepository extends JpaRepository<Personne, Integer>, Pe
      */
     @Query("SELECT p FROM Personne p WHERE p.personneNom = :personneNom AND p.personnePrenom = :personnePrenom")
     public Collection<Personne> findByPersonFirstAndLastName(@Param("personneNom")String personneNom, @Param("personnePrenom")String personnePrenom);
+    
 }

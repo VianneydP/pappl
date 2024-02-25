@@ -160,7 +160,7 @@ public class PersonneController {
             returned = ApplicationTools.getModel( "relogin", null );
             returned.addObject("personne", item);
             returned.addObject("eleve", eleve);
-            
+            System.out.println(eleve.getEleveId());
         }
         return returned;
     }

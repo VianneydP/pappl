@@ -167,6 +167,25 @@ public class EleveController {
         }
         return returned;
     }
+    
+    @RequestMapping(value = "EleveShow.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTEleveShow(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel("index", null);
+        } else {
+            // Retreive item (null if not created)
+            Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
+            Eleve item = repository.getByEleveId(id);
+
+            // Edit item
+            String modelName = "EleveShow";
+            returned = ApplicationTools.getModel(modelName, user);
+            returned.addObject("item", item);
+        }
+        return returned;
+    }
 
     @RequestMapping(value = "EleveCreate.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveCreate(HttpServletRequest request) {
@@ -180,8 +199,7 @@ public class EleveController {
             String modelName = "EleveEdit";
             returned = ApplicationTools.getModel(modelName, user);
             returned.addObject("item", item);
-            returned.addObject("communeList", communeRepository.findAll());
-            returned.addObject("logementNumeroList", logementRepository.findAll());
+            returned.addObject("communeList", communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune")));
             returned.addObject("personneIdList", personneRepository.findAll());
             returned.addObject("typeSouhaitList", souhaitRepository.findAll());
         }
@@ -230,27 +248,19 @@ public class EleveController {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
         if (user == null) {
-            returned = ApplicationTools.getModel("index", null);
+            returned = ApplicationTools.getModel("reconnect", null);
         } else {
-            // Get item to save request
-            // Retreive item (null if not created)
+            // Récupération de l'élève qui a rempli le formulaire
             Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
             Eleve item = repository.getByEleveId(id);
-            //Ajoute par moi
-            Integer id2 = ApplicationTools.getIntFromRequest(request,"personneId");
-            Personne pers = personneRepository.getByPersonneId( id2 );
-            //Eleve item=repository.getByPersonneId(id2);
-            //Eleve item=repository.getByPersonNomPrenomNumscei(pers.getPersonneNom(),pers.getPersonnePrenom(),ApplicationTools.getIntFromRequest(request, "login"));
-
             Eleve dataToSave = new Eleve();
-            //Ajoute par moi
+            
+            //Vérification (création si besoin) du dossier pour les notifs de bourse
+            //Exportation des fichiers
             File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
             String filename=notif.getName();
-            //String extension=getFileExtension(filename);
             String targetDirectory = request.getServletContext().getRealPath("televersements");
             Path path = Paths.get(targetDirectory);
-            // TODO Coucou Elsa ! Prends la ligne du dessus et la boucle if du dessous pour créer ton dossier
-            // Vérifier si le répertoire existe
             if (!Files.exists(path)) {
                 // Créer le répertoire s'il n'existe pas
                 try {
@@ -261,56 +271,54 @@ public class EleveController {
             if(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier")){
                 Path destination = Paths.get(targetDirectory);
                 //Path destination = new File(targetDirectory).toPath();
-                String newFileName = pers.getPersonneNom()+"_"+pers.getPersonnePrenom()+generateUniqueFileName(destination)+".pdf";
+                String newFileName = item.getPersonne().getPersonneNom()+"_"+item.getPersonne().getPersonnePrenom()+"_bourse_"+generateUniqueFileName(destination)+".pdf";
                 Path destinationWithUniqueName =destination.resolve(newFileName);
                 Files.copy(notif.toPath(), destinationWithUniqueName);
             }
+            String infosupVE=dataToSave.getEleveInfosupVe();
             dataToSave.setNumscei(item.getNumscei());
-            dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
+            //Comparaison des données SCEI
+            if (!dataToSave.getEleveDateNaissance().equals(item.getEleveDateNaissance())){
+                infosupVE+="\n## DateNaissProb: SCEI="+item.getEleveDateNaissance()+" vs Form="+dataToSave.getEleveDateNaissance();
+            }
             dataToSave.setGenre(ApplicationTools.getStringFromRequest(request, "genre"));
+            if (!dataToSave.getGenre().equals(item.getGenre())){
+                infosupVE+="\n## GenreProb: SCEI="+item.getGenre()+" vs Form="+dataToSave.getGenre();
+            }
             dataToSave.setElevePayshab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
-            dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
+            if (!dataToSave.getElevePayshab().equalsIgnoreCase(item.getElevePayshab())){
+                infosupVE+="\n## PaysHabProb: SCEI="+item.getElevePayshab()+" vs Form="+dataToSave.getElevePayshab();
+            }
             dataToSave.setEleveCodepostal(ApplicationTools.getIntFromRequest(request, "eleveCodepostal"));
+            dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
+            if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
+                dataToSave.setEleveCodepostal(ApplicationTools.getIntFromRequest(request, "eleveCodepostal"));
+                int cp_form=dataToSave.getEleveCodepostal();
+                String dep_form=Integer.toString(cp_form);
+                dep_form=dep_form.substring(0, 2);
+                Integer cp_begin=item.getEleveCodepostal();
+                String dep_begin=Integer.toString(cp_begin);
+                dep_begin=dep_begin.substring(0, 2);
+                if (dep_begin.equals(dep_form)){
+                    dataToSave.setCommune(communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab()));
+                    if (dataToSave.getCommune()!=null){
+                        dataToSave.setEleveVillehab(dataToSave.getCommune().getNomCommune());
+                    } else {
+                        infosupVE+="\n## CommuneProb: non rec. dans bdd (verifier nom+CP)";
+                    }
+                }
+            }
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
+            dataToSave.setElevePMR(ApplicationTools.getBooleanFromRequest(request, "elevePMR"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
             dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
-            //Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
-            //dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
-            String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
-            dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
-            Integer personneIdTemp = ApplicationTools.getIntFromRequest(request, "personneId");
-            dataToSave.setPersonne(personneRepository.getByPersonneId(personneIdTemp));
-            //dataToSave.setCodeCommune(new Commune(ApplicationTools.findCodeForCommune(dataToSave.getEleveVillehab()).getCodeCommune()));
-            
-            //On set la commune grâce au nom de la ville
-            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
-            if (saCommune!=null){
-                dataToSave.setCommune(saCommune);
-            }
-            /*
-            //Si l'élève n'a pas renseigné le code postal, on le rajoute
-            if(dataToSave.getEleveCodepostal()==-1 || dataToSave.getEleveCodepostal()==0){
-                dataToSave.setEleveCodepostal(dataToSave.getCodeCommune().getCodePostal());
-            }
-            
-            //Si la commune n'a pas été trouvée à partir du nom (faute de frappe dans le nom) et que l'élève a renseigné un code postal, on la set à partir du code postal
-            if(dataToSave.getEleveCodepostal()!=-1 && dataToSave.getEleveCodepostal()!=0 && dataToSave.getCodeCommune()==null){
-                dataToSave.setCodeCommune(ApplicationTools.findCodeForCodePostal(dataToSave.getEleveCodepostal()));
-                //Si la commune a été trouvé à partir du CP, il doit être bon, on rectifie donc le nom de la ville
-                if(dataToSave.getCodeCommune()!=null){
-                    dataToSave.setEleveVillehab(dataToSave.getCodeCommune().getNomCommune());
-                }
-            }*/
-             
-            //TODO : si la commune est encore null (n'a été trouvé ni à partir de la ville ni à partir du CP, créer une ALERTE pour la VE)
-            //String typeSouhaitTemp = ApplicationTools.getStringFromRequest(request, "typeSouhait");
-            //dataToSave.setTypeSouhait(souhaitRepository.getByTypeSouhait(typeSouhaitTemp));
-
+            dataToSave.setPersonne(item.getPersonne());
+            dataToSave.setEleveInfosupVe(infosupVE);
             // Create if necessary then Update item
             if (item == null) {
                 item = repository.create(dataToSave);
@@ -319,7 +327,7 @@ public class EleveController {
 
             // Return to the list
             //returned = handleEleveList(user);
-            returned=ApplicationTools.getModel("questionnaire", user);
+            returned=ApplicationTools.getModel("confirmation", user);
         }
         return returned;
     }
@@ -336,14 +344,12 @@ public class EleveController {
             // Retreive item (null if not created)
             Integer id = ApplicationTools.getIntFromRequest(request, "eleveId");
             Eleve item = repository.getByEleveId(id);
-            Integer id2=item.getPersonne().getPersonneId();
-            Personne pers=personneRepository.getByPersonneId(id2);
+            Personne pers=item.getPersonne();
       
             Eleve dataToSave = new Eleve();
             
             dataToSave.setPersonne(pers);
             dataToSave.setNumscei(item.getNumscei());
-            dataToSave.setNumscei(ApplicationTools.getIntFromRequest(request, "NumScei"));
             // Retreive values from request
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
@@ -354,17 +360,20 @@ public class EleveController {
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
             dataToSave.setEleveBoursier(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier"));
+            dataToSave.setElevePMR(ApplicationTools.getBooleanFromRequest(request, "elevePMR"));
             dataToSave.setEleveInfosup(ApplicationTools.getStringFromRequest(request, "eleveInfosup"));
+            dataToSave.setEleveInfosupVe(ApplicationTools.getStringFromRequest(request, "eleveInfosupVE"));
             dataToSave.setTypeSouhait(new Souhait(ApplicationTools.getStringFromRequest(request, "typeSouhait")));
+            dataToSave.setEleveConfirm(ApplicationTools.getBooleanFromRequest(request, "eleveConfirm"));
             //Integer codeCommuneTemp = ApplicationTools.getIntFromRequest(request, "codeCommune");
             //dataToSave.setCodeCommune(communeRepository.getByCodeCommune(codeCommuneTemp));
-            String logementNumeroTemp = ApplicationTools.getStringFromRequest(request, "logementNumero");
-            dataToSave.setLogementNumero(logementRepository.getByLogementNumero(logementNumeroTemp));
             
             //On set la commune grâce au nom de la ville
-            Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
-            if (saCommune!=null){
-                dataToSave.setCommune(saCommune);
+            if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
+                Commune saCommune = communeRepository.getByCodePostalNom( dataToSave.getEleveCodepostal(), dataToSave.getEleveVillehab());
+                if (saCommune!=null){
+                    dataToSave.setCommune(saCommune);
+                }
             }
             /*
             //Si l'élève n'a pas renseigné le code postal, on le rajoute
@@ -392,8 +401,7 @@ public class EleveController {
             repository.update(item.getEleveId(), dataToSave);
 
             // Return to the list
-            //returned = handleEleveList(user);
-            returned=ApplicationTools.getModel("accueilAdmin", user);
+            returned = handleEleveList(user);
         }
         return returned;
     }

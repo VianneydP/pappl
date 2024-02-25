@@ -303,11 +303,12 @@
                                 </div>
                             </div> 
                             <br>
-
-                            <div class="form-group row">
-                                <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
-                                <div class="col-10">
-                                    <input type="text" class="form-control" id="inputvilleh" pattern="[a-zA-ZÀ-ÖØ-öø-ÿ-]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab" required="required">
+                            <div id="nofranceFields" style="display: none;">
+                                <div class="form-group row">
+                                    <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
+                                    <div class="col-10">
+                                        <input type="text" class="form-control" id="inputvilleh" pattern="[A-Z]+$" placeholder="<fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/>" name="eleveVillehab">
+                                    </div>
                                 </div>
                             </div>
 
@@ -333,7 +334,20 @@
                                     <label for="fileInput"><fmt:message key="message.questionnaireNotif2" bundle="${ressourcesBundle}"/></label>
                                 </div>
                             </div>
-
+                           
+                            <div class="form-group row"> 
+                                <label for="inputpmrh" class="col-2 col-form-label"><fmt:message key="message.elevePMR" bundle="${ressourcesBundle}"/></label>
+                                <div class="col-10">
+                                    <div class="d-block my-3">
+                                        <div class="custom-control custom-radio">
+                                            <input id="inputpmrnon" name="elevePMR" type="radio" class="custom-control-input" required="" value="false"> <label class="custom-control-label" for="inputpmrnon">Non</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input id="inputpmroui" name="elevePMR" type="radio" class="custom-control-input" required="" value="true"> <label class="custom-control-label" for="inputpmroui">Oui</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group row"> 
                                 <label for="inputgenre" class="col-2 col-form-label"><fmt:message key="message.questionnaireGenre" bundle="${ressourcesBundle}"/></label>
                                 <div class="col-10">
@@ -404,10 +418,13 @@
         <script>
         document.getElementById('country').addEventListener('change', function () {
             var franceFields = document.getElementById('franceFields');
+            var nofranceFields = document.getElementById('nofranceFields');
             if (this.value === 'france') {
                 franceFields.style.display = 'block';
+                nofranceFields.style.display = 'none';
             } else {
                 franceFields.style.display = 'none';
+                nofranceFields.style.display = 'block';
             }
         });
 

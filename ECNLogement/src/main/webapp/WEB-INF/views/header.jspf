@@ -28,7 +28,7 @@
         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
       <c:choose>
         <c:when test="${empty user}"><button type="submit" class="btn btn-light" formaction="reconnect.do" formmethod="GET"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button></c:when>
-        <c:otherwise><button type="submit" class="btn btn-light" formaction="trier.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button></c:otherwise>
+        <c:otherwise><button type="submit" class="btn btn-light" formaction="disconnect.do" formmethod="POST"><fmt:message key="button.disconnect" bundle="${ressourcesBundle}"/></button></c:otherwise>
       </c:choose>
       </form>
       <form action="#" method="POST" id="navLaunch">
