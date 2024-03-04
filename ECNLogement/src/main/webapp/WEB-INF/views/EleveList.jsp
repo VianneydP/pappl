@@ -95,7 +95,7 @@
                         </c:if>
                     </td>
                     <td class="text-center">
-                      <form action="#" method="POST" calss="d-inline">
+                      <form action="#" method="POST" class="d-inline">
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                         <input type="hidden" name="eleveId" value="${item.eleveId}">
                         <div class="btn-group" role="group" aria-label="Actions">

@@ -96,17 +96,22 @@ public class LoginController {
     public ModelAndView handlePOSTConnect(HttpServletRequest request) throws ParseException {
         ModelAndView returned = null;
         String nom = ApplicationTools.getStringFromRequest(request, "nom");
-        nom=ApplicationTools.correctString(nom);
+        nom=ApplicationTools.removeAccentsAndSpecialCharacters(nom);
         String prenom = ApplicationTools.getStringFromRequest(request, "prenom");
-        prenom=ApplicationTools.correctString(prenom);
+        prenom=ApplicationTools.removeAccentsAndSpecialCharacters(prenom);
         int numscei = ApplicationTools.getIntFromRequest(request, "numscei");
         if ((nom != null) && (prenom != null) && (numscei != -1)
                 && (!nom.isEmpty()) && (!prenom.isEmpty())) {
             Eleve eleve = eleveRepository.getByPersonNomPrenomNumscei(nom, prenom, numscei);
-            if (eleve == null) {
-                returned = choixVueConnexion(nom, prenom, numscei);
+            if (eleve != null) {
+                if (eleve.getPersonne().getPersonneLogin() == null || eleve.getPersonne().getPersonneLogin().equals("")){
+                    returned = choixVueConnexion(nom, prenom, numscei);                    
+                }else{
+                    returned = ApplicationTools.getModel("relogin", null);
+                }
             }else{
-                returned = ApplicationTools.getModel("relogin", null);
+                returned = ApplicationTools.getModel("login", null);
+                returned.addObject("nonReco", true);
             }
         }else{
             returned=ApplicationTools.getModel("loginError", null);
@@ -129,13 +134,12 @@ public class LoginController {
                 String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
                 returned.addObject("dateDebut", dateDeb);
             } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
-                Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
-                Eleve eleve =eleveRepository.create(numscei,pers);
+                Eleve eleve =eleveRepository.getByPersonNomPrenomNumscei(nom,prenom,numscei);
                 Connexion user = connexionRepository.create(eleve.getPersonne());
                 returned = ApplicationTools.getModel("password", user);
-                returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
+                returned.addObject("username", String.valueOf(eleve.getPersonne().getPersonneId())+String.valueOf(numscei));
                 returned.addObject("eleve", eleve);
-                returned.addObject("personne", pers);
+                returned.addObject("personne", eleve.getPersonne());
             } if (now.after(adminDates.getDatesFin())){
                 returned = ApplicationTools.getModel("tropTard", null);
             }
