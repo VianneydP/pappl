@@ -47,9 +47,9 @@ public class PersonneController {
     private RoleRepository roleRepository;
 
     private ModelAndView handlePersonneList(Connexion user) {
-        String modelName = "PersonneList";
+        String modelName = "AssistList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
-        returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "personneId")));
+        //returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "personneId")));
         return returned;
     }
 
@@ -60,7 +60,7 @@ public class PersonneController {
         if (user == null) {
             returned = ApplicationTools.getModel( "index", null );
         } else {
-            returned = handlePersonneList(user);
+            returned = handlePersonneList(user);           
         }
         return returned;
     }

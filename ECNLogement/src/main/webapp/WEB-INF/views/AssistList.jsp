@@ -73,7 +73,7 @@
                     <td class="text-left">${item.personneNom}</td>
                     <td class="text-left">${item.personnePrenom}</td>
                     <td class="text-left">${item.personneLogin}</td>
-                    <td class="text-left">${item.roleId.roleNom}</td>
+                    <td class="text-left">${item.getRoleId().getRoleNom()}</td>
                     <td class="text-center">
                       <form action="#" method="POST">
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />

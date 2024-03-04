@@ -4,6 +4,8 @@
  * Ecole Centrale Nantes
  * Vianney de Ponthaud - Maxence Nicolet
  * ----------------------------------------- */
+
+//-*- coding: utf-8 
 package fr.centrale.nantes.ecnlogement.controllers;
 
 import java.io.File;
@@ -37,12 +39,15 @@ import fr.centrale.nantes.ecnlogement.items.Souhait;
 import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -88,11 +93,51 @@ public class EleveController {
     public ModelAndView handlePOSTEleveList(HttpServletRequest request) {
         ModelAndView returned = null;
         Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        String action = ApplicationTools.getStringFromRequest(request, "nomEtape");
+        
         if (user == null) {
-            returned = ApplicationTools.getModel("index", null);
+            returned = ApplicationTools.getModel("loginAdmin", null);
         } else {
             returned = handleEleveList(user);
         }
+        if ("importScei".equals(action)) {
+            File fichierScei=ApplicationTools.getFileFromRequest(request,"SceiImport");
+            String filename=fichierScei.getName();
+            
+            String targetDirectory = request.getServletContext().getRealPath("FichierScei");
+            
+            
+            if(fichierScei!=null){
+                try {
+                    Path path = Paths.get(targetDirectory);
+                    if (!Files.exists(path)) {
+                        try {
+                            Files.createDirectories(path);
+                        } catch (IOException e) {
+                        }
+                    }
+                    
+                    //String newFileName ="fichierScei.csv";
+                    
+                    String newFileName = "fichierScei"+generateUniqueFileName(path)+".csv";
+                    Path destinationWithUniqueName =path.resolve(newFileName);
+                    
+                    //Files.copy(fichierScei.toPath(), destinationWithUniqueName);
+                    //Path destination =path.resolve(newFileName);
+//                    
+                    Files.copy(fichierScei.toPath(), destinationWithUniqueName);
+                    importCsvScei(fichierScei) ;
+                    
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally{
+                    returned = handleEleveList(user);
+                }
+                
+        }
+        }   
         return returned;
     }
 
@@ -444,37 +489,52 @@ public class EleveController {
         Personne personne = new Personne();
         personne.setRoleId(roleId);
         Date naissance;
-
+        
         boolean canDoIt = true;
         Iterator<String> valueIterator = values.iterator();
         for (String name : header) {
             if (valueIterator.hasNext()) {
                 String value = valueIterator.next().trim();
                 switch (name) {
-                    case "eleveId":
-                        item.setEleveId(ApplicationTools.getIntFromString(value));
+                    case "CAN _NUM _SCEI":
+                        item.setNumscei(ApplicationTools.getIntFromString(value));
                         break;
-                    case "nom":
+                    case "NOM":
                         personne.setPersonneNom(value);
                         break;
-                    case "prenom":
+                    case "PRENOM":
                         personne.setPersonnePrenom(value);
                         break;
-                    case "naissance":
+                    case "CAN _NAI":
                         naissance = ApplicationTools.isDate(value);
                         item.setEleveDateNaissance(naissance);
                         break;
-                    case "genre":
-                        item.setGenre(value);
+                    case "CIV _LIB":
+                        switch (value){
+                            case "MME":
+                                item.setGenre("F");
+                                break;
+                            case "M.":
+                                item.setGenre("M");
+                                break;
+                            default :
+                                item.setGenre("NON RENSEIGNE");
+                                break;
+                    }
                         break;
-                    case "pays":
+                    case "CAN _PAY _ADR":
                         item.setElevePayshab(value);
                         break;
-                    case "ville":
+                    case "CAN _COM":
                         item.setEleveVillehab(value);
                         break;
-                    case "codepostal":
+                    case "CAN _COD _POS":
                         item.setEleveCodepostal(ApplicationTools.getIntFromString(value));
+                        break;
+                    case "ATA _LIB":
+                        if (!value.equals("OUI DEFINITIF")){
+                            canDoIt=false;
+                        }
                         break;
                     default:
                         canDoIt = false;
@@ -487,17 +547,18 @@ public class EleveController {
 
         if (canDoIt) {
             Eleve temp = null;
-            if (((personne.getPersonneNom() != null) && (!personne.getPersonneNom().isEmpty()) && (item.getEleveDateNaissance() != null))
-                    && ((personne.getPersonnePrenom() != null) && (!personne.getPersonnePrenom().isEmpty()))) {
+            if (personne.isPersonneValid()){
                 temp = repository.getByPersonNomPrenomNaissance(personne.getPersonneNom(), personne.getPersonnePrenom(), item.getEleveDateNaissance());
-            }
-            
-            if (temp == null) {
+                if (temp == null) {
                 Personne tempP = personneRepository.create(personne.getPersonneNom(), personne.getPersonnePrenom(), roleId);
-                temp = repository.create(item.getEleveId(),item.getEleveDateNaissance(), 
-                        item.getGenre(), item.getElevePayshab(), item.getEleveVillehab(), item.getEleveCodepostal() , personne);
+                item.setEleveConfirm(false);
+                //temp = repository.create(item.getNumscei(),item.getEleveDateNaissance(), 
+                //        item.getGenre(), item.getElevePayshab(), item.getEleveVillehab(), item.getEleveCodepostal() , personne);
                 repository.setPersonne(item, tempP, personneRepository);
             }
+            }
+            
+            
         }
     }
     
@@ -630,16 +691,18 @@ public class EleveController {
         // Build creation method
         // Read file
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(importFile));
+            FileInputStream fis = new FileInputStream(importFile);
+            InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(isr);
 
             String line = reader.readLine();
             if (line != null) {
                 // Get header
                 List<String> header = new LinkedList<>();
                 StringTokenizer st = new StringTokenizer(line, ";");
-                while (st.hasMoreElements()) {
+                while (st.hasMoreElements()&& (header.size()<10)) {
                     String name = st.nextToken().trim();
-                    header.add(name);
+                    header.add(ApplicationTools.removeAccentsAndSpecialCharacters(name));
                 }
                 // Get lines
                 line = reader.readLine();
@@ -649,9 +712,9 @@ public class EleveController {
                     List<String> lineValues = new LinkedList<>();
                     int i = 0;
                     String elem = "";
-                    while (i < line.length()) {
+                    while ((i < line.length())&&(lineValues.size()<10)) {
                         if (line.substring(i, i + 1).equals(";")) {
-                            lineValues.add(elem);
+                            lineValues.add(ApplicationTools.removeAccentsAndSpecialCharacters(elem));
                             elem = "";
                         } else {
                             if (line.substring(i, i + 1).equals(",")) {
@@ -663,6 +726,7 @@ public class EleveController {
                         i++;
                         
                     }
+                    lineValues.add(ApplicationTools.removeAccentsAndSpecialCharacters(elem));
                     // Create item with values
                     createItem(header, lineValues);
                     // Next line

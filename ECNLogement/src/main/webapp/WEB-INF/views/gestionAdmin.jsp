@@ -71,6 +71,14 @@
                     <fmt:message key="button.createDefaultCommune" bundle="${ressourcesBundle}"/></button>
             </form>
         </div>
+            <div class="col-md-6 d-flex justify-content-center">
+            <form id="c_form-h" class="" action="pageImport.do" method="POST">
+                <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                    <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
+                        <fmt:message key="button.importAdmin" bundle="${ressourcesBundle}"/>
+                    </button>
+            </form>
+            </div>
         <%--<div class="col-md-6 d-flex justify-content-center">
             <form id="c_form-h" class="" action="àdéfinir.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />

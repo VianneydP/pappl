@@ -962,8 +962,9 @@ public class ApplicationTools {
             .replace("'", " ")
             .replace("<", " ")
             .replace(">", " ")
-            .replace("?", "");
-        result =result.toUpperCase();
+            
+			.replace("?", "");
+        result =result.replaceAll("\\p{C}", "").toUpperCase();
         return result;
     }
         
