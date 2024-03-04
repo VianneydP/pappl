@@ -56,5 +56,9 @@ public interface ConnexionRepositoryCustom {
      * @param item
      */
     public void expand(Connexion item);
-
+    
+    public boolean checkUnicity(Personne personne);
+    
+    public void deleteByPerson(Personne personne);
+    
 }

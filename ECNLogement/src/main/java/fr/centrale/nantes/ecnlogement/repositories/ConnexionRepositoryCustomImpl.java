@@ -132,4 +132,23 @@ public class ConnexionRepositoryCustomImpl implements ConnexionRepositoryCustom 
             repository.saveAndFlush(item);
         }
     }
+    
+    public boolean checkUnicity(Personne personne) {
+        Collection<Connexion> coRep = repository.findAll();
+        for (Connexion co:coRep){
+            if (co.getPersonne().getPersonneId()==personne.getPersonneId()){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public void deleteByPerson(Personne personne) {
+        Collection<Connexion> coRep = repository.findAll();
+        for (Connexion co:coRep){
+            if (co.getPersonne().getPersonneId()==personne.getPersonneId()){
+                repository.deleteById(co.getConnectionId());
+            }
+        }
+    }
 }

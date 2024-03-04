@@ -161,8 +161,20 @@ public class LoginController {
                 String savedPassword = person.getPersonnePassword();
                 if ((user == null) && (savedPassword != null) && (!savedPassword.isEmpty()) && (ApplicationTools.checkPassword(pass, savedPassword))) {
                     if (person.getRoleId().getRoleId()==Role.ROLEASSIST || person.getRoleId().getRoleId()==Role.ROLEADMIN){
-                        //Authentifié comme Admin ou Assistant
-                        user = connexionRepository.create(person);
+                        Collection<Connexion> coRep=connexionRepository.findAll();
+                        boolean flag=connexionRepository.checkUnicity(person);
+                        if (flag==true){
+                            user = connexionRepository.create(person);
+                        } else {
+                            int numEssai = ApplicationTools.getIntFromRequest(request, "numEssai");
+                            if (numEssai==3){
+                                 connexionRepository.deleteByPerson(person);
+                                user = connexionRepository.create(person);
+                            }else{
+                                returned = ApplicationTools.getModel("loginAdmin",null);
+                                returned.addObject("loginForce", true);
+                            }
+                        }
                     }
                 }
             }

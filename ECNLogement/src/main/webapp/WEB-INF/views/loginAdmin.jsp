@@ -39,6 +39,10 @@
               <div class="col-10">
                 <input type="password" class="form-control" id="inputpasswordh" placeholder="<fmt:message key="message.password" bundle="${ressourcesBundle}"/>" name="password" required="required"></div>
             </div>
+            <c:if test="${loginForce}">
+                <p style="color :red"><strong><fmt:message key="message.loginForce" bundle="${ressourcesBundle}"/></strong></p>
+                <input type="hidden" name="numEssai" value="3" />
+            </c:if>
             <button type="submit" class="btn btn-primary"><fmt:message key="button.connectAdmin" bundle="${ressourcesBundle}"/></button>
           </form>
         </div>
