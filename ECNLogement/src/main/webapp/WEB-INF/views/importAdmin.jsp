@@ -38,7 +38,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary"><fmt:message key="button.validerImport" bundle="${ressourcesBundle}"/></button>
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('Si vous aviez déjà importé ce fichier, les logements et étudiants associés au premier import seront supprimés et uniquement les nouveux seront enregistés dans la base de donnée. Voulez-vous continuer ?');"><fmt:message key="button.validerImport" bundle="${ressourcesBundle}"/></button>
                         </div>
                     </div>
                     <br>

@@ -116,24 +116,26 @@ public class EleveController {
                         } catch (IOException e) {
                         }
                     }
-                    //Path destination = new File(targetDirectory).toPath();
-                    String newFileName ="fichierScei.csv";
-                    Path destination =path.resolve(newFileName);
-                    /*
-                    if (Files.exists(destination)) {
-                        //essai pop up
-                        String alertMessage = "Le fichier existe déjà dans le dossier.";
-                        returned.addObject("message", "FileExists");
-                        returned.addObject("alertMessage", alertMessage);
-                        //fin essai
-                    }else {*/
-                        Files.copy(fichierScei.toPath(), destination);
-                        importCsvScei(fichierScei) ;
-                    //}
+                    
+                    //String newFileName ="fichierScei.csv";
+                    
+                    String newFileName = "fichierScei"+generateUniqueFileName(path)+".csv";
+                    Path destinationWithUniqueName =path.resolve(newFileName);
+                    
+                    //Files.copy(fichierScei.toPath(), destinationWithUniqueName);
+                    //Path destination =path.resolve(newFileName);
+//                    
+                    Files.copy(fichierScei.toPath(), destinationWithUniqueName);
+                    importCsvScei(fichierScei) ;
+                    
                     
                 } catch (IOException ex) {
                     Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                finally{
+                    returned = handleEleveList(user);
+                }
+                
         }
         }   
         return returned;

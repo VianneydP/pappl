@@ -46,6 +46,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -100,7 +101,7 @@ public class LogementController {
             String targetDirectory = request.getServletContext().getRealPath("FichierRez");
             
             
-            if(fichierRez!=null){
+            if(fichierRez!=null&& fichierRez.length()>0){
                 try {
                     Path path = Paths.get(targetDirectory);
                     if (!Files.exists(path)) {
@@ -112,12 +113,22 @@ public class LogementController {
                     //Path destination = new File(targetDirectory).toPath();
                     String newFileName ="fichierRez.csv";
                     Path destination =path.resolve(newFileName);
-                    if (Files.exists(destination)) {
-                        //essai pop up
-                        String alertMessage = "Le fichier existe déjà dans le dossier.";
-                        returned.addObject("message", "FileExists");
-                        returned.addObject("alertMessage", alertMessage);
-                        //fin essai
+                    //On regarde si le fichier e déjà été importé
+                    //S'il l'a été on supprime les données qui ont été importées
+                    //avec le premier import pour ne garder que les données du second
+                    if (Files.exists(destination)) { 
+                        Files.delete(destination);
+                        //FIXME supprimer les personnes associées aux élèves, truc bizarre lors d'un deuxième importph
+                        Collection<Eleve> elevesToDelete=eleveRepository.findByNumscei(-1);
+                        ArrayList<Personne> personnesToDelete=new ArrayList<>();
+                        for (Eleve eleve : elevesToDelete) {
+                            personnesToDelete.add(eleve.getPersonne());
+                        }
+                        eleveRepository.deleteAll(elevesToDelete);
+                        personneRepository.deleteAll(personnesToDelete);
+                        repository.deleteAll();
+                        Files.copy(fichierRez.toPath(), destination);
+                        importCsvRez(fichierRez) ;
                     }else {
                         Files.copy(fichierRez.toPath(), destination);
                         importCsvRez(fichierRez) ;
@@ -126,6 +137,10 @@ public class LogementController {
                 } catch (IOException ex) {
                     Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                finally{
+                    returned = handleLogementList(user);
+                }
+                
         }
         }   
         return returned;

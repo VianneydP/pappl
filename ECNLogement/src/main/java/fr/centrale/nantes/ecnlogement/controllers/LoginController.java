@@ -103,7 +103,9 @@ public class LoginController {
         if ((nom != null) && (prenom != null) && (numscei != -1)
                 && (!nom.isEmpty()) && (!prenom.isEmpty())) {
             Eleve eleve = eleveRepository.getByPersonNomPrenomNumscei(nom, prenom, numscei);
-            if (eleve == null) {
+            //FIX IT de Elsa : si un élève a été impoté il n'arrive pas sur la partie créer un mot de passe mais se reconnecter
+            //if (eleve == null) {
+            if (eleve.getTypeSouhait() == null) {
                 returned = choixVueConnexion(nom, prenom, numscei);
             }else{
                 returned = ApplicationTools.getModel("relogin", null);

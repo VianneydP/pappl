@@ -130,9 +130,31 @@
                         <th scope="col"><fmt:message key="message.typeSouhait" bundle="${ressourcesBundle}"/></th>
                         <td>
                           <select name="typeSouhait">
-                            <c:forEach var="itemIter" items="${typeSouhaitList}">
+                              <!-- Menu déroulant qui ne fonctionne pas  
+                              <c:forEach var="itemIter" items="${typeSouhaitList}">
                               <option value="${itemIter.typeSouhait}" <c:if test="${itemIter.typeSouhait eq item.typeSouhait}">selected</c:if>>${itemIter.typeSouhait}</option>
-                            </c:forEach>
+                            </c:forEach> -->
+                            <!-- Cases à cochées qui fonctionnent-->
+                            <div class="col-5">
+                                  <div class="d-block my-3">
+                                      <div class="custom-control custom-radio">
+                                          <input id="choix1" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Seul">
+                                          <label class="custom-control-label" for="choix1"><fmt:message key="message.questionnaireChoix1" bundle="${ressourcesBundle}"/></label>
+                                      </div>
+                                      <div class="custom-control custom-radio">
+                                          <input id="choix2" name="typeSouhait" type="radio" class="custom-control-input" required="" value="SeulOuColoc">
+                                          <label class="custom-control-label" for="choix2"><fmt:message key="message.questionnaireChoix2" bundle="${ressourcesBundle}"/></label>
+                                      </div>
+                                      <div class="custom-control custom-radio">
+                                          <input id="choix3" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Coloc">
+                                          <label class="custom-control-label" for="choix3"><fmt:message key="message.questionnaireChoix3" bundle="${ressourcesBundle}"/></label>
+                                      </div>
+                                      <div class="custom-control custom-radio">
+                                          <input id="choix4" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Indifferent">
+                                          <label class="custom-control-label" for="choix4"><fmt:message key="message.questionnaireChoix4" bundle="${ressourcesBundle}"/></label>
+                                      </div>
+                                  </div>
+                              </div>
                           </select>
                         </td>
                       </tr>
