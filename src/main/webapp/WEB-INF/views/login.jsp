@@ -46,7 +46,7 @@
             <c:if test="${nonReco}">
                 <p style="color :red"><strong><fmt:message key="message.nonReco" bundle="${ressourcesBundle}"/></strong></p>
             </c:if>
-            <button type="submit" class="btn btn-primary"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
+            <button type="submit" class="btn btn-primary"><fmt:message key="button.inscription" bundle="${ressourcesBundle}"/></button>
           </form>
         </div>
       </div>
