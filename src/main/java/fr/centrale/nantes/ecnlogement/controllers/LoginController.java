@@ -161,14 +161,13 @@ public class LoginController {
                 String savedPassword = person.getPersonnePassword();
                 if ((user == null) && (savedPassword != null) && (!savedPassword.isEmpty()) && (ApplicationTools.checkPassword(pass, savedPassword))) {
                     if (person.getRoleId().getRoleId()==Role.ROLEASSIST || person.getRoleId().getRoleId()==Role.ROLEADMIN){
-                        Collection<Connexion> coRep=connexionRepository.findAll();
                         boolean flag=connexionRepository.checkUnicity(person);
                         if (flag==true){
                             user = connexionRepository.create(person);
                         } else {
                             int numEssai = ApplicationTools.getIntFromRequest(request, "numEssai");
                             if (numEssai==3){
-                                 connexionRepository.deleteByPerson(person);
+                                connexionRepository.deleteByPerson(person);
                                 user = connexionRepository.create(person);
                             }else{
                                 returned = ApplicationTools.getModel("loginAdmin",null);
@@ -181,8 +180,7 @@ public class LoginController {
         }
         if (user!=null){
             returned=ApplicationTools.getModel("accueilAdmin", user);
-        }
-        else {
+        }if (user==null && returned==null){
             returned = ApplicationTools.getModel("loginAdmin",null);
         }
         
@@ -207,17 +205,30 @@ public class LoginController {
         String mdp = ApplicationTools.getStringFromRequest(request, "password");
         Connexion user = null;
         if ((identifiant != null) && (mdp != null) && (!identifiant.isEmpty()) && (!mdp.isEmpty())) {
-            Personne pers = personneRepository.getByPersonneLogin(identifiant);
-            if (pers != null && checkPassword(mdp, pers.getPersonnePassword())) {
-                user = connexionRepository.create(pers);
-                Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
-                returned = choixVueReconnexion(user, eleve, pers);
+            Personne person = personneRepository.getByPersonneLogin(identifiant);
+            if (person != null && checkPassword(mdp, person.getPersonnePassword())) {
+                if (connexionRepository.checkUnicity(person)){
+                    user = connexionRepository.create(person);
+                    Eleve eleve=eleveRepository.getByPersonneId(person.getPersonneId());
+                    returned = choixVueReconnexion(user, eleve, person);
+                } else {
+                    int numEssai = ApplicationTools.getIntFromRequest(request, "numEssai");
+                    if (numEssai==3){
+                        connexionRepository.deleteByPerson(person);
+                        user = connexionRepository.create(person);
+                        Eleve eleve=eleveRepository.getByPersonneId(person.getPersonneId());
+                        returned = choixVueReconnexion(user, eleve, person);
+                    }else{
+                        returned = ApplicationTools.getModel("relogin",null);
+                        returned.addObject("loginForce", true);
+                    }
+                }
             }else{
                 returned=ApplicationTools.getModel("relogin", null);
                 returned.addObject("mdpErrone", true);
             }
         }else{
-            returned=ApplicationTools.getModel("reconnect", null);
+            returned=ApplicationTools.getModel("relogin", null);
         }
         return returned;
     }
@@ -236,12 +247,17 @@ public class LoginController {
                 String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
                 returned.addObject("dateDebut", dateDeb);
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
-            returned = ApplicationTools.getModel("questionnaire", user);
-            //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
-            Collection<Commune> maListe=communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune"));
-            returned.addObject("communeListe", maListe);
-            returned.addObject("eleve", eleve);
-            returned.addObject("personne", pers);
+            if (eleve.getEleveNumtel()==null){
+                returned = ApplicationTools.getModel("questionnaire", user);
+                Collection<Commune> maListe=communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune"));
+                returned.addObject("communeListe", maListe);
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
+            }else{
+                returned = ApplicationTools.getModel("questionnaireReco", user);
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
+            }
         } if (now.after(adminDates.getDatesFin()) && now.before(adminDates.getDatesResultats())){
             returned = ApplicationTools.getModel("attenteResultat", null);
             SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));

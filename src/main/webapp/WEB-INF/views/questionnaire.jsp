@@ -286,7 +286,7 @@
 
                             <div id="franceFields" style="display: none;">
                                 <div class="form-group row">
-                                    <label for="inputcodepostalh" class="col-2 col-form-label d-none d-md-block"><fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
+                                    <label for="inputcodepostalh" class="col-2 col-form-label d-none d-md-block">Département<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
                                         <div class="col-10">
                                             <input type="number" class="form-control" id="inputcodepostalh" style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
                                         </div>
@@ -390,7 +390,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                        <div class="col-5"><fmt:message key="message.questionnaireColoc" bundle="${ressourcesBundle}"/></div>       
+                                <div class="col-5"><fmt:message key="message.questionnaireColoc" bundle="${ressourcesBundle}"/></div>       
                             </div>
                             <div class="form-group row">
                                 <label for="inputinfosuph" class="col-2 col-form-label"><fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/></label>
@@ -447,6 +447,26 @@
                 document.getElementById('fileInput').removeAttribute('required');
             }
         });
+        
+        document.getElementById('inputcodepostalh').onchange = function() {
+            var selectedDepartement = this.value; // Valeur du département sélectionné
+
+            // Filtrer la liste des communes pour ne garder que celles du département sélectionné
+            var filteredCommunes = ${communeListe}.filter(function(commune) {
+                return commune.codeInsee.substring(0,2) === selectedDepartement;
+            });
+
+            // Mettre à jour les options de la liste déroulante avec les communes filtrées
+            var selectElement = document.getElementById('inputvilleh');
+            selectElement.innerHTML = ''; // Effacer les anciennes options
+
+            filteredCommunes.forEach(function(commune) {
+                var option = document.createElement('option');
+                option.value = commune.nomCommune;
+                option.textContent = commune.nomCommune;
+                selectElement.appendChild(option);
+            });
+        };
     </script>
     </body>
 </html>

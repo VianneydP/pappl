@@ -42,6 +42,10 @@
             <c:if test="${mdpErrone}">
                 <p style="color :red"><strong><fmt:message key="message.mdpErrone" bundle="${ressourcesBundle}"/></strong></p>
             </c:if>
+            <c:if test="${! empty loginForce}">
+                <p style="color :red"><strong><fmt:message key="message.loginForce" bundle="${ressourcesBundle}"/></strong></p>
+                <input type="hidden" name="numEssai" value="3" />
+            </c:if>
             <button type="submit" class="btn btn-primary"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
           </form>
         </div>
