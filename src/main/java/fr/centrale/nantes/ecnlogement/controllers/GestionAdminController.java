@@ -14,12 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import fr.centrale.nantes.ecnlogement.repositories.ConnexionRepository;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
 import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
-import fr.centrale.nantes.ecnlogement.items.Connexion;
-import fr.centrale.nantes.ecnlogement.items.Dates;
-import fr.centrale.nantes.ecnlogement.items.Eleve;
-
-import fr.centrale.nantes.ecnlogement.items.Personne;
-import fr.centrale.nantes.ecnlogement.items.Role;
+import fr.centrale.nantes.ecnlogement.repositories.TexteRepository;
+import fr.centrale.nantes.ecnlogement.items.*;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
@@ -56,7 +52,7 @@ public class GestionAdminController {
     private LogementRepository logementRepository;
     
     @Autowired
-    private TypeAppartRepository typeAppartRepository;
+    private TexteRepository texteRepository;
     
     @RequestMapping(value = "afficheDates.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTGestionAdmin(HttpServletRequest request) {
@@ -272,6 +268,61 @@ public class GestionAdminController {
             }
             // Return to the list
             returned = handleAssistList(user);
+        }
+        return returned;
+    }
+    
+    @RequestMapping(value = "gestionTextes.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTGestionTextes(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            returned = ApplicationTools.getModel("TexteList", user);
+            Collection<Texte> maListe=texteRepository.findAll(Sort.by(Sort.Direction.ASC, "texteNom"));
+            returned.addObject("itemList", maListe);
+        }
+        return returned;
+    }
+    
+    @RequestMapping(value="TexteEdit.do", method=RequestMethod.POST)
+    public ModelAndView handlePOSTTexteEdit(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            // Retreive item (null if not created)
+            Texte item = texteRepository.getByTexteNom(ApplicationTools.getStringFromRequest(request, "texteNom"));
+            returned = ApplicationTools.getModel("TexteEdit", user);
+            if (item!=null){
+                // Envoi de l'item pour modification
+                returned.addObject("item", item);
+            }
+        }
+        return returned;
+    }
+    
+    @RequestMapping(value="TexteSave.do", method=RequestMethod.POST)
+    public ModelAndView handlePOSTTexteSave(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            // Get item to save request
+            // Retreive item (null if not created)
+            Texte item = texteRepository.getByTexteNom(ApplicationTools.getStringFromRequest(request, "texteNom"));
+            Texte dataToSave = new Texte();
+            // Retreive values from request
+            dataToSave.setTexteNom(item.getTexteNom());
+            dataToSave.setTexteContenu(ApplicationTools.getStringFromRequest(request,"texteContenu"));
+            texteRepository.update(item.getTexteNom(), dataToSave);
+            // Return to the list
+            returned = ApplicationTools.getModel("TexteList", user);
+            Collection<Texte> maListe=texteRepository.findAll(Sort.by(Sort.Direction.ASC, "texteNom"));
+            returned.addObject("itemList", maListe);
         }
         return returned;
     }

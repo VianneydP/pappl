@@ -16,13 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import fr.centrale.nantes.ecnlogement.repositories.ConnexionRepository;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
-import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
-import fr.centrale.nantes.ecnlogement.items.Connexion;
-import fr.centrale.nantes.ecnlogement.items.Eleve;
-import fr.centrale.nantes.ecnlogement.items.Commune;
-import fr.centrale.nantes.ecnlogement.items.Personne;
-import fr.centrale.nantes.ecnlogement.items.Role;
-import fr.centrale.nantes.ecnlogement.items.Dates;
+import fr.centrale.nantes.ecnlogement.repositories.TexteRepository;
+import fr.centrale.nantes.ecnlogement.items.*;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
@@ -53,7 +48,7 @@ public class LoginController {
     private EleveRepository eleveRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private TexteRepository texteRepository;
     
     @Autowired
     private DatesRepository datesRepository;
@@ -70,6 +65,8 @@ public class LoginController {
     @RequestMapping(value = "index.do")
     public ModelAndView handleIndex(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("accueil", null);
+        Texte texte=texteRepository.getByTexteNom("Page d'accueil élève");
+        returned.addObject("texte",texte);
         return returned;
     }
     
@@ -133,6 +130,8 @@ public class LoginController {
                 SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
                 String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
                 returned.addObject("dateDebut", dateDeb);
+                Texte texte=texteRepository.getByTexteNom("Attente ouverture du formulaire");
+                returned.addObject("texte",texte);
             } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
                 Eleve eleve =eleveRepository.getByPersonNomPrenomNumscei(nom,prenom,numscei);
                 Connexion user = connexionRepository.create(eleve.getPersonne());
@@ -145,6 +144,8 @@ public class LoginController {
             }
         }else{
             returned = ApplicationTools.getModel("preouverture",null);
+            Texte texte=texteRepository.getByTexteNom("Attente ouverture du formulaire");
+            returned.addObject("texte",texte);
         }
         return returned;
     }
@@ -195,6 +196,8 @@ public class LoginController {
             user = null;
         }
         ModelAndView returned = ApplicationTools.getModel("accueil", user);
+        Texte texte=texteRepository.getByTexteNom("Page d'accueil élève");
+        returned.addObject("texte",texte);
         return returned;
     }
     
@@ -244,8 +247,10 @@ public class LoginController {
         if (now.before(adminDates.getDatesDebut())){
             returned = ApplicationTools.getModel("preouverture",null);
             SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
-                String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
-                returned.addObject("dateDebut", dateDeb);
+            String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
+            returned.addObject("dateDebut", dateDeb);
+            Texte texte=texteRepository.getByTexteNom("Attente ouverture du formulaire");
+            returned.addObject("texte",texte);
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
             if (eleve.getEleveNumtel()==null){
                 returned = ApplicationTools.getModel("questionnaire", user);
@@ -253,16 +258,26 @@ public class LoginController {
                 returned.addObject("communeListe", maListe);
                 returned.addObject("eleve", eleve);
                 returned.addObject("personne", pers);
+                Texte texte=texteRepository.getByTexteNom("En-tête du formulaire");
+                returned.addObject("texte",texte);
+                Texte texteContact=texteRepository.getByTexteNom("Renvoi vers le contact");
+                returned.addObject("texteContact",texteContact);
             }else{
                 returned = ApplicationTools.getModel("questionnaireReco", user);
                 returned.addObject("eleve", eleve);
                 returned.addObject("personne", pers);
+                Texte texte=texteRepository.getByTexteNom("En-tête du formulaire reconnexion");
+                returned.addObject("texte",texte);
+                Texte texteContact=texteRepository.getByTexteNom("Renvoi vers le contact");
+                returned.addObject("texteContact",texteContact);
             }
         } if (now.after(adminDates.getDatesFin()) && now.before(adminDates.getDatesResultats())){
             returned = ApplicationTools.getModel("attenteResultat", null);
             SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
             String dateRes=dateFormat1.format(adminDates.getDatesResultats());
             returned.addObject("dateResultats", dateRes);
+            Texte texte=texteRepository.getByTexteNom("Attente des résultats");
+            returned.addObject("texte",texte);
         } if (now.after(adminDates.getDatesResultats())){
             returned = ApplicationTools.getModel("resultat", user);
         }        

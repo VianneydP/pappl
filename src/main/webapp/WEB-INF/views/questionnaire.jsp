@@ -55,7 +55,7 @@
             <div class="container md-10 justify-content-center">
                 <h1>Formulaire</h1>
                 <br>
-                <h5>Veuillez remplir les informations ci-dessous pour enregistrer votre demande de pré-réservation d'un logement dans la résidence de l'école. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h5>
+                <h5>${texte.texteContenu}</h5>
                 <br>
                     <div class="col-md-12">
                         <form id="c_form-h" class="" action="EleveSave.do" method="POST" enctype="multipart/form-data">
@@ -393,7 +393,7 @@
                             <br>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5 class="">Pour toute information ou problème, merci de contacter le [numéro permanence logement]</h5>
+                                    <h5 class="">${texteContact.texteContenu}</h5>
                                 </div>
                             </div>
                         </form>

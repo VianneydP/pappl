@@ -251,7 +251,6 @@ public class EleveController {
             //Vérification (création si besoin) du dossier pour les notifs de bourse
             //Exportation des fichiers
             File notif=ApplicationTools.getFileFromRequest(request,"eleveFile");
-            String filename=notif.getName();
             String targetDirectory = request.getServletContext().getRealPath("televersements");
             Path path = Paths.get(targetDirectory);
             if (!Files.exists(path)) {

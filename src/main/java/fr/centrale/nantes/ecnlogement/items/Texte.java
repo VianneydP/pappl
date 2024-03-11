@@ -33,7 +33,7 @@ public class Texte implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 32)
+    @Size(min = 1, max = 64)
     @Column(name = "texte_nom")
     private String texteNom;
     @Basic(optional = false)

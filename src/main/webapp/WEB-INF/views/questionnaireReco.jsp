@@ -27,9 +27,9 @@
     <%@ include file="header.jspf" %>
     <div class="py-5">
       <div class="container col-md-10">
-        <h1><fmt:message key="message.formulaire" bundle="${ressourcesBundle}"/></h1>
+        <h3><fmt:message key="message.formulaire" bundle="${ressourcesBundle}"/></h3>
         <br>
-        <h5><fmt:message key="message.messageFormulaireReco" bundle="${ressourcesBundle}"/></h5>
+        <h5>${texte.texteContenu}</h5>
         <div class="row">
           <div class="col-md-12">
             <form method="POST">
@@ -148,6 +148,11 @@
                 </table>
               </div>
             </form>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="">${texteContact.texteContenu}</h5>
+                </div>
+            </div>
           </div>
         </div>
       </div>

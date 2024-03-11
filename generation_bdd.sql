@@ -1,5 +1,5 @@
 CREATE TABLE public.texte (
-                texte_nom VARCHAR(32) NOT NULL,
+                texte_nom VARCHAR(64) NOT NULL,
                 texte_contenu VARCHAR(2048) NOT NULL,
                 CONSTRAINT texte_pk PRIMARY KEY (texte_nom)
 );
