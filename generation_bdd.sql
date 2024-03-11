@@ -1,14 +1,15 @@
-
-CREATE SEQUENCE public.role_role_id_seq;
+CREATE TABLE public.texte (
+                texte_nom VARCHAR(32) NOT NULL,
+                texte_contenu VARCHAR(2048) NOT NULL,
+                CONSTRAINT texte_pk PRIMARY KEY (texte_nom)
+);
 
 CREATE TABLE public.role (
-                role_id INTEGER NOT NULL DEFAULT nextval('public.role_role_id_seq'),
+                role_id INTEGER NOT NULL,
                 role_nom VARCHAR(32) NOT NULL,
                 CONSTRAINT role_pk PRIMARY KEY (role_id)
 );
 
-
-ALTER SEQUENCE public.role_role_id_seq OWNED BY public.role.role_id;
 
 CREATE SEQUENCE public.personne_personne_id_seq;
 

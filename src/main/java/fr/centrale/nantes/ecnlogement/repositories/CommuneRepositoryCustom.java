@@ -52,5 +52,5 @@ public interface CommuneRepositoryCustom {
     
     public Double distNantesCommune(String codeCommune);
     
-    public Commune getByCodePostalNom(Integer codePostal,String nom);
+    public Commune getByDepNom(String dep,String nom);
 }

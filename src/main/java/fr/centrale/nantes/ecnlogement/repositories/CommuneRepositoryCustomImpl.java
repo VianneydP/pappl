@@ -85,15 +85,13 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
           return null;
     }
     @Override
-    public Commune getByCodePostalNom(Integer codePostal,String nom) {
+    public Commune getByDepNom(String dep,String nom) {
         Collection<Commune> result = repository.findByNomCommune(nom);
         for (Commune co:result){
             int cp_form=co.getCodePostal();
             String dep_form=Integer.toString(cp_form);
             dep_form=dep_form.substring(0, 2);
-            String dep_begin=Integer.toString(codePostal);
-            dep_begin=dep_begin.substring(0, 2);
-            if (dep_form.equalsIgnoreCase(dep_begin)){
+            if (dep_form.equalsIgnoreCase(dep)){
                 return co;
             }
         }

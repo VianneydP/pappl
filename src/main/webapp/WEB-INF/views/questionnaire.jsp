@@ -294,7 +294,7 @@
                                 <div class="form-group row">
                                     <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
                                     <div class="col-10">
-                                        <select id="inputvilleh" name="eleveVillehab" required style="width: 200px;">
+                                        <select id="inputvilleh" name="eleveVillehabFr" required style="width: 200px;">
                                             <c:forEach var="item" items="${communeListe}">
                                                 <option value="${item.nomCommune}">${item.nomCommune}</option>
                                             </c:forEach>
@@ -334,20 +334,7 @@
                                     <label for="fileInput"><fmt:message key="message.questionnaireNotif2" bundle="${ressourcesBundle}"/></label>
                                 </div>
                             </div>
-                           
-                            <div class="form-group row"> 
-                                <label for="inputpmrh" class="col-2 col-form-label"><fmt:message key="message.elevePMR" bundle="${ressourcesBundle}"/></label>
-                                <div class="col-10">
-                                    <div class="d-block my-3">
-                                        <div class="custom-control custom-radio">
-                                            <input id="inputpmrnon" name="elevePMR" type="radio" class="custom-control-input" required="" value="false"> <label class="custom-control-label" for="inputpmrnon">Non</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input id="inputpmroui" name="elevePMR" type="radio" class="custom-control-input" required="" value="true"> <label class="custom-control-label" for="inputpmroui">Oui</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        
                             <div class="form-group row"> 
                                 <label for="inputgenre" class="col-2 col-form-label"><fmt:message key="message.questionnaireGenre" bundle="${ressourcesBundle}"/></label>
                                 <div class="col-10">
@@ -393,7 +380,7 @@
                                 <div class="col-5"><fmt:message key="message.questionnaireColoc" bundle="${ressourcesBundle}"/></div>       
                             </div>
                             <div class="form-group row">
-                                <label for="inputinfosuph" class="col-2 col-form-label"><fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/></label>
+                                <label for="inputinfosuph" class="col-2 col-form-label"><fmt:message key="message.eleveInfosup" bundle="${ressourcesBundle}"/></label>
                                 <div class="col-10">
                                     <input type="text" class="form-control" id="inputinfosuph" placeholder="<fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/>" name="eleveInfosup"></div>
                             </div>
@@ -448,25 +435,7 @@
             }
         });
         
-        document.getElementById('inputcodepostalh').onchange = function() {
-            var selectedDepartement = this.value; // Valeur du département sélectionné
-
-            // Filtrer la liste des communes pour ne garder que celles du département sélectionné
-            var filteredCommunes = ${communeListe}.filter(function(commune) {
-                return commune.codeInsee.substring(0,2) === selectedDepartement;
-            });
-
-            // Mettre à jour les options de la liste déroulante avec les communes filtrées
-            var selectElement = document.getElementById('inputvilleh');
-            selectElement.innerHTML = ''; // Effacer les anciennes options
-
-            filteredCommunes.forEach(function(commune) {
-                var option = document.createElement('option');
-                option.value = commune.nomCommune;
-                option.textContent = commune.nomCommune;
-                selectElement.appendChild(option);
-            });
-        };
+        
     </script>
     </body>
 </html>

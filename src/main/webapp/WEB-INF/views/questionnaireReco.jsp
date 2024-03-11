@@ -13,6 +13,7 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+  <a href="questionnaireReco.jsp"></a>
     <script type="text/javascript" src="js/jquery-3.6.1.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Local -->
@@ -23,7 +24,7 @@
   </head>
 
   <body>
-    <%@ include file="headerAdmin.jspf" %>
+    <%@ include file="header.jspf" %>
     <div class="py-5">
       <div class="container col-md-10">
         <h1><fmt:message key="message.formulaire" bundle="${ressourcesBundle}"/></h1>
@@ -34,9 +35,13 @@
             <form method="POST">
               <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
               <input type="hidden" name="eleveId" value="${eleve.eleveId}" />
-              <input type="hidden" name="field" value="Eleve" />
+              <input type="hidden" name="personneId" value="${personne.personneId}" />
               <div class="table-responsive">
                 <table class="table table-striped table-sm ">
+                    <colgroup>
+                        <col style="width: 25%">
+                        <col style="width: 75%">
+                    </colgroup>
                   <tbody>
                     <tr>
                       <th scope="col"><fmt:message key="message.personneNom" bundle="${ressourcesBundle}"/></th>
@@ -80,10 +85,10 @@
                             <div class="col-10">
                                 <div class="d-block my-3">
                                     <div class="custom-control custom-radio">
-                                        <input id="inputboursiernon" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="false"> <label class="custom-control-label" for="inputboursiernon">Non</label>
+                                        <input id="inputboursiernon" name="eleveBoursier" type="radio" class="custom-control-input"  value="false"> <label class="custom-control-label" for="inputboursiernon">Non</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input id="inputboursieroui" name="eleveBoursier" type="radio" class="custom-control-input" required="" value="true"> <label class="custom-control-label" for="inputboursieroui">Oui</label>
+                                        <input id="inputboursieroui" name="eleveBoursier" type="radio" class="custom-control-input" value="true"> <label class="custom-control-label" for="inputboursieroui">Oui</label>
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +97,7 @@
                     <tr>
                         <th scope="col"><fmt:message key="message.questionnaireNotif" bundle="${ressourcesBundle}"/></th>
                         <td>
-                            <div id="scholarshipCertificate" class="col-12" style="display: none;">
+                            <div id="scholarshipCertificate" style="display: none;">
                                 <input type="file" id="fileInput" name="eleveFile" accept=".pdf">
                                 <label for="fileInput"><fmt:message key="message.questionnaireNotif2" bundle="${ressourcesBundle}"/></label>
                             </div>
@@ -103,19 +108,19 @@
                         <td>
                             <div class="d-block">
                                 <div class="custom-control custom-radio">
-                                    <input id="choix1" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Seul">
+                                    <input id="choix1" name="typeSouhait" type="radio" class="custom-control-input" value="Seul">
                                     <label class="custom-control-label" for="choix1"><fmt:message key="message.questionnaireChoix1" bundle="${ressourcesBundle}"/></label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="choix2" name="typeSouhait" type="radio" class="custom-control-input" required="" value="SeulOuColoc">
+                                    <input id="choix2" name="typeSouhait" type="radio" class="custom-control-input" value="SeulOuColoc">
                                     <label class="custom-control-label" for="choix2"><fmt:message key="message.questionnaireChoix2" bundle="${ressourcesBundle}"/></label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="choix3" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Coloc">
+                                    <input id="choix3" name="typeSouhait" type="radio" class="custom-control-input" value="Coloc">
                                     <label class="custom-control-label" for="choix3"><fmt:message key="message.questionnaireChoix3" bundle="${ressourcesBundle}"/></label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="choix4" name="typeSouhait" type="radio" class="custom-control-input" required="" value="Indifferent">
+                                    <input id="choix4" name="typeSouhait" type="radio" class="custom-control-input" value="Indifferent">
                                     <label class="custom-control-label" for="choix4"><fmt:message key="message.questionnaireChoix4" bundle="${ressourcesBundle}"/></label>
                                 </div>
                             </div>
@@ -136,7 +141,7 @@
                     <tr id="save">
                       <th scope="col"></th>
                       <td class="text-center">
-                        <button type="submit" formaction="EleveEdit.do" class="btn btn-primary"><fmt:message key="button.save" bundle="${ressourcesBundle}"/></button>
+                        <button type="submit" formaction="EleveResave.do" class="btn btn-primary"><fmt:message key="button.save" bundle="${ressourcesBundle}"/></button>
                       </td>
                     </tr>
                   </tfoot>
