@@ -29,17 +29,17 @@
     <%@ include file="headerAdmin.jspf" %>
   <div class="py-5">
     <div class="container">
-      <div class="row mb-4">
-        <div class="col-md-4 d-flex justify-content-center">
+      <div class="row mb-4"> <!-- Une ligne, on met deux boutons et les desctiptions associées sur chaque ligne -->
+        <div class="col-md-4 d-flex justify-content-center"> <!-- Premier texte descriptif -->
             <h5 class=""><fmt:message key="message.datesml" bundle="${ressourcesBundle}"/></h5>
         </div>
-        <div class="col-md-2 d-flex justify-content-center">
+        <div class="col-md-2 d-flex justify-content-center"> <!-- Bouton associé -->
             <form id="c_form-h" class="" action="afficheDates.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                 <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
                     <fmt:message key="button.datesml" bundle="${ressourcesBundle}"/></button>
             </form>
-        </div>
+        </div><!-- Fin bouton -->
         <div class="col-md-4 d-flex justify-content-center">
             <h5 class=""><fmt:message key="message.logementListe" bundle="${ressourcesBundle}"/></h5>
         </div>
@@ -51,7 +51,7 @@
                         <fmt:message key="button.logementList" bundle="${ressourcesBundle}"/></button>
             </form>
         </div>
-      </div>
+      </div> <!-- Fin première ligne (structure identique après -->
       <div class="row mb-4">
         <div class="col-md-4 d-flex justify-content-center">
             <h5 class=""><fmt:message key="message.gestionAssistants" bundle="${ressourcesBundle}"/></h5>
@@ -75,8 +75,7 @@
             </form>
         </div>
       </div>
-      <div class="row mb-4">
-        <div class="col-md-6 d-flex justify-content-center">
+      <div class="row mb-4">   
         <div class="col-md-4 d-flex justify-content-center">
             <h5 class=""><fmt:message key="message.importBDDCommunes" bundle="${ressourcesBundle}"/></h5>
         </div>
@@ -86,8 +85,8 @@
                 <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
                     <fmt:message key="button.createDefaultCommune" bundle="${ressourcesBundle}"/></button>
             </form>
-        </div>
-			<div class="col-md-6 d-flex justify-content-center">
+        </div>    
+	
             <div class="col-md-4 d-flex justify-content-center">
                 <h5 class=""><fmt:message key="message.importAdmin" bundle="${ressourcesBundle}"/></h5>
             </div>
@@ -98,24 +97,28 @@
                         <fmt:message key="button.importAdmin" bundle="${ressourcesBundle}"/>
                     </button>
             </form>
-		</div>
-          </div>
+            </div>   
       </div>
       <div class="row mb-4">
-          <div class="col-md-6 d-flex justify-content-center">
+            <div class="col-md-4 d-flex justify-content-center">
+                <h5 class=""><fmt:message key="message.gestionTextes" bundle="${ressourcesBundle}"/></h5>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center">
             <form id="c_form-h" class="" action="gestionTextes.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                 <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
                     <fmt:message key="button.gestionTextes" bundle="${ressourcesBundle}"/></button>
             </form>
+            </div> 
+          <%--utilisable pour un bouton et son texte 
+          div class="col-md-4 d-flex justify-content-center"> <!-- Pour mettre le texte descriptif -->
+            <h5 class=""><fmt:message key="message.importBDDCommunes" bundle="${ressourcesBundle}"/></h5> 
           </div>
-          <%--utilisable
-          <div class="col-md-6 d-flex justify-content-center">
-            <form id="c_form-h" class="" action="pageImport.do" method="POST">
+          <div class="col-md-2 d-flex justify-content-center"> <!-- Bouton associé -->
+            <form id="c_form-h" class="" action="createDefaultCommune.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                    <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
-                        <fmt:message key="button.importAdmin" bundle="${ressourcesBundle}"/>
-                    </button>
+                <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
+                    <fmt:message key="button.createDefaultCommune" bundle="${ressourcesBundle}"/></button>
             </form>
           </div>--%>
       </div>
