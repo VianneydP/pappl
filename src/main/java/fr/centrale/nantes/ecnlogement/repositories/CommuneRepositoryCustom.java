@@ -50,7 +50,18 @@ public interface CommuneRepositoryCustom {
      */
     public Commune getByCodeCommune(String codeCommune);
     
+    /**
+     * Méthode pour donner la distance d'une ville par rapport à Nantes
+     * @param codeCommune Ville dont on calcule la distance à Nantes
+     * @return Distance obtenue
+     */
     public Double distNantesCommune(String codeCommune);
     
+    /**
+     * Getter pour obtenir un objet COmmune à partir du département et du nom
+     * @param dep Département
+     * @param nom Nom de la commune
+     * @return codeCommune Identifiant de la commune
+     */
     public Commune getByDepNom(String dep,String nom);
 }

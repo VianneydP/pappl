@@ -36,13 +36,23 @@ public class RoleController {
     @Autowired
     private ConnexionRepository connexionRepository;
     
+    /**
+     * Méthode des controllers pour consituer la vue RoleList
+     * @param user Connexion utilisée
+     * @return Vue RoleList
+     */
     private ModelAndView handleRoleList(Connexion user) {
         String modelName = "RoleList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
         returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "roleId")));
         return returned;
     }
-
+    
+    /**
+     * Controller pour afficher les roles (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue RoleList
+     */
     @RequestMapping(value="RoleList.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTRoleList(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -54,7 +64,12 @@ public class RoleController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour modifier un role (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue RoleEdit
+     */
     @RequestMapping(value="RoleEdit.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTRoleEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -73,7 +88,12 @@ public class RoleController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour créer un role (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue RoleEdit
+     */
     @RequestMapping(value="RoleCreate.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTRoleCreate(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -89,7 +109,12 @@ public class RoleController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour supprimer un role (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue RoleList
+     */
     @RequestMapping(value="RoleRemove.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTRoleRemove(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -109,7 +134,12 @@ public class RoleController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour enregistrer un role (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue RoleList
+     */
     @RequestMapping(value="RoleSave.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTRoleSave(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -138,7 +168,12 @@ public class RoleController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour importer un role (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue RoleList
+     */
     @RequestMapping(value="RoleImport.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTRoleImport(HttpServletRequest request) {
         ModelAndView returned = null;

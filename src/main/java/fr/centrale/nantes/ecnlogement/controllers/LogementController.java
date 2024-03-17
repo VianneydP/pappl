@@ -74,7 +74,11 @@ public class LogementController {
     @Autowired
     private EleveRepository eleveRepository;
 
-
+    /**
+     * Méthode des controllers pour consituer la vue LogementList
+     * @param user Connexion utilisée
+     * @return Vue LogementList
+     */
     private ModelAndView handleLogementList(Connexion user) {
         String modelName = "LogementList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
@@ -82,7 +86,12 @@ public class LogementController {
         returned.addObject("itemList", maListe);
         return returned;
     }
-
+    
+    /**
+     * Controller lié à l'affichage des logements et à l'import du fichier Rez
+     * @param request Requête HTTP
+     * @return Vue LogementList
+     */
     @RequestMapping(value="LogementList.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTLogementList(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -145,7 +154,12 @@ public class LogementController {
         }   
         return returned;
     }
-
+    
+    /**
+     * Controller lié à la modification d'un logement (inutlisé)
+     * @param request Requête HTTP
+     * @return Vue LogementEdit
+     */
     @RequestMapping(value="LogementEdit.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTLogementEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -165,7 +179,12 @@ public class LogementController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller lié à la création d'un logement (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue LogementEdit
+     */
     @RequestMapping(value="LogementCreate.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTLogementCreate(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -182,7 +201,12 @@ public class LogementController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller lié à la suppression d'un logement (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue LogementList
+     */
     @RequestMapping(value="LogementRemove.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTLogementRemove(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -202,7 +226,12 @@ public class LogementController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller lié à la sauvagarde des modification d'un logement (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue LogementList
+     */
     @RequestMapping(value="LogementSave.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTLogementSave(HttpServletRequest request) {
         ModelAndView returned = null;

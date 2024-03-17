@@ -924,32 +924,12 @@ public class ApplicationTools {
 
         return name;
     }
-    
-    public static String correctString(String text){
-        String returned=text.replace("à", "a");
-        returned=returned.replace("é", "e");
-        returned=returned.replace("è", "e");
-        returned=returned.replace("ê", "e");
-        returned=returned.replace("ë", "e");
-        returned=returned.replace("ù", "u");
-        returned=returned.replace("ç", "c");
-        returned=returned.replace("â", "a");
-        returned=returned.replace("î", "i");
-        returned=returned.replace("ï", "i");
-        returned=returned.replace("ô", "o");
-        returned=returned.replace("û", "u");
-        returned=returned.replace("ï", "u");
-        returned=returned.replace("ñ", "n");
-        returned=returned.replace("ç", "c");
-        returned=returned.replace("-", " ");
-        returned =returned.replace("'", " ");
-        returned =returned.replace("<", " ");
-        returned =returned.replace(">", " ");
-        returned =returned.replace("Saint", "St");
-        returned =returned.toUpperCase();
-        return returned;
-    }
-    
+   
+    /**
+     * Méthode pour normaliser une String
+     * @param input String à normaliser
+     * @return  String normalisée
+     */
     public static String removeAccentsAndSpecialCharacters(String input) {
         // Suppression des accents
         String normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
@@ -967,5 +947,16 @@ public class ApplicationTools {
         result =result.replaceAll("\\p{C}", "").toUpperCase();
         return result;
     }
-        
+    
+    /**
+     * Méthode pour générer un nom unique de fichier
+     * @param input 
+     * @return 
+     */
+    public static String generateUniqueFileName(Path destination) {
+       //String fileExtension = destination.getFileName().substring(destination.getFileName().lastIndexOf("."));
+       //String fileExtension = getFileExtension(fileNameWithExtension);
+       //return System.currentTimeMillis() + "_" + destination.getFileName().toString()+fileExtension;
+       return System.currentTimeMillis() + "_" + destination.getFileName().toString();
+    }
 }

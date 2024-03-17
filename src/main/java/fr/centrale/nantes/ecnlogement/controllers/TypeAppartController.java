@@ -35,14 +35,24 @@ public class TypeAppartController {
 
     @Autowired
     private ConnexionRepository connexionRepository;
-
+    
+    /**
+     * Méthode des controllers pour consituer la vue TypeAppartList
+     * @param user Connexion utilisée
+     * @return Vue TypeAppartList
+     */
     private ModelAndView handleTypeAppartList(Connexion user) {
         String modelName = "TypeAppartList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
         returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "typeAppartNom")));
         return returned;
     }
-
+    
+    /**
+     * Controller pour afficher les typeAppart (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue TypeAppartList
+     */
     @RequestMapping(value="TypeAppartList.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTTypeAppartList(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -54,7 +64,12 @@ public class TypeAppartController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour modifier un typeAppart (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue TypeAppartList
+     */
     @RequestMapping(value="TypeAppartEdit.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTTypeAppartEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -73,7 +88,12 @@ public class TypeAppartController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour créer un typeAppart (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue TypeAppartList
+     */
     @RequestMapping(value="TypeAppartCreate.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTTypeAppartCreate(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -89,7 +109,12 @@ public class TypeAppartController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour supprimer un typeAppart (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue TypeAppartList
+     */
     @RequestMapping(value="TypeAppartRemove.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTTypeAppartRemove(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -109,7 +134,12 @@ public class TypeAppartController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour enregistrer un typeAppart (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue TypeAppartList
+     */
     @RequestMapping(value="TypeAppartSave.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTTypeAppartSave(HttpServletRequest request) {
         ModelAndView returned = null;

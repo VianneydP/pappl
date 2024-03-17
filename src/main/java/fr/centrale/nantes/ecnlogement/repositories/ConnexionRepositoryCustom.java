@@ -57,8 +57,17 @@ public interface ConnexionRepositoryCustom {
      */
     public void expand(Connexion item);
     
+    /**
+     * Check the unicity of the connection
+     * @param personne
+     * @return boolean 
+     */
     public boolean checkUnicity(Personne personne);
     
+    /**
+     * Supprimer une connexion à partir de la personne
+     * @param personne Personne dont on ssouhaite supprimer la connexion 
+     */
     public void deleteByPerson(Personne personne);
     
 }

@@ -81,6 +81,11 @@ public class EleveController {
     @Autowired
     private RoleRepository roleRepository;
 
+    /**
+     * Méthode des controllers pour consituer la vue EleveList
+     * @param user Connexion utilisée
+     * @return Vue EleveList
+     */
     private ModelAndView handleEleveList(Connexion user) {
         String modelName = "EleveList";
         ModelAndView returned = ApplicationTools.getModel(modelName, user);
@@ -88,7 +93,12 @@ public class EleveController {
         returned.addObject("itemList", maListe);
         return returned;
     }
-
+    
+    /**
+     * Controller lié au bouton "Visualiation" et à l'import du fichier SCEI
+     * @param request Requête HTTP
+     * @return Vue EleveList
+     */
     @RequestMapping(value = "EleveList.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveList(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -119,7 +129,7 @@ public class EleveController {
                     
                     //String newFileName ="fichierScei.csv";
                     
-                    String newFileName = "fichierScei"+generateUniqueFileName(path)+".csv";
+                    String newFileName = "fichierScei"+ApplicationTools.generateUniqueFileName(path)+".csv";
                     Path destinationWithUniqueName =path.resolve(newFileName);
                     
                     //Files.copy(fichierScei.toPath(), destinationWithUniqueName);
@@ -140,7 +150,12 @@ public class EleveController {
         }   
         return returned;
     }
-
+    
+    /**
+     * Controller lié au bouton de modification d'un élève sur la page EleveList
+     * @param request Requête HTTP
+     * @return Vue EleveEdit
+     */
     @RequestMapping(value = "EleveEdit.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -170,6 +185,11 @@ public class EleveController {
         return returned;
     }
     
+    /**
+     * Controller lié au bouton d'information d'un élève sur la page EleveList
+     * @param request Requête HTTP
+     * @return Vue EleveShow
+     */
     @RequestMapping(value = "EleveShow.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveShow(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -188,7 +208,12 @@ public class EleveController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller lié au bouton "New" de la page EleveList
+     * @param request Requête HTTP
+     * @return Vue EleveEdit
+     */
     @RequestMapping(value = "EleveCreate.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveCreate(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -207,7 +232,12 @@ public class EleveController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller lié au bouton de suppression de la page EleveList
+     * @param request Requête HTTP
+     * @return Vue EleveList
+     */
     @RequestMapping(value = "EleveRemove.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveRemove(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -228,14 +258,11 @@ public class EleveController {
         return returned;
     }
     
-    //Ajoute par moi
-    private static String generateUniqueFileName(Path destination) {
-        //String fileExtension = destination.getFileName().substring(destination.getFileName().lastIndexOf("."));
-        //String fileExtension = getFileExtension(fileNameWithExtension);
-        //return System.currentTimeMillis() + "_" + destination.getFileName().toString()+fileExtension;
-        return System.currentTimeMillis() + "_" + destination.getFileName().toString();
-    }
-
+    /**
+     * Controller lié à la première validation du formulaire par un élève
+     * @param request Requête HTTP
+     * @return Vue EleveList
+     */
     @RequestMapping(value = "EleveSave.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveSave(HttpServletRequest request) throws IOException {
         ModelAndView returned = null;
@@ -263,7 +290,7 @@ public class EleveController {
             if(ApplicationTools.getBooleanFromRequest(request, "eleveBoursier")){
                 Path destination = Paths.get(targetDirectory);
                 //Path destination = new File(targetDirectory).toPath();
-                String newFileName = item.getPersonne().getPersonneNom()+"_"+item.getPersonne().getPersonnePrenom()+"_bourse_"+generateUniqueFileName(destination)+".pdf";
+                String newFileName = item.getPersonne().getPersonneNom()+"_"+item.getPersonne().getPersonnePrenom()+"_bourse_"+ApplicationTools.generateUniqueFileName(destination)+".pdf";
                 Path destinationWithUniqueName =destination.resolve(newFileName);
                 Files.copy(notif.toPath(), destinationWithUniqueName);
             }
@@ -280,14 +307,14 @@ public class EleveController {
             if (!dataToSave.getGenre().equals(item.getGenre())){
                 infosupVE+="\n## GenreProb: SCEI="+item.getGenre()+"//Form="+dataToSave.getGenre();
             }
-            dataToSave.setElevePayshab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
+            dataToSave.setElevePayshab(ApplicationTools.removeAccentsAndSpecialCharacters(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
             if (!dataToSave.getElevePayshab().equalsIgnoreCase(item.getElevePayshab())){
                 infosupVE+="\n## PaysHabProb: SCEI="+item.getElevePayshab()+"//Form="+dataToSave.getElevePayshab();
             }
-            dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
+            dataToSave.setEleveVillehab(ApplicationTools.removeAccentsAndSpecialCharacters(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
             if (dataToSave.getElevePayshab().equalsIgnoreCase("france")){
                 dataToSave.setEleveCodepostal(ApplicationTools.getIntFromRequest(request, "eleveCodepostal"));
-                dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehabFr")));
+                dataToSave.setEleveVillehab(ApplicationTools.removeAccentsAndSpecialCharacters(ApplicationTools.getStringFromRequest(request, "eleveVillehabFr")));
                 int cp_form=dataToSave.getEleveCodepostal();
                 String dep_form=Integer.toString(cp_form);
                 dep_form=dep_form.substring(0, 2);
@@ -324,6 +351,11 @@ public class EleveController {
         return returned;
     }
     
+    /**
+     * Controller lié à la nième validation du formulaire par un élève
+     * @param request Requête HTTP
+     * @return Vue EleveList
+     */
     @RequestMapping(value = "EleveResave.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveResave(HttpServletRequest request) throws IOException {
         ModelAndView returned = null;
@@ -364,7 +396,7 @@ public class EleveController {
                 if (notif!=null){
                     Path destination = Paths.get(targetDirectory);
                     //Path destination = new File(targetDirectory).toPath();
-                    String newFileName = item.getPersonne().getPersonneNom()+"_"+item.getPersonne().getPersonnePrenom()+"_bourse_"+generateUniqueFileName(destination)+".pdf";
+                    String newFileName = item.getPersonne().getPersonneNom()+"_"+item.getPersonne().getPersonnePrenom()+"_bourse_"+ApplicationTools.generateUniqueFileName(destination)+".pdf";
                     Path destinationWithUniqueName =destination.resolve(newFileName);
                     Files.copy(notif.toPath(), destinationWithUniqueName); 
                 }
@@ -374,7 +406,7 @@ public class EleveController {
             if (dataToSave.getTypeSouhait()==null){
                 dataToSave.setTypeSouhait(item.getTypeSouhait());
             }
-            dataToSave.setEleveInfosup(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveInfosup")));
+            dataToSave.setEleveInfosup(ApplicationTools.removeAccentsAndSpecialCharacters(ApplicationTools.getStringFromRequest(request, "eleveInfosup")));
             repository.update(item.getEleveId(), dataToSave);
             
             //Return to the list
@@ -384,6 +416,11 @@ public class EleveController {
         return returned;
     }
     
+    /**
+     * Controller lié à la modification d'un élève par un assistant
+     * @param request Requête HTTP
+     * @return Vue EleveList
+     */
     @RequestMapping(value = "EleveSaveAdmin.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTEleveSaveAdmin(HttpServletRequest request) throws IOException {
         ModelAndView returned = null;
@@ -405,8 +442,8 @@ public class EleveController {
             dataToSave.setEleveId(ApplicationTools.getIntFromRequest(request, "eleveId"));
             dataToSave.setEleveDateNaissance(ApplicationTools.getDateFromRequest(request, "eleveDateNaissance"));
             dataToSave.setGenre(ApplicationTools.getStringFromRequest(request, "genre"));
-            dataToSave.setElevePayshab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
-            dataToSave.setEleveVillehab(ApplicationTools.correctString(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
+            dataToSave.setElevePayshab(ApplicationTools.removeAccentsAndSpecialCharacters(ApplicationTools.getStringFromRequest(request, "elevePayshab")));
+            dataToSave.setEleveVillehab(ApplicationTools.removeAccentsAndSpecialCharacters(ApplicationTools.getStringFromRequest(request, "eleveVillehab")));
             dataToSave.setEleveCodepostal(ApplicationTools.getIntFromRequest(request, "eleveCodepostal"));
             dataToSave.setEleveMail(ApplicationTools.getStringFromRequest(request, "eleveMail"));
             dataToSave.setEleveNumtel(ApplicationTools.getStringFromRequest(request, "eleveNumtel"));
@@ -465,7 +502,7 @@ public class EleveController {
     }
 
     /**
-     *
+     * 
      * @param request
      * @return
      */
@@ -618,19 +655,11 @@ public class EleveController {
         }
     }
     
-    @RequestMapping(value = "ouidef.do", method = RequestMethod.POST)
-    public ModelAndView handlePOSTouidef(HttpServletRequest request){
-        ModelAndView returned=null;
-        boolean oui = ApplicationTools.getBooleanFromRequest(request, "ouidef");
-        Connexion user = ApplicationTools.checkAccess(connexionRepository,request);
-        if (oui){
-            returned=ApplicationTools.getModel("questionnaire", user);
-        }else{
-            returned=ApplicationTools.getModel("errorPage", null);
-        }
-        return returned;    
-    }
-    
+    /**
+     * Controller pour trier les élèves confirmés en vue de les affecter aux logements (inutilisé pour l'instant)
+     * @param request Requête HTTP
+     * @return Vue EleveList
+     */
     @RequestMapping(value = "trier.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTtrier(HttpServletRequest request){
         ModelAndView returned=null;
@@ -670,6 +699,11 @@ public class EleveController {
     return returned;    
     }
     
+    /**
+     * Méthode du controller handlePOSTtrier qui trie les listes d'élèves
+     * @param aTrier Collection d'élèves qui doit être triée
+     * @return ArrayList d'élèves triée
+     */
     public ArrayList<Eleve> trierElevesDistance(Collection<Eleve> aTrier){
         //Création du contenant de la future liste triée
         ArrayList<Eleve> returned=new ArrayList<>();
@@ -692,6 +726,13 @@ public class EleveController {
         return returned;
     }
     
+    /**
+     * Méthode du controller handlePOSTtrier qui écrit le fichier csv contenant les élèves triés
+     * @param request Requête HTTP
+     * @param inter ArrayList triée des élèves internationaux
+     * @param bours ArrayList triée des élèves boursiers
+     * @param autres ArrayList triée des élèves autres
+     */
     public void ecritureCSVTri(HttpServletRequest request,ArrayList<Eleve> inter,ArrayList<Eleve> bours,ArrayList<Eleve> autres){
         //String extension=getFileExtension(filename);
         String targetDirectory = request.getServletContext().getRealPath("tri_eleves");
@@ -742,7 +783,10 @@ public class EleveController {
         }
     }
     
-    
+    /**
+     * Méthode pour importer le fichier SCEI
+     * @param importFile fichier à importer
+     */
     public void importCsvScei(File importFile) {
         // Build creation method
         // Read file
