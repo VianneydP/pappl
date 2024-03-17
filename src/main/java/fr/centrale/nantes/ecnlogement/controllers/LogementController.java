@@ -5,7 +5,6 @@
  * Vianney de Ponthaud - Maxence Nicolet
  * ----------------------------------------- */
  
-//-*- coding: utf-8 
 package fr.centrale.nantes.ecnlogement.controllers;
 
 import static fr.centrale.nantes.ecnlogement.controllers.ApplicationTools.getMethod;
@@ -330,6 +329,10 @@ public class LogementController {
                             eleve.setEleveMail(value );
                         }
                         break;
+                    case "TEL." :
+                    case "SURFACE HABITABLE" :
+                        canDoIt=true;
+                        break;
                     default:
                         canDoIt = false;
                         break;
@@ -338,7 +341,7 @@ public class LogementController {
                 canDoIt = false;
             }
         }
-
+        if (canDoIt){
             Eleve temp = null; 
             if (personne.isPersonneValid() ) {
                 temp = eleveRepository.getByPersonNomPrenomMail(personne.getPersonneNom(), personne.getPersonnePrenom(),eleve.getEleveMail());
@@ -362,6 +365,7 @@ public class LogementController {
                     
                 }
             }
+        }
     }
     
     public void handleNewLogement(Logement item, Eleve eleve) {  
@@ -403,7 +407,7 @@ public class LogementController {
                 // Get header
                 List<String> header = new LinkedList<>();
                 StringTokenizer st = new StringTokenizer(line, ";");
-                while ((st.hasMoreElements())&& (header.size()<14)) {
+                while ((st.hasMoreElements())&& (header.size()<10)) {
                     String name = st.nextToken().trim();
                     header.add(ApplicationTools.removeAccentsAndSpecialCharacters(name));
                 }
@@ -415,7 +419,7 @@ public class LogementController {
                     List<String> lineValues = new LinkedList<>();
                     int i = 0;
                     String elem = "";
-                    while ((i < line.length())&&(lineValues.size()<14)) {
+                    while ((i < line.length())&&(lineValues.size()<10)) {
                         if (line.substring(i, i + 1).equals(";")) {
                             lineValues.add(ApplicationTools.removeAccentsAndSpecialCharacters(elem));
                             elem = "";

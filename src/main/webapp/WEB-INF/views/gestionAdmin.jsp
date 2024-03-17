@@ -30,14 +30,20 @@
   <div class="py-5">
     <div class="container">
       <div class="row mb-4">
-        <div class="col-md-6 d-flex justify-content-center">
+        <div class="col-md-4 d-flex justify-content-center">
+            <h5 class=""><fmt:message key="message.datesml" bundle="${ressourcesBundle}"/></h5>
+        </div>
+        <div class="col-md-2 d-flex justify-content-center">
             <form id="c_form-h" class="" action="afficheDates.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                 <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
                     <fmt:message key="button.datesml" bundle="${ressourcesBundle}"/></button>
             </form>
         </div>
-        <div class="col-md-6 d-flex justify-content-center">
+        <div class="col-md-4 d-flex justify-content-center">
+            <h5 class=""><fmt:message key="message.logementListe" bundle="${ressourcesBundle}"/></h5>
+        </div>
+        <div class="col-md-2 d-flex justify-content-center">
             <form id="c_form-h" class="" action="LogementList.do" value="RedirectLogementList" method="POST">
                 <input type="hidden" name="nomEtape" value="redirect" />
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
@@ -47,7 +53,10 @@
         </div>
       </div>
       <div class="row mb-4">
-        <div class="col-md-6 d-flex justify-content-center">
+        <div class="col-md-4 d-flex justify-content-center">
+            <h5 class=""><fmt:message key="message.gestionAssistants" bundle="${ressourcesBundle}"/></h5>
+        </div>
+        <div class="col-md-2 d-flex justify-content-center">    
             <form id="c_form-h" class="" action="gestionAssistants.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                     <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
@@ -55,7 +64,10 @@
                     </button>
             </form>
         </div>
-        <div class="col-md-6 d-flex justify-content-center">
+        <div class="col-md-4 d-flex justify-content-center">
+            <h5 class=""><fmt:message key="message.suppressionBDD" bundle="${ressourcesBundle}"/></h5>
+        </div>
+        <div class="col-md-2 d-flex justify-content-center">
             <form id="c_form-h" class="" action="suppressionBDD.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                     <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
@@ -64,14 +76,20 @@
         </div>
       </div>
       <div class="row mb-4">
-        <div class="col-md-6 d-flex justify-content-center">
+        <div class="col-md-4 d-flex justify-content-center">
+            <h5 class=""><fmt:message key="message.importBDDCommunes" bundle="${ressourcesBundle}"/></h5>
+        </div>
+        <div class="col-md-2 d-flex justify-content-center">
             <form id="c_form-h" class="" action="createDefaultCommune.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                 <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
                     <fmt:message key="button.createDefaultCommune" bundle="${ressourcesBundle}"/></button>
             </form>
         </div>
-            <div class="col-md-6 d-flex justify-content-center">
+            <div class="col-md-4 d-flex justify-content-center">
+                <h5 class=""><fmt:message key="message.importAdmin" bundle="${ressourcesBundle}"/></h5>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center">
             <form id="c_form-h" class="" action="pageImport.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                     <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">

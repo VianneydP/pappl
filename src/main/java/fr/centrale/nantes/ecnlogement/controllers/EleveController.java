@@ -434,7 +434,7 @@ public class EleveController {
 
     /**
      * Import CSV file
-     *
+     * NON Utilisé, fonction générée automatiquement
      * @param importFile
      */
     private void importCSV(File importFile) {
@@ -478,7 +478,7 @@ public class EleveController {
     }
 
     /**
-     * Create an item form attribute lists
+     * Crée un élève à partir d'une ligne d'un csv
      *
      * @param header
      * @param values
@@ -496,7 +496,7 @@ public class EleveController {
             if (valueIterator.hasNext()) {
                 String value = valueIterator.next().trim();
                 switch (name) {
-                    case "CAN _NUM _SCEI":
+                    case "NUM SCEI":
                         item.setNumscei(ApplicationTools.getIntFromString(value));
                         break;
                     case "NOM":
@@ -505,11 +505,11 @@ public class EleveController {
                     case "PRENOM":
                         personne.setPersonnePrenom(value);
                         break;
-                    case "CAN _NAI":
+                    case "NAISSANCE":
                         naissance = ApplicationTools.isDate(value);
                         item.setEleveDateNaissance(naissance);
                         break;
-                    case "CIV _LIB":
+                    case "CIVILITE":
                         switch (value){
                             case "MME":
                                 item.setGenre("F");
@@ -522,16 +522,16 @@ public class EleveController {
                                 break;
                     }
                         break;
-                    case "CAN _PAY _ADR":
+                    case "PAYS ADRESSE":
                         item.setElevePayshab(value);
                         break;
-                    case "CAN _COM":
+                    case "COMMUNE":
                         item.setEleveVillehab(value);
                         break;
-                    case "CAN _COD _POS":
+                    case "CODE POSTAL":
                         item.setEleveCodepostal(ApplicationTools.getIntFromString(value));
                         break;
-                    case "ATA _LIB":
+                    case "STATUT SCEI":
                         if (!value.equals("OUI DEFINITIF")){
                             canDoIt=false;
                         }
