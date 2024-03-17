@@ -95,7 +95,8 @@ public class EleveController {
     }
     
     /**
-     * Controller lié au bouton "Visualiation" et à l'import du fichier SCEI
+     * Controller lié au bouton "Visualiation" et à l'import du fichier 
+     * SCEI (après l'import, on affiche la liste pour vérification)
      * @param request Requête HTTP
      * @return Vue EleveList
      */
@@ -502,7 +503,9 @@ public class EleveController {
     }
 
     /**
-     * 
+     * NON utilisé, gééré automatiquement, l'import renvoie sur
+     * la liste des élèves (pour vérifier la réussite de l'import)
+     * voir handlePOSTEleveList
      * @param request
      * @return
      */
@@ -571,10 +574,10 @@ public class EleveController {
     }
 
     /**
-     * Crée un élève à partir d'une ligne d'un csv
-     *
-     * @param header
-     * @param values
+     * Crée un élève à partir d'une ligne d'un csv formaté type ( le type est 
+     * détaillé dans la doc admin)
+     * @param header valeurs de l'entête des colonnes du csv
+     * @param values valeurs associées pour l'élève
      */
     public void createItem(List<String> header, List<String> values) {
         Role roleId = roleRepository.getByRoleId(Role.ROLEELEVE);
@@ -645,8 +648,6 @@ public class EleveController {
                 if (temp == null) {
                 Personne tempP = personneRepository.create(personne.getPersonneNom(), personne.getPersonnePrenom(), roleId);
                 item.setEleveConfirm(false);
-                //temp = repository.create(item.getNumscei(),item.getEleveDateNaissance(), 
-                //        item.getGenre(), item.getElevePayshab(), item.getEleveVillehab(), item.getEleveCodepostal() , personne);
                 repository.setPersonne(item, tempP, personneRepository);
             }
             }
@@ -797,7 +798,7 @@ public class EleveController {
 
             String line = reader.readLine();
             if (line != null) {
-                // Get header
+                // Get header (valeur de l'entête des colonnes)
                 List<String> header = new LinkedList<>();
                 StringTokenizer st = new StringTokenizer(line, ";");
                 while (st.hasMoreElements()&& (header.size()<10)) {
@@ -827,9 +828,9 @@ public class EleveController {
                         
                     }
                     lineValues.add(ApplicationTools.removeAccentsAndSpecialCharacters(elem));
-                    // Create item with values
+                    // On crée un élève avec les valeurs d'une ligne
                     createItem(header, lineValues);
-                    // Next line
+                    // On passe à la ligne suivante
                     line = reader.readLine();
                     }
 

@@ -126,7 +126,6 @@ public class LogementController {
                     //avec le premier import pour ne garder que les données du second
                     if (Files.exists(destination)) { 
                         Files.delete(destination);
-                        //FIXME supprimer les personnes associées aux élèves, truc bizarre lors d'un deuxième importph
                         Collection<Eleve> elevesToDelete=eleveRepository.findByNumscei(-1);
                         ArrayList<Personne> personnesToDelete=new ArrayList<>();
                         for (Eleve eleve : elevesToDelete) {
