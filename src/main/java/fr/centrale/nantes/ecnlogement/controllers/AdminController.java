@@ -44,7 +44,6 @@ import java.util.logging.Logger;
 @Controller
 public class AdminController {
     
-    
     @Autowired
     private PersonneRepository personneRepository;
 
@@ -57,34 +56,13 @@ public class AdminController {
     @Autowired
     private DatesRepository datesRepository;
     
-    @RequestMapping(value = "pageImport.do", method = RequestMethod.POST)
-    public ModelAndView handlePOSTPageImport(HttpServletRequest request) {
-        ModelAndView returned = null;
-        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
-        if (user == null) {
-            returned = ApplicationTools.getModel( "index", null);
-        } else {
-            returned=ApplicationTools.getModel("importAdmin", user);
-        }
-        
-        
-        
-            
-        return returned;
-    }
+   
     
-    @RequestMapping(value = "visuBDD.do", method = RequestMethod.POST)
-    public ModelAndView handlePOSTPageVisuBDD(HttpServletRequest request) {
-        ModelAndView returned = null;
-        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
-        if (user == null) {
-            returned = ApplicationTools.getModel( "user", null );
-        } else {
-            returned=ApplicationTools.getModel("EleveEdit", user);
-        }
-        return returned;
-    }
-    
+    /**
+     * Controller lié au bouton "Alertes" du headerAdmin
+     * @param request Requête HTTP
+     * @return Vue alertes
+     */
     @RequestMapping(value = "alertes.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTPageAlertes(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -97,6 +75,11 @@ public class AdminController {
         return returned;
     }
     
+    /**
+     * Controller lié au bouton "Affectation" du headerAdmin
+     * @param request Requête HTTP
+     * @return Vue affectLogement
+     */
     @RequestMapping(value = "affectLogement.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTPageAffectLogement(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -109,6 +92,11 @@ public class AdminController {
         return returned;
     }
     
+    /**
+     * Controller lié au bouton "GestionAdmin" du headerAdmin
+     * @param request Requête HTTP
+     * @return Vue affectLogement
+     */
     @RequestMapping(value = "gestionAdmin.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTGestionAdmin(HttpServletRequest request) {
         ModelAndView returned = null;

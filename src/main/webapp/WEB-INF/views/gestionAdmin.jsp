@@ -76,6 +76,7 @@
         </div>
       </div>
       <div class="row mb-4">
+        <div class="col-md-6 d-flex justify-content-center">
         <div class="col-md-4 d-flex justify-content-center">
             <h5 class=""><fmt:message key="message.importBDDCommunes" bundle="${ressourcesBundle}"/></h5>
         </div>
@@ -86,6 +87,7 @@
                     <fmt:message key="button.createDefaultCommune" bundle="${ressourcesBundle}"/></button>
             </form>
         </div>
+			<div class="col-md-6 d-flex justify-content-center">
             <div class="col-md-4 d-flex justify-content-center">
                 <h5 class=""><fmt:message key="message.importAdmin" bundle="${ressourcesBundle}"/></h5>
             </div>
@@ -96,14 +98,26 @@
                         <fmt:message key="button.importAdmin" bundle="${ressourcesBundle}"/>
                     </button>
             </form>
-            </div>
-        <%--<div class="col-md-6 d-flex justify-content-center">
-            <form id="c_form-h" class="" action="àdéfinir.do" method="POST">
+		</div>
+          </div>
+      </div>
+      <div class="row mb-4">
+          <div class="col-md-6 d-flex justify-content-center">
+            <form id="c_form-h" class="" action="gestionTextes.do" method="POST">
+                <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
+                    <fmt:message key="button.gestionTextes" bundle="${ressourcesBundle}"/></button>
+            </form>
+          </div>
+          <%--utilisable
+          <div class="col-md-6 d-flex justify-content-center">
+            <form id="c_form-h" class="" action="pageImport.do" method="POST">
                 <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                     <button class="nav-link btn btn-ecnYellow text-black mx-2" type="submit">
-                        <fmt:message key="button.àdéfinir" bundle="${ressourcesBundle}"/></button>
+                        <fmt:message key="button.importAdmin" bundle="${ressourcesBundle}"/>
+                    </button>
             </form>
-        </div>--%>
+          </div>--%>
       </div>
     </div>
   </div>

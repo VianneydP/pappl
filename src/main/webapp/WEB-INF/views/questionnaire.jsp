@@ -55,7 +55,7 @@
             <div class="container md-10 justify-content-center">
                 <h1>Formulaire</h1>
                 <br>
-                <h5>Veuillez remplir les informations ci-dessous pour enregistrer votre demande de pré-réservation d'un logement dans la résidence de l'école. (Ceci est destiné aux élèves en "Oui définitif" sur SCEI, les autres ne seront pas pris en compte).</h5>
+                <h5>${texte.texteContenu}</h5>
                 <br>
                     <div class="col-md-12">
                         <form id="c_form-h" class="" action="EleveSave.do" method="POST" enctype="multipart/form-data">
@@ -286,7 +286,7 @@
 
                             <div id="franceFields" style="display: none;">
                                 <div class="form-group row">
-                                    <label for="inputcodepostalh" class="col-2 col-form-label d-none d-md-block"><fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
+                                    <label for="inputcodepostalh" class="col-2 col-form-label d-none d-md-block">Département<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/></label>
                                         <div class="col-10">
                                             <input type="number" class="form-control" id="inputcodepostalh" style="width: 180px;" placeholder="<fmt:message key="message.questionnaireCodePostal" bundle="${ressourcesBundle}"/>" name="eleveCodepostal">
                                         </div>
@@ -294,7 +294,7 @@
                                 <div class="form-group row">
                                     <label for="inputvilleh" class="col-2 col-form-label"><fmt:message key="message.questionnaireVille" bundle="${ressourcesBundle}"/></label>
                                     <div class="col-10">
-                                        <select id="inputvilleh" name="eleveVillehab" required style="width: 200px;">
+                                        <select id="inputvilleh" name="eleveVillehabFr" required style="width: 200px;">
                                             <c:forEach var="item" items="${communeListe}">
                                                 <option value="${item.nomCommune}">${item.nomCommune}</option>
                                             </c:forEach>
@@ -334,20 +334,7 @@
                                     <label for="fileInput"><fmt:message key="message.questionnaireNotif2" bundle="${ressourcesBundle}"/></label>
                                 </div>
                             </div>
-                           
-                            <div class="form-group row"> 
-                                <label for="inputpmrh" class="col-2 col-form-label"><fmt:message key="message.elevePMR" bundle="${ressourcesBundle}"/></label>
-                                <div class="col-10">
-                                    <div class="d-block my-3">
-                                        <div class="custom-control custom-radio">
-                                            <input id="inputpmrnon" name="elevePMR" type="radio" class="custom-control-input" required="" value="false"> <label class="custom-control-label" for="inputpmrnon">Non</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input id="inputpmroui" name="elevePMR" type="radio" class="custom-control-input" required="" value="true"> <label class="custom-control-label" for="inputpmroui">Oui</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        
                             <div class="form-group row"> 
                                 <label for="inputgenre" class="col-2 col-form-label"><fmt:message key="message.questionnaireGenre" bundle="${ressourcesBundle}"/></label>
                                 <div class="col-10">
@@ -390,10 +377,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                        <div class="col-5"><fmt:message key="message.questionnaireColoc" bundle="${ressourcesBundle}"/></div>       
+                                <div class="col-5"><fmt:message key="message.questionnaireColoc" bundle="${ressourcesBundle}"/></div>       
                             </div>
                             <div class="form-group row">
-                                <label for="inputinfosuph" class="col-2 col-form-label"><fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/></label>
+                                <label for="inputinfosuph" class="col-2 col-form-label"><fmt:message key="message.eleveInfosup" bundle="${ressourcesBundle}"/></label>
                                 <div class="col-10">
                                     <input type="text" class="form-control" id="inputinfosuph" placeholder="<fmt:message key="message.questionnaireInfosup" bundle="${ressourcesBundle}"/>" name="eleveInfosup"></div>
                             </div>
@@ -406,7 +393,7 @@
                             <br>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5 class="">Pour toute information ou problème, merci de contacter le [numéro permanence logement]</h5>
+                                    <h5 class="">${texteContact.texteContenu}</h5>
                                 </div>
                             </div>
                         </form>
@@ -447,6 +434,8 @@
                 document.getElementById('fileInput').removeAttribute('required');
             }
         });
+        
+        
     </script>
     </body>
 </html>

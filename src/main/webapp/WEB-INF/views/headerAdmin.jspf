@@ -72,13 +72,15 @@
                                     <fmt:message key="button.affectationLogement" bundle="${ressourcesBundle}"/></button>
                             </li>
                         </form>
-                        <form id="c_form-h" class="" action="gestionAdmin.do" method="POST">
-                            <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                            <li class="nav-item">
-                                <button class="nav-link btn btn-light text-black mx-2" type="submit">
-                                    <fmt:message key="button.gestionAdmin" bundle="${ressourcesBundle}"/></button>
-                            </li>
-                        </form>
+                        <c:if test="${user.personne.roleId.roleNom eq 'Admin'}">
+                            <form id="c_form-h" class="" action="gestionAdmin.do" method="POST">
+                                <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
+                                <li class="nav-item">
+                                    <button class="nav-link btn btn-light text-black mx-2" type="submit">
+                                        <fmt:message key="button.gestionAdmin" bundle="${ressourcesBundle}"/></button>
+                                </li>
+                            </form>
+                        </c:if>
                     </ul>
                 </div>
                         </c:otherwise>

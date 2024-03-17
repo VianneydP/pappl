@@ -34,14 +34,11 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Role.findByRoleNom", query = "SELECT r FROM Role r WHERE r.roleNom = :roleNom")})
 public class Role implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     public static int ROLEADMIN = 1;
     public static int ROLEELEVE = 2;
     public static int ROLEASSIST = 3;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "role_id")
     private Integer roleId;

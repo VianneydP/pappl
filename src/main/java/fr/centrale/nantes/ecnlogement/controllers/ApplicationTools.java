@@ -924,32 +924,12 @@ public class ApplicationTools {
 
         return name;
     }
-    
-    public static String correctString(String text){
-        String returned=text.replace("à", "a");
-        returned=returned.replace("é", "e");
-        returned=returned.replace("è", "e");
-        returned=returned.replace("ê", "e");
-        returned=returned.replace("ë", "e");
-        returned=returned.replace("ù", "u");
-        returned=returned.replace("ç", "c");
-        returned=returned.replace("â", "a");
-        returned=returned.replace("î", "i");
-        returned=returned.replace("ï", "i");
-        returned=returned.replace("ô", "o");
-        returned=returned.replace("û", "u");
-        returned=returned.replace("ï", "u");
-        returned=returned.replace("ñ", "n");
-        returned=returned.replace("ç", "c");
-        returned=returned.replace("-", " ");
-        returned =returned.replace("'", " ");
-        returned =returned.replace("<", " ");
-        returned =returned.replace(">", " ");
-        returned =returned.replace("Saint", "St");
-        returned =returned.toUpperCase();
-        return returned;
-    }
-    
+   
+    /**
+     * Méthode pour normaliser une String
+     * @param input String à normaliser
+     * @return  String normalisée
+     */
     public static String removeAccentsAndSpecialCharacters(String input) {
         // Suppression des accents
         String normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
@@ -962,152 +942,21 @@ public class ApplicationTools {
             .replace("'", " ")
             .replace("<", " ")
             .replace(">", " ")
-            .replace("?", "")
-            .replace("Saint", "St");
             
-
+			.replace("?", "");
         result =result.replaceAll("\\p{C}", "").toUpperCase();
         return result;
     }
     
-  /**  
-    public static String getCodeCommune(String communeName) throws IOException {
-        try (Reader reader = new FileReader(C:/Users/Céline/Documents/ECN/EI2/PGROU/PGROU2/pappl/Fichiers_csv/communes-departement-region.csv));
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader())) {
-
-            for (CSVRecord csvRecord : csvParser) {
-                String currentCommuneName = csvRecord.get("Nom de la commune");
-                String communeCode = csvRecord.get("Code commune");
-
-                // Comparaison insensible à la casse
-                if (currentCommuneName.equalsIgnoreCase(communeName)) {
-                    return communeCode;
-                }
-            }
-        }
-
-        return null; // Code commune non trouvé pour la commune spécifiée
+    /**
+     * Méthode pour générer un nom unique de fichier
+     * @param input 
+     * @return 
+     */
+    public static String generateUniqueFileName(Path destination) {
+       //String fileExtension = destination.getFileName().substring(destination.getFileName().lastIndexOf("."));
+       //String fileExtension = getFileExtension(fileNameWithExtension);
+       //return System.currentTimeMillis() + "_" + destination.getFileName().toString()+fileExtension;
+       return System.currentTimeMillis() + "_" + destination.getFileName().toString();
     }
-    **/
-    
-    public static Commune findCodeForCodePostal(int codePostal) {
-        try {
-            File csvFile = new File("C:/Users/Céline/Documents/ECN/EI2/PGROU/PGROU2/pappl/Fichiers_csv/communes-departement-region.csv");
-            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
-            // Read header to get column indices
-            String headerLine = reader.readLine();
-            if (headerLine != null) {
-                List<String> header = new LinkedList<>();
-                StringTokenizer headerTokenizer = new StringTokenizer(headerLine, ",");
-                while (headerTokenizer.hasMoreElements()) {
-                    header.add(headerTokenizer.nextToken().trim());
-                }
-
-                // Find indices of required columns
-                int cpIndex = header.indexOf("code_postal");
-                int codeIndex = header.indexOf("code_commune_INSEE");
-                int latitudeIndex = header.indexOf("latitude");
-                int longitudeIndex = header.indexOf("longitude");
-                int nameIndex = header.indexOf("nom_commune_postal");
-
-                if (cpIndex != -1 && codeIndex != -1 && latitudeIndex != -1 && longitudeIndex != -1 && nameIndex!=-1) {
-                    // Read lines and search for the matching commune
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        StringTokenizer tokenizer = new StringTokenizer(line, ",");
-                        List<String> lineValues = new LinkedList<>();
-                        while (tokenizer.hasMoreElements()) {
-                            lineValues.add(tokenizer.nextToken());
-                        }
-
-                        // Check if the commune name matches
-                        if (lineValues.size() > cpIndex && lineValues.size() > codeIndex
-                                && lineValues.size() > latitudeIndex && lineValues.size() > longitudeIndex && lineValues.size() > nameIndex) {
-                            int currentCodePostal = Integer.parseInt(lineValues.get(cpIndex).trim());
-                            if (currentCodePostal==codePostal) {
-                                String code = lineValues.get(codeIndex).trim();
-                                float latitude = Float.parseFloat(lineValues.get(latitudeIndex).trim());
-                                float longitude = Float.parseFloat(lineValues.get(longitudeIndex).trim());
-                                String name =lineValues.get(nameIndex).trim();
-                                //return lineValues.get(codeIndex).trim();
-                                List<Integer> metropoleNantes=new ArrayList<Integer>(24);
-                                metropoleNantes.addAll(List.of(44009,44018,44020,44024,44026,44047,44074,44035,44101,44120,44198,44094,44109,44114,44143,44150,44162,44166,44171,44190,44172,44194,44204,44215));
-                                boolean dansMetropoleNantes=metropoleNantes.contains(code);
-                                Commune commune=new Commune(code, name, codePostal, latitude, longitude,dansMetropoleNantes);
-                                return commune;
-                            }
-                        }
-                    }
-                }
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Return null if commune not found
-        return null;
-    }
-    
-        public static Commune findCodeForCommune(String communeName) {
-        try {
-            File csvFile = new File("C:/Users/Céline/Documents/ECN/EI2/PGROU/PGROU2/pappl/Fichiers_csv/communes-departement-region.csv");
-            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
-            // Read header to get column indices
-            String headerLine = reader.readLine();
-            if (headerLine != null) {
-                List<String> header = new LinkedList<>();
-                StringTokenizer headerTokenizer = new StringTokenizer(headerLine, ",");
-                while (headerTokenizer.hasMoreElements()) {
-                    header.add(headerTokenizer.nextToken().trim());
-                }
-
-                // Find indices of required columns
-                int communeIndex = header.indexOf("nom_commune_postal");
-                int codeIndex = header.indexOf("code_commune_INSEE");
-                int latitudeIndex = header.indexOf("latitude");
-                int longitudeIndex = header.indexOf("longitude");
-                int cpIndex = header.indexOf("code_postal");
-
-                if (communeIndex != -1 && codeIndex != -1 && latitudeIndex != -1 && longitudeIndex != -1 && cpIndex != -1) {
-                    // Read lines and search for the matching commune
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        StringTokenizer tokenizer = new StringTokenizer(line, ",");
-                        List<String> lineValues = new LinkedList<>();
-                        while (tokenizer.hasMoreElements()) {
-                            lineValues.add(tokenizer.nextToken());
-                        }
-
-                        // Check if the commune name matches
-                        if (lineValues.size() > communeIndex && lineValues.size() > codeIndex
-                                && lineValues.size() > latitudeIndex && lineValues.size() > longitudeIndex && lineValues.size() > cpIndex) {
-                            String currentCommuneName = lineValues.get(communeIndex).trim();
-                            if (currentCommuneName.equalsIgnoreCase(communeName)) {
-                                String code = lineValues.get(codeIndex).trim();
-                                float latitude = Float.parseFloat(lineValues.get(latitudeIndex).trim());
-                                float longitude = Float.parseFloat(lineValues.get(longitudeIndex).trim());
-                                int codePostal=Integer.parseInt(lineValues.get(cpIndex).trim());
-                                //return lineValues.get(codeIndex).trim();
-                                List<Integer> metropoleNantes=new ArrayList<Integer>(24);
-                                metropoleNantes.addAll(List.of(44009,44018,44020,44024,44026,44047,44074,44035,44101,44120,44198,44094,44109,44114,44143,44150,44162,44166,44171,44190,44172,44194,44204,44215));
-                                boolean dansMetropoleNantes=metropoleNantes.contains(code);
-                                Commune commune=new Commune(code, communeName, codePostal,latitude, longitude,dansMetropoleNantes);
-                                return commune;
-                            }
-                        }
-                    }
-                }
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Return null if commune not found
-        return null;
-    }
-    
 }

@@ -35,14 +35,24 @@ public class SouhaitController {
 
     @Autowired
     private ConnexionRepository connexionRepository;
-
+    
+    /**
+     * Méthode des controllers pour consituer la vue SouhaitList
+     * @param user Connexion utilisée
+     * @return Vue SouhaitList
+     */
     private ModelAndView handleSouhaitList(Connexion user) {
         String modelName = "SouhaitList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
         returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "typeSouhait")));
         return returned;
     }
-
+    
+    /**
+     * Controller pour afficher les souhaits (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue SouhaitList
+     */
     @RequestMapping(value="SouhaitList.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTSouhaitList(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -54,7 +64,12 @@ public class SouhaitController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour modifier un souhait (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue SouhaitList
+     */
     @RequestMapping(value="SouhaitEdit.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTSouhaitEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -73,7 +88,12 @@ public class SouhaitController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour créer un souhait (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue SouhaitList
+     */
     @RequestMapping(value="SouhaitCreate.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTSouhaitCreate(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -89,7 +109,12 @@ public class SouhaitController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour supprimer un souhait (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue SouhaitList
+     */
     @RequestMapping(value="SouhaitRemove.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTSouhaitRemove(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -109,7 +134,12 @@ public class SouhaitController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour enregistrer un souhait (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue SouhaitList
+     */
     @RequestMapping(value="SouhaitSave.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTSouhaitSave(HttpServletRequest request) {
         ModelAndView returned = null;

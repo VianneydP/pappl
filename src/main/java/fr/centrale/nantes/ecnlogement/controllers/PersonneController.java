@@ -45,14 +45,24 @@ public class PersonneController {
 
     @Autowired
     private RoleRepository roleRepository;
-
+    
+    /**
+     * Controller inutilisé
+     * @param user Connexion utilisée
+     * @return Vue AssistList
+     */
     private ModelAndView handlePersonneList(Connexion user) {
         String modelName = "AssistList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
         //returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "personneId")));
         return returned;
     }
-
+    
+    /**
+     * Controller pour afficher les personnes (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue AssistList
+     */
     @RequestMapping(value="PersonneList.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTPersonneList(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -64,7 +74,12 @@ public class PersonneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour modifier une personne (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue AssistList
+     */
     @RequestMapping(value="PersonneEdit.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTPersonneEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -85,6 +100,11 @@ public class PersonneController {
         return returned;
     }
     
+    /**
+     * Controller pour créer une personne (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue AssistList
+     */
     @RequestMapping(value="PersonneCreate.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTPersonneCreate(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -101,7 +121,12 @@ public class PersonneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour supprimer une personne
+     * @param request Requête HTTP
+     * @return Vue AssistList
+     */
     @RequestMapping(value="PersonneRemove.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTPersonneRemove(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -121,7 +146,12 @@ public class PersonneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller pour créer une personne (inutilisé)
+     * @param request Requête HTTP
+     * @return Vue AssistList
+     */
     @RequestMapping(value="PersonneSave.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTPersonneSave(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -161,10 +191,16 @@ public class PersonneController {
             returned.addObject("personne", item);
             returned.addObject("eleve", eleve);
             System.out.println(eleve.getEleveId());
+            connexionRepository.deleteByPerson(item);
         }
         return returned;
     }
-
+    
+    /**
+     * ???
+     * @param request
+     * @return 
+     */
     @RequestMapping(value="PersonneImport.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTPersonneImport(HttpServletRequest request) {
         ModelAndView returned = null;

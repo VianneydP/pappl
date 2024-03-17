@@ -68,6 +68,7 @@ public class ApplicationInitializer implements ServletContextListener {
         createDefaultRoles();
         createDefaultUsers();
         createDefaultTypeAppart();
+        createDefaultTextes();
         //createDefaultSouhaits();
     }
 
@@ -229,4 +230,37 @@ public class ApplicationInitializer implements ServletContextListener {
     }
 
     /* ----------------------------------------------------------------------- */
+    
+     private Texte getTexte(String uid) {
+        return (Texte) getItemFromString(uid, "Texte.findByTexteNom", Texte.class, "texteNom");
+    }
+
+    private Texte createTexte(String texteNom, String texteContenu) {
+        Texte item = getTexte(texteNom);
+        if (item == null) {
+            // Does not exist
+            item = new Texte();
+            item.setTexteNom(texteNom);
+            item.setTexteContenu(texteContenu);
+            em.persist(item);
+            em.flush();
+
+            // Reload from database to be sure to get it
+            item = getTexte(texteNom);
+        }
+        return item;
+    }
+
+    private void createDefaultTextes() {
+        EntityTransaction transaction = em.getTransaction();
+
+        transaction.begin();
+        createTexte("Renvoi vers le contact", "Pour toute information ou problème, merci de contacter la mission logement au numéro indiqué sur la page : https://www.ec-nantes.fr/campus/nantes/vivre-a-la-rez");
+        createTexte("Page d'accueil élève", "Bienvenue sur la page d'accueil du site de la mission logement de l'Ecole Centrale de Nantes. Merci de vous connecter pour continuer.");
+        createTexte("En-tête du formulaire","Veuillez remplir les informations ci-dessous pour enregistrer votre demande de pré-réservation d'un logement dans la résidence de l'école.");
+        createTexte("En-tête du formulaire reconnexion","Vous êtes sur cette page car vous avez déjà rempli une première fois le formulaire. Vous pouvez modifier certaines de vos données. Si d'autres sont erronées, nous vous invitons à contacter la Mission Logement.");
+        createTexte("Attente ouverture du formulaire","Veuillez attendre l'ouverture de la mission logement pour procéder à votre inscription.");
+        createTexte("Attente des résultats","Les résultats de la Mission Logement seront publiés le :");
+        transaction.commit();
+    }
 }

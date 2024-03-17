@@ -42,14 +42,24 @@ public class CommuneController {
 
     @Autowired
     private ConnexionRepository connexionRepository;
-
+    
+    /**
+     * Méthode liée au controller handlePOSTCommuneList pour récupérer les données Communes
+     * @param request Requête HTTP
+     * @return ModelAndView CommuneList avec les communes
+     */
     private ModelAndView handleCommuneList(Connexion user) {
         String modelName = "CommuneList";
         ModelAndView returned = ApplicationTools.getModel( modelName, user );
         returned.addObject("itemList", repository.findAll(Sort.by(Sort.Direction.ASC, "codeCommune")));
         return returned;
     }
-
+    
+    /**
+     * Controller inutilisé
+     * @param request Requête HTTP
+     * @return Vue CommuneList
+     */
     @RequestMapping(value="CommuneList.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTCommuneList(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -61,7 +71,12 @@ public class CommuneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller inutilisé
+     * @param request Requête HTTP
+     * @return Vue CommuneEdit
+     */
     @RequestMapping(value="CommuneEdit.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTCommuneEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -80,7 +95,12 @@ public class CommuneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller inutilisé
+     * @param request Requête HTTP
+     * @return Vue CommuneEdit
+     */
     @RequestMapping(value="CommuneCreate.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTCommuneCreate(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -96,7 +116,12 @@ public class CommuneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller inutilisé
+     * @param request Requête HTTP
+     * @return Vue CommuneList
+     */
     @RequestMapping(value="CommuneRemove.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTCommuneRemove(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -116,7 +141,12 @@ public class CommuneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller inutilisé
+     * @param request Requête HTTP
+     * @return Vue CommuneList
+     */
     @RequestMapping(value="CommuneSave.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTCommuneSave(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -149,7 +179,12 @@ public class CommuneController {
         }
         return returned;
     }
-
+    
+    /**
+     * Controller inutilisé
+     * @param request Requête HTTP
+     * @return Vue CommuneList
+     */
     @RequestMapping(value="CommuneImport.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTCommuneImport(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -232,7 +267,11 @@ public class CommuneController {
         }
     }
     
-        
+     /**
+     * Controller lié au bouton "Mise en place BDD" des la page GestionAdmin
+     * @param request Requête HTTP
+     * @return Vue gestionADmin (réussite) ou accueilAdmin (échec)
+     */
     @RequestMapping(value="createDefaultCommune.do", method=RequestMethod.POST)
     private ModelAndView handlePOSTCreateDefaultCommune(HttpServletRequest request) throws IOException {
         ModelAndView returned = null;

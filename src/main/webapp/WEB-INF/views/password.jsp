@@ -47,6 +47,7 @@
                 <br>
                 <h5> Définissez votre mot de passe. Notez-le bien, à partir de maintenant, il sera nécessaire pour vous connecter.</h5>  
                 <br>
+                <h5 style="color: red;"> Pour plus de sécurité, utilisez à la fois des chiffres et des lettres.</h5>  
                 <form id="c_form-h" class="" action="PersonneSave.do" method="POST">
                             <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                             <input type="hidden" name="eleveId" value="${eleve.eleveId}" />

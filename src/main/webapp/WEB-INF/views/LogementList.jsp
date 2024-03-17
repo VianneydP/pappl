@@ -52,12 +52,6 @@
                     <div id="fountainG_7" class="fountainG"></div>
                     <div id="fountainG_8" class="fountainG"></div>
                 </div>
-                <div id="fileImporter" style="display:inline">
-                    <form id="formImporter" action="#" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
-                        <input type="file" id="importFile" name="importFile" onChange="this.form.submit();" />
-                    </form>
-                </div>
                 <table id="LogementList" class="table table-striped table-md sortable" style="">
                 <thead>
                   <tr>
@@ -66,7 +60,7 @@
                     <th scope="col" class="col-md-2"><fmt:message key="message.logementTypeAppart" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-2"><fmt:message key="message.logementGenre" bundle="${ressourcesBundle}"/></th>
                     <th scope="col" class="col-md-2"><fmt:message key="message.logementPlacesDispo" bundle="${ressourcesBundle}"/></th>
-                    
+                    <th class="col-md-2"></th>
                   </tr>
                 </thead>
                 <tbody class="bodyTable">
@@ -81,8 +75,10 @@
                       <form action="#" method="POST">
                         <input type="hidden" name="connexion" value="<c:if test="${! empty user}">${user.connectionId}</c:if>" />
                         <input type="hidden" name="logementNumero" value="${item.logementNumero}">
-                        <button class="btn btn-xs" formaction="LogementEdit.do"><img src="img/edit.png" alt="edit" class="localButton" /></button>
-                        <button class="btn btn-xs" formaction="LogementRemove.do"><img src="img/delete.png" alt="delete" class="localButton" /></button>
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <button class="btn btn-xs" formaction="LogementEdit.do"><img src="img/edit.png" alt="edit" class="localButton" /></button>
+                            <button class="btn btn-xs" formaction="LogementRemove.do"><img src="img/delete.png" alt="delete" class="localButton" /></button>
+                        </div>
                       </form>
                     </td>
                    </tr>
@@ -95,6 +91,7 @@
                     <th id="slogementTypeAppartNom"><fmt:message key="message.logementTypeAppart" bundle="${ressourcesBundle}"/></th>
                     <th id="slogementGenreRequis"><fmt:message key="message.logementGenre" bundle="${ressourcesBundle}"/></th>
                     <th id="slogementPlacesDispo"><fmt:message key="message.logementPlacesDispo" bundle="${ressourcesBundle}"/></th>
+                    <th></th>
                   </tr>
                 </tfoot>
               </table>

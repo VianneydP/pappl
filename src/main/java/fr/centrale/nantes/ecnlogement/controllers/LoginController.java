@@ -16,13 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import fr.centrale.nantes.ecnlogement.repositories.ConnexionRepository;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
-import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
-import fr.centrale.nantes.ecnlogement.items.Connexion;
-import fr.centrale.nantes.ecnlogement.items.Eleve;
-import fr.centrale.nantes.ecnlogement.items.Commune;
-import fr.centrale.nantes.ecnlogement.items.Personne;
-import fr.centrale.nantes.ecnlogement.items.Role;
-import fr.centrale.nantes.ecnlogement.items.Dates;
+import fr.centrale.nantes.ecnlogement.repositories.TexteRepository;
+import fr.centrale.nantes.ecnlogement.items.*;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
@@ -53,7 +48,7 @@ public class LoginController {
     private EleveRepository eleveRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private TexteRepository texteRepository;
     
     @Autowired
     private DatesRepository datesRepository;
@@ -70,6 +65,8 @@ public class LoginController {
     @RequestMapping(value = "index.do")
     public ModelAndView handleIndex(HttpServletRequest request) {
         ModelAndView returned = ApplicationTools.getModel("accueil", null);
+        Texte texte=texteRepository.getByTexteNom("Page d'accueil élève");
+        returned.addObject("texte",texte);
         return returned;
     }
     
@@ -96,19 +93,22 @@ public class LoginController {
     public ModelAndView handlePOSTConnect(HttpServletRequest request) throws ParseException {
         ModelAndView returned = null;
         String nom = ApplicationTools.getStringFromRequest(request, "nom");
-        nom=ApplicationTools.correctString(nom);
+        nom=ApplicationTools.removeAccentsAndSpecialCharacters(nom);
         String prenom = ApplicationTools.getStringFromRequest(request, "prenom");
-        prenom=ApplicationTools.correctString(prenom);
+        prenom=ApplicationTools.removeAccentsAndSpecialCharacters(prenom);
         int numscei = ApplicationTools.getIntFromRequest(request, "numscei");
         if ((nom != null) && (prenom != null) && (numscei != -1)
                 && (!nom.isEmpty()) && (!prenom.isEmpty())) {
             Eleve eleve = eleveRepository.getByPersonNomPrenomNumscei(nom, prenom, numscei);
-            //FIX IT de Elsa : si un élève a été impoté il n'arrive pas sur la partie créer un mot de passe mais se reconnecter
-            //if (eleve == null) {
-            if (eleve.getTypeSouhait() == null) {
-                returned = choixVueConnexion(nom, prenom, numscei);
+            if (eleve != null) {
+                if (eleve.getPersonne().getPersonneLogin() == null || eleve.getPersonne().getPersonneLogin().equals("")){
+                    returned = choixVueConnexion(nom, prenom, numscei);                    
+                }else{
+                    returned = ApplicationTools.getModel("relogin", null);
+                }
             }else{
-                returned = ApplicationTools.getModel("relogin", null);
+                returned = ApplicationTools.getModel("login", null);
+                returned.addObject("nonReco", true);
             }
         }else{
             returned=ApplicationTools.getModel("loginError", null);
@@ -130,19 +130,22 @@ public class LoginController {
                 SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
                 String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
                 returned.addObject("dateDebut", dateDeb);
+                Texte texte=texteRepository.getByTexteNom("Attente ouverture du formulaire");
+                returned.addObject("texte",texte);
             } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
-                Personne pers=personneRepository.create(nom,prenom,roleRepository.getByRoleId(Role.ROLEELEVE)); 
-                Eleve eleve =eleveRepository.create(numscei,pers);
+                Eleve eleve =eleveRepository.getByPersonNomPrenomNumscei(nom,prenom,numscei);
                 Connexion user = connexionRepository.create(eleve.getPersonne());
                 returned = ApplicationTools.getModel("password", user);
-                returned.addObject("username", String.valueOf(pers.getPersonneId())+String.valueOf(numscei));
+                returned.addObject("username", String.valueOf(eleve.getPersonne().getPersonneId())+String.valueOf(numscei));
                 returned.addObject("eleve", eleve);
-                returned.addObject("personne", pers);
+                returned.addObject("personne", eleve.getPersonne());
             } if (now.after(adminDates.getDatesFin())){
                 returned = ApplicationTools.getModel("tropTard", null);
             }
         }else{
             returned = ApplicationTools.getModel("preouverture",null);
+            Texte texte=texteRepository.getByTexteNom("Attente ouverture du formulaire");
+            returned.addObject("texte",texte);
         }
         return returned;
     }
@@ -159,16 +162,26 @@ public class LoginController {
                 String savedPassword = person.getPersonnePassword();
                 if ((user == null) && (savedPassword != null) && (!savedPassword.isEmpty()) && (ApplicationTools.checkPassword(pass, savedPassword))) {
                     if (person.getRoleId().getRoleId()==Role.ROLEASSIST || person.getRoleId().getRoleId()==Role.ROLEADMIN){
-                        //Authentifié comme Admin ou Assistant
-                        user = connexionRepository.create(person);
+                        boolean flag=connexionRepository.checkUnicity(person);
+                        if (flag==true){
+                            user = connexionRepository.create(person);
+                        } else {
+                            int numEssai = ApplicationTools.getIntFromRequest(request, "numEssai");
+                            if (numEssai==3){
+                                connexionRepository.deleteByPerson(person);
+                                user = connexionRepository.create(person);
+                            }else{
+                                returned = ApplicationTools.getModel("loginAdmin",null);
+                                returned.addObject("loginForce", true);
+                            }
+                        }
                     }
                 }
             }
         }
         if (user!=null){
             returned=ApplicationTools.getModel("accueilAdmin", user);
-        }
-        else {
+        }if (user==null && returned==null){
             returned = ApplicationTools.getModel("loginAdmin",null);
         }
         
@@ -183,6 +196,8 @@ public class LoginController {
             user = null;
         }
         ModelAndView returned = ApplicationTools.getModel("accueil", user);
+        Texte texte=texteRepository.getByTexteNom("Page d'accueil élève");
+        returned.addObject("texte",texte);
         return returned;
     }
     
@@ -193,17 +208,30 @@ public class LoginController {
         String mdp = ApplicationTools.getStringFromRequest(request, "password");
         Connexion user = null;
         if ((identifiant != null) && (mdp != null) && (!identifiant.isEmpty()) && (!mdp.isEmpty())) {
-            Personne pers = personneRepository.getByPersonneLogin(identifiant);
-            if (pers != null && checkPassword(mdp, pers.getPersonnePassword())) {
-                user = connexionRepository.create(pers);
-                Eleve eleve=eleveRepository.getByPersonneId(pers.getPersonneId());
-                returned = choixVueReconnexion(user, eleve, pers);
+            Personne person = personneRepository.getByPersonneLogin(identifiant);
+            if (person != null && checkPassword(mdp, person.getPersonnePassword())) {
+                if (connexionRepository.checkUnicity(person)){
+                    user = connexionRepository.create(person);
+                    Eleve eleve=eleveRepository.getByPersonneId(person.getPersonneId());
+                    returned = choixVueReconnexion(user, eleve, person);
+                } else {
+                    int numEssai = ApplicationTools.getIntFromRequest(request, "numEssai");
+                    if (numEssai==3){
+                        connexionRepository.deleteByPerson(person);
+                        user = connexionRepository.create(person);
+                        Eleve eleve=eleveRepository.getByPersonneId(person.getPersonneId());
+                        returned = choixVueReconnexion(user, eleve, person);
+                    }else{
+                        returned = ApplicationTools.getModel("relogin",null);
+                        returned.addObject("loginForce", true);
+                    }
+                }
             }else{
                 returned=ApplicationTools.getModel("relogin", null);
                 returned.addObject("mdpErrone", true);
             }
         }else{
-            returned=ApplicationTools.getModel("reconnect", null);
+            returned=ApplicationTools.getModel("relogin", null);
         }
         return returned;
     }
@@ -219,20 +247,37 @@ public class LoginController {
         if (now.before(adminDates.getDatesDebut())){
             returned = ApplicationTools.getModel("preouverture",null);
             SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
-                String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
-                returned.addObject("dateDebut", dateDeb);
+            String dateDeb=dateFormat1.format(adminDates.getDatesDebut());
+            returned.addObject("dateDebut", dateDeb);
+            Texte texte=texteRepository.getByTexteNom("Attente ouverture du formulaire");
+            returned.addObject("texte",texte);
         } if (now.after(adminDates.getDatesDebut()) && now.before(adminDates.getDatesFin())){
-            returned = ApplicationTools.getModel("questionnaire", user);
-            //Eleve eleve=eleveRepository.getByEleveId(getEleveIdByPersonneId(pers.getPersonneId()));
-            Collection<Commune> maListe=communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune"));
-            returned.addObject("communeListe", maListe);
-            returned.addObject("eleve", eleve);
-            returned.addObject("personne", pers);
+            if (eleve.getEleveNumtel()==null){
+                returned = ApplicationTools.getModel("questionnaire", user);
+                Collection<Commune> maListe=communeRepository.findAll(Sort.by(Sort.Direction.ASC, "nomCommune"));
+                returned.addObject("communeListe", maListe);
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
+                Texte texte=texteRepository.getByTexteNom("En-tête du formulaire");
+                returned.addObject("texte",texte);
+                Texte texteContact=texteRepository.getByTexteNom("Renvoi vers le contact");
+                returned.addObject("texteContact",texteContact);
+            }else{
+                returned = ApplicationTools.getModel("questionnaireReco", user);
+                returned.addObject("eleve", eleve);
+                returned.addObject("personne", pers);
+                Texte texte=texteRepository.getByTexteNom("En-tête du formulaire reconnexion");
+                returned.addObject("texte",texte);
+                Texte texteContact=texteRepository.getByTexteNom("Renvoi vers le contact");
+                returned.addObject("texteContact",texteContact);
+            }
         } if (now.after(adminDates.getDatesFin()) && now.before(adminDates.getDatesResultats())){
             returned = ApplicationTools.getModel("attenteResultat", null);
             SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd MMMM yyyy HH:mm", new Locale("fr"));
             String dateRes=dateFormat1.format(adminDates.getDatesResultats());
             returned.addObject("dateResultats", dateRes);
+            Texte texte=texteRepository.getByTexteNom("Attente des résultats");
+            returned.addObject("texte",texte);
         } if (now.after(adminDates.getDatesResultats())){
             returned = ApplicationTools.getModel("resultat", user);
         }        

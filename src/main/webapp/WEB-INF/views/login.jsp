@@ -43,7 +43,10 @@
               <div class="col-10">
                 <input type="integer" class="form-control" id="inputnumsceih" placeholder="<fmt:message key="message.numscei" bundle="${ressourcesBundle}"/>" name="numscei" required="required"></div>
             </div>
-            <button type="submit" class="btn btn-primary"><fmt:message key="button.connect" bundle="${ressourcesBundle}"/></button>
+            <c:if test="${nonReco}">
+                <p style="color :red"><strong><fmt:message key="message.nonReco" bundle="${ressourcesBundle}"/></strong></p>
+            </c:if>
+            <button type="submit" class="btn btn-primary"><fmt:message key="button.inscription" bundle="${ressourcesBundle}"/></button>
           </form>
         </div>
       </div>

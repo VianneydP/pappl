@@ -14,12 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import fr.centrale.nantes.ecnlogement.repositories.ConnexionRepository;
 import fr.centrale.nantes.ecnlogement.repositories.PersonneRepository;
 import fr.centrale.nantes.ecnlogement.repositories.RoleRepository;
-import fr.centrale.nantes.ecnlogement.items.Connexion;
-import fr.centrale.nantes.ecnlogement.items.Dates;
-import fr.centrale.nantes.ecnlogement.items.Eleve;
-
-import fr.centrale.nantes.ecnlogement.items.Personne;
-import fr.centrale.nantes.ecnlogement.items.Role;
+import fr.centrale.nantes.ecnlogement.repositories.TexteRepository;
+import fr.centrale.nantes.ecnlogement.items.*;
 
 import fr.centrale.nantes.ecnlogement.ldap.LDAPManager;
 import fr.centrale.nantes.ecnlogement.repositories.DatesRepository;
@@ -56,8 +52,31 @@ public class GestionAdminController {
     private LogementRepository logementRepository;
     
     @Autowired
-    private TypeAppartRepository typeAppartRepository;
+    private TexteRepository texteRepository;
     
+    
+    /**
+     * Controller lié au bouton "Import" dans la page GestionAdmin
+     * @param request Requête HTTP
+     * @return Vue de la page d'import
+     */
+    @RequestMapping(value = "pageImport.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTPageImport(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "index", null);
+        } else {
+            returned=ApplicationTools.getModel("importAdmin", user);
+        }
+        return returned;
+    }
+    
+    /**
+     * Controller lié au bouton "Dates" dans la page GestionAdmin
+     * @param request Requête HTTP
+     * @return Vue datesMissionLogement
+     */
     @RequestMapping(value = "afficheDates.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTGestionAdmin(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -66,6 +85,7 @@ public class GestionAdminController {
             returned = ApplicationTools.getModel( "loginAdmin", null );
         } else {
             returned=ApplicationTools.getModel("datesMissionLogement", user);
+            //Récupération de l'année actuelle
             Date now = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = dateFormat.format(now);
@@ -81,6 +101,11 @@ public class GestionAdminController {
         return returned;
     }
     
+    /**
+     * Controller lié à la validation des dates dans la page datesMissionLogement
+     * @param request Requête HTTP
+     * @return Vue datesMissionLogement
+     */
     @RequestMapping(value = "majDates.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTMajDates(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -95,6 +120,7 @@ public class GestionAdminController {
             Date dateResultats=ApplicationTools.getTimestampFromRequest(request, "resultats");
             if (datesRepository.getByAnnee(dateAnnee)==null){
                 if (dateDebut!=null && dateFin!=null && dateResultats!=null){
+                    //Verification de la cohérence chronologique des dates
                     if (dateDebut.before(dateFin) && dateFin.before(dateResultats)){
                         datesRepository.create(dateAnnee, dateDebut, dateFin, dateResultats);
                     }else{
@@ -109,6 +135,7 @@ public class GestionAdminController {
                 }if(dateResultats==null){
                     dateResultats=datesRepository.getByAnnee(dateAnnee).getDatesResultats();
                 }
+                //Verification de la cohérence chronologique des dates
                 if (dateDebut.before(dateFin) && dateFin.before(dateResultats)){
                     datesRepository.create(dateAnnee, dateDebut, dateFin, dateResultats);
                 }else {
@@ -131,6 +158,11 @@ public class GestionAdminController {
         return returned;
     }
     
+    /**
+     * Controller lié au bouton "Suppression BDD" de la page GestionAdmin
+     * @param request Requête HTTP
+     * @return Vue suppressionBDD
+     */
     @RequestMapping(value = "suppressionBDD.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTSuppressionBDD(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -143,6 +175,11 @@ public class GestionAdminController {
         return returned;
     }
     
+    /**
+     * Controller lié au bouton rouge de la page suppressionBDD
+     * @param request Requête HTTP
+     * @return Vue suppressionConfirmation
+     */
     @RequestMapping(value = "suppressionConfirmation.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTSuppressionConfirmation(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -155,6 +192,11 @@ public class GestionAdminController {
         return returned;
     }
     
+    /**
+     * Controller lié à la validation dans suppressionConfirmation
+     * @param request Requête HTTP
+     * @return Vue suppressionBDD avec message reussite/erreur
+     */
     @RequestMapping(value = "suppressionConfirmee.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTSuppressionConfirmee(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -168,7 +210,6 @@ public class GestionAdminController {
                 Personne moi=user.getPersonne();
                 //Suppression des donnees
                 connexionRepository.deleteAll();
-                
                 eleveRepository.deleteAll();
                 personneRepository.deleteAll();
                 logementRepository.deleteAll();
@@ -184,7 +225,11 @@ public class GestionAdminController {
         return returned;
     }
     
-    
+    /**
+     * Méthode liée au controller handlePOSTGestionAssistants pour récupérer les données Assistants
+     * @param user Connexion utilisée
+     * @return ModelAndView AssisList avec les assistants
+     */
     private ModelAndView handleAssistList(Connexion user) {
         String modelName = "AssistList";
         ModelAndView returned = ApplicationTools.getModel(modelName, user);
@@ -202,6 +247,11 @@ public class GestionAdminController {
         return returned;
     }
     
+    /**
+     * Controller lié au bouton "Gestion des Assistants" sur la page GestionAdmin
+     * @param request Requête HTTP
+     * @return Vue AssisList
+     */
     @RequestMapping(value = "gestionAssistants.do", method = RequestMethod.POST)
     public ModelAndView handlePOSTGestionAssistants(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -214,6 +264,11 @@ public class GestionAdminController {
         return returned;
     }
     
+    /**
+     * Controller lié au bouton de modification/édition d'un assistant sur la page AssisList
+     * @param request Requête HTTP
+     * @return Vue AssistEdit (avec assistant à modifier)
+     */
     @RequestMapping(value="AssistEdit.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTAssistEdit(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -233,6 +288,11 @@ public class GestionAdminController {
         return returned;
     }
     
+    /**
+     * Controller lié à la validation de la page AssistEdit
+     * @param request Requête HTTP
+     * @return Vue AssisList
+     */
     @RequestMapping(value="AssistSave.do", method=RequestMethod.POST)
     public ModelAndView handlePOSTAssistSave(HttpServletRequest request) {
         ModelAndView returned = null;
@@ -272,6 +332,76 @@ public class GestionAdminController {
             }
             // Return to the list
             returned = handleAssistList(user);
+        }
+        return returned;
+    }
+    
+    /**
+     * Controller lié au bouton "Gestion des textes" sur la page GestionAdmin
+     * @param request Requête HTTP
+     * @return Vue TexteList
+     */
+    @RequestMapping(value = "gestionTextes.do", method = RequestMethod.POST)
+    public ModelAndView handlePOSTGestionTextes(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            returned = ApplicationTools.getModel("TexteList", user);
+            Collection<Texte> maListe=texteRepository.findAll(Sort.by(Sort.Direction.ASC, "texteNom"));
+            returned.addObject("itemList", maListe);
+        }
+        return returned;
+    }
+    
+    /**
+     * Controller lié au bouton de modification des textes sur la page TexteList
+     * @param request Requête HTTP
+     * @return Vue TexteEdit
+     */
+    @RequestMapping(value="TexteEdit.do", method=RequestMethod.POST)
+    public ModelAndView handlePOSTTexteEdit(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            // Retreive item (null if not created)
+            Texte item = texteRepository.getByTexteNom(ApplicationTools.getStringFromRequest(request, "texteNom"));
+            returned = ApplicationTools.getModel("TexteEdit", user);
+            if (item!=null){
+                // Envoi de l'item pour modification
+                returned.addObject("item", item);
+            }
+        }
+        return returned;
+    }
+    
+    /**
+     * Controller lié à la validation sur la page TexteEdit
+     * @param request Requête HTTP
+     * @return Vue TexteList
+     */
+    @RequestMapping(value="TexteSave.do", method=RequestMethod.POST)
+    public ModelAndView handlePOSTTexteSave(HttpServletRequest request) {
+        ModelAndView returned = null;
+        Connexion user = ApplicationTools.checkAccess(connexionRepository, request);
+        if (user == null) {
+            returned = ApplicationTools.getModel( "loginAdmin", null );
+        } else {
+            // Get item to save request
+            // Retreive item (null if not created)
+            Texte item = texteRepository.getByTexteNom(ApplicationTools.getStringFromRequest(request, "texteNom"));
+            Texte dataToSave = new Texte();
+            // Retreive values from request
+            dataToSave.setTexteNom(item.getTexteNom());
+            dataToSave.setTexteContenu(ApplicationTools.getStringFromRequest(request,"texteContenu"));
+            texteRepository.update(item.getTexteNom(), dataToSave);
+            // Return to the list
+            returned = ApplicationTools.getModel("TexteList", user);
+            Collection<Texte> maListe=texteRepository.findAll(Sort.by(Sort.Direction.ASC, "texteNom"));
+            returned.addObject("itemList", maListe);
         }
         return returned;
     }
