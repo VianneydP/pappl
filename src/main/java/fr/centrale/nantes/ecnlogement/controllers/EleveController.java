@@ -54,6 +54,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
@@ -648,6 +649,11 @@ public class EleveController {
                 if (temp == null) {
                 Personne tempP = personneRepository.create(personne.getPersonneNom(), personne.getPersonnePrenom(), roleId);
                 item.setEleveConfirm(false);
+                Commune commune=communeRepository.getByDepNom(Integer.toString(item.getEleveCodepostal()).substring(0, 2), item.getEleveVillehab());
+                if (commune!=null){
+                    item.setCommune(commune);
+                    
+                }
                 repository.setPersonne(item, tempP, personneRepository);
             }
             }

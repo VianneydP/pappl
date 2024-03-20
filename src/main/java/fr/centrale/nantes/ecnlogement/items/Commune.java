@@ -32,6 +32,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Commune.findByCodeCommune", query = "SELECT c FROM Commune c WHERE c.codeCommune = :codeCommune"),
     @NamedQuery(name = "Commune.findByNomCommune", query = "SELECT c FROM Commune c WHERE c.nomCommune = :nomCommune"),
     @NamedQuery(name = "Commune.findByCodePostal", query = "SELECT c FROM Commune c WHERE c.codePostal = :codePostal"),
+    @NamedQuery(name = "Commune.findByCodePostalEtNomCommune", query = "SELECT c FROM Commune c WHERE c.codePostal = :codePostal AND c.nomCommune = :nomCommune"),
     @NamedQuery(name = "Commune.findByLatitude", query = "SELECT c FROM Commune c WHERE c.latitude = :latitude"),
     @NamedQuery(name = "Commune.findByLongitude", query = "SELECT c FROM Commune c WHERE c.longitude = :longitude"),
     @NamedQuery(name = "Commune.findByDansMetropoleNantes", query = "SELECT c FROM Commune c WHERE c.dansMetropoleNantes = :dansMetropoleNantes")})

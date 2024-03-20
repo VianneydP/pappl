@@ -98,6 +98,7 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
         return null;
     }
     
+    
     @Override
     public Double distNantesCommune(String codeCommune){
         Double rg=0.;
@@ -122,4 +123,6 @@ public class CommuneRepositoryCustomImpl implements CommuneRepositoryCustom {
         }
         return rg;
     }
+    
+    
 }
