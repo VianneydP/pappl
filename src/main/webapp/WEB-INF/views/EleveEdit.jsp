@@ -129,7 +129,7 @@
                      <tr>
                         <th scope="col"><fmt:message key="message.typeSouhait" bundle="${ressourcesBundle}"/></th>
                         <td>
-                          <select name="typeSouhait">
+                          <!-- select name="typeSouhait">
                               <!-- Menu déroulant qui ne fonctionne pas  
                               <c:forEach var="itemIter" items="${typeSouhaitList}">
                               <option value="${itemIter.typeSouhait}" <c:if test="${itemIter.typeSouhait eq item.typeSouhait}">selected</c:if>>${itemIter.typeSouhait}</option>
