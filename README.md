@@ -1,3 +1,4 @@
-Info random à pas oublier doc :
--Fichier pour import appartements Rez : Il faut que le fichier soit encodé en UFT-8, donc excel, enregistrer sous, CSV, format UFT-8
--Il faut au préalable créer un répertoire "televersements" dans target/ECN-Logement1.0 pour que les notif de bourses soient bien téléversées
+Projet de groupe : Mission logement
+Documentation du projet (mode d'emploi administrateur/étudiant, développeur) dans le drive et joint au projet
+Lien du drive (accès à demander) : https://drive.google.com/drive/folders/1M31YOwxYXBB81lKJqn5j5Tny5lPL3DPd?usp=sharing
+
